@@ -1,0 +1,82 @@
+@page "/components/chat"
+@using MudBlazor
+
+<MudAlert Severity="Severity.Info" Variant="Variant.Outlined" Class="mb-4">
+    `MudChat` components are no longer available in MudBlazor 9. This page now shows an equivalent reference layout built from supported components.
+</MudAlert>
+
+<MudStack Spacing="3">
+    <MudPaper Class="pa-4" Elevation="@_elevation" Outlined="@(_variant == Variant.Outlined)" Square="@_square">
+        <MudStack Row AlignItems="AlignItems.Center" Spacing="2">
+            <MudAvatar>A</MudAvatar>
+            <MudStack Spacing="0">
+                <MudText Typo="Typo.subtitle2">Anakin</MudText>
+                <MudText Typo="Typo.caption">12:46</MudText>
+            </MudStack>
+        </MudStack>
+        <MudStack Class="mt-3" Spacing="@(_dense ? 1 : 2)">
+            <MudAlert Severity="@ToSeverity(_selectedColor)" Variant="@_variant" Dense="@_dense" Square="@_square">What kind of nonsense is this</MudAlert>
+            <MudAlert Severity="@ToSeverity(_selectedColor)" Variant="@_variant" Dense="@_dense" Square="@_square">Put me on the Council and not make me a Master!??</MudAlert>
+            <MudAlert Severity="@ToSeverity(_selectedColor)" Variant="@_variant" Dense="@_dense" Square="@_square">That's never been done in the history of the Jedi. It's insulting!</MudAlert>
+        </MudStack>
+        <MudText Typo="Typo.caption" Class="mt-2">Seen at 12:46</MudText>
+    </MudPaper>
+
+    <MudPaper Class="pa-4" Elevation="@_elevation" Outlined="@(_variant == Variant.Outlined)" Square="@_square">
+        <MudStack Row AlignItems="AlignItems.Center" Justify="Justify.FlexEnd" Spacing="2">
+            <MudStack Spacing="0" AlignItems="AlignItems.End">
+                <MudText Typo="Typo.subtitle2">Obi-Wan Kenobi</MudText>
+                <MudText Typo="Typo.caption">12:45</MudText>
+            </MudStack>
+            <MudAvatar Size="@(_dense ? Size.Small : Size.Medium)">
+                <MudImage Src="images/mony.jpg" />
+            </MudAvatar>
+        </MudStack>
+        <MudStack Class="mt-3" Spacing="@(_dense ? 1 : 2)" AlignItems="AlignItems.End">
+            <MudAlert Severity="@ToSeverity(_selectedColor)" Variant="@_variant" Dense="@_dense" Square="@_square">Calm down, Anakin. You have been given a great honor.<br />To be on the Council at your age.</MudAlert>
+            <MudAlert Severity="Severity.Info" Variant="@_variant" Dense="@_dense" Square="@_square">It's never happened before.</MudAlert>
+        </MudStack>
+        <MudText Typo="Typo.caption" Align="Align.Right" Class="mt-2">Delivered</MudText>
+    </MudPaper>
+</MudStack>
+
+<MudGrid>
+    <MudItem xs="12" Class="justify-center">
+        <MudStack>
+            <MudStack Row Class="mt-5">
+                <MudCheckBox Label="Dense" @bind-Value="_dense" />
+                <MudCheckBox Label="Square" @bind-Value="_square" />
+            </MudStack>
+            <MudRadioGroup @bind-Value="_variant">
+                <MudRadio Value="@Variant.Text" Label="Text" />
+                <MudRadio Value="@Variant.Outlined" Label="Outlined" />
+                <MudRadio Value="@Variant.Filled" Label="Filled" />
+            </MudRadioGroup>
+            <MudStack Row Class="ml-4" Style="max-width:600px;">
+                <MudSelect Class="mr-1" T="MudBlazor.Color" Label="Chat Color" @bind-Value="_selectedColor">
+                    @foreach (MudBlazor.Color color in Enum.GetValues(typeof(MudBlazor.Color)))
+                    {
+                        <MudSelectItem Value="@color">@color.ToString()</MudSelectItem>
+                    }
+                </MudSelect>
+            </MudStack>
+            <MudSlider @bind-Value="_elevation" Min="0" Max="25" Color="Color.Info" Class="ml-4 mb-6" Style="max-width:600px;">Elevation: @_elevation.ToString()</MudSlider>
+        </MudStack>
+    </MudItem>
+</MudGrid>
+
+@code {
+    private bool _dense = false;
+    private bool _square = false;
+    private int _elevation = 5;
+    private Variant _variant = Variant.Text;
+    private Color _selectedColor = Color.Default;
+
+    private static Severity ToSeverity(Color color) => color switch
+    {
+        Color.Success => Severity.Success,
+        Color.Warning => Severity.Warning,
+        Color.Error => Severity.Error,
+        _ => Severity.Info
+    };
+}

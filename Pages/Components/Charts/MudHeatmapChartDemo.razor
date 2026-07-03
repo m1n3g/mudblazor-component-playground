@@ -1,0 +1,203 @@
+@page "/components/heatmapchart"
+@using MudBlazor
+
+<MudPaper Class="pa-4">
+    <MudChart T="double" ChartType="ChartType.HeatMap" ChartSeries="@_series" ChartOptions="@_options"
+        LegendPosition="@_legendPosition" ChartLabels="@_xLabels" Width="100%" Height="350px" />
+</MudPaper>
+
+<MudPaper Class="pa-4 mt-2 d-flex justify-center" Elevation="0">
+    <MudButton OnClick="AddColor" Disabled="@(_colorCount >= 5)" Variant="Variant.Filled" Color="Color.Primary">Add
+        Color</MudButton>
+    <MudButton @onclick="RandomizeData" Variant="Variant.Filled" Class="mx-4">Randomize</MudButton>
+    <MudButton @onclick="ShowFixedData" Disabled="@(!_isShuffled)" Variant="Variant.Filled">Reset to Fixed</MudButton>
+    <MudButton OnClick="RemoveColor" Disabled="@(_colorCount <= 1)" Variant="Variant.Filled" Class="ml-4"
+        Color="Color.Secondary">Remove Color</MudButton>
+</MudPaper>
+
+<MudGrid Spacing="2" Class="d-flex">
+    <MudItem xs="4">
+        <MudSelect T="Position" Label="Legend Position" @bind-Value="_legendPosition" Margin="Margin.Dense">
+            <MudSelectItem Value="Position.Top">Top</MudSelectItem>
+            <MudSelectItem Value="Position.Bottom">Bottom</MudSelectItem>
+            <MudSelectItem Value="Position.Left">Left</MudSelectItem>
+            <MudSelectItem Value="Position.Right">Right</MudSelectItem>
+        </MudSelect>
+    </MudItem>
+
+    <MudItem xs="4">
+        <MudSelect T="XAxisLabelPosition" Label="XAxis Labels" @bind-Value="@_xAxisLabelPosition"
+            @bind-Value:after="BuildOptions" FullWidth="true">
+            <MudSelectItem Value="XAxisLabelPosition.Top">Top</MudSelectItem>
+            <MudSelectItem Value="XAxisLabelPosition.Bottom">Bottom</MudSelectItem>
+            <MudSelectItem Value="XAxisLabelPosition.None">None</MudSelectItem>
+        </MudSelect>
+    </MudItem>
+
+    <MudItem xs="4">
+        <MudSelect T="YAxisLabelPosition" Label="YAxis Labels" @bind-Value="@_yAxisLabelPosition"
+            @bind-Value:after="BuildOptions" FullWidth="true">
+            <MudSelectItem Value="YAxisLabelPosition.Left">Left</MudSelectItem>
+            <MudSelectItem Value="YAxisLabelPosition.Right">Right</MudSelectItem>
+            <MudSelectItem Value="YAxisLabelPosition.None">None</MudSelectItem>
+        </MudSelect>
+    </MudItem>
+
+    <MudItem xs="4">
+        <MudCheckBox T="bool" @bind-Value="@_showLegend" @bind-Value:after="BuildOptions" Color="Color.Primary">
+            Show Legend
+        </MudCheckBox>
+    </MudItem>
+
+    <MudItem xs="4">
+        <MudCheckBox T="bool" @bind-Value="@_showLegendValues" @bind-Value:after="BuildOptions" Color="Color.Primary">
+            Show Legend Values
+        </MudCheckBox>
+    </MudItem>
+
+    <MudItem xs="4">
+        <MudCheckBox T="bool" @bind-Value="@_smoothGradient" @bind-Value:after="BuildOptions" Color="Color.Primary">
+            Enable Smooth Gradient
+        </MudCheckBox>
+    </MudItem>
+
+    <MudItem xs="4">
+        <MudCheckBox T="bool" @bind-Value="@_showValueLabels" @bind-Value:after="BuildOptions" Color="Color.Primary">
+            Show Values
+        </MudCheckBox>
+    </MudItem>
+
+    <MudItem xs="4">
+        <MudCheckBox T="bool" @bind-Value="@_showValueTooltips" @bind-Value:after="BuildOptions" Color="Color.Primary">
+            Show Value Tooltips
+        </MudCheckBox>
+    </MudItem>
+</MudGrid>
+
+<MudStack Row Justify="Justify.Center" class="mt-4">
+    @for (var i = 0; i < _colors.Length; i++)
+    {
+        <MudPaper class="pa-2 mx-1"
+            style="@($"background-color:{_colors[i]};width:50px;height:50px;{(i>_colorCount-1?string.Empty:"border:2px solid black;")}")">
+        </MudPaper>
+    }
+</MudStack>
+
+<MudText Align="Align.Center" Class="mt-4" Typo="Typo.h6">Number of Colors Selected: @_colorCount</MudText>
+
+@code {
+    private int _colorCount = 1;
+    private readonly string[] _colors = ["#5AC8FA", "#34C759", "#007AFF", "#FFCC00", "#e03131"];
+
+    private List<ChartSeries<double>> _series = [];
+    private HeatMapChartOptions _options = new();
+    private string[] _xLabels = [];
+
+    private XAxisLabelPosition _xAxisLabelPosition = XAxisLabelPosition.Bottom;
+    private YAxisLabelPosition _yAxisLabelPosition = YAxisLabelPosition.Left;
+
+    private Position _legendPosition = Position.Bottom;
+    private bool _showLegend = true;
+    private bool _showLegendValues = true;
+
+    // NEW heatmap-specific toggles
+    private bool _smoothGradient = false;
+    private bool _showValueLabels = true;
+    private bool _showValueTooltips = true;
+
+    // Track whether the layout is currently shuffled
+    private bool _isShuffled = false;
+
+    // Fixed 3×3 dataset (row-major order)
+    private static readonly double[] _fixedValues = new double[]
+    {
+    9.79, 34.53, 14.57,
+    74.13, 35.38, 88.54,
+    85.44, 78.82, 55.19
+    };
+
+    protected override void OnInitialized()
+    {
+        base.OnInitialized();
+        BuildOptions();
+
+        _isShuffled = false;
+        SetFixedData(shuffle: false);
+    }
+
+    private void AddColor()
+    {
+        if (_colorCount < _colors.Length)
+        {
+            _colorCount++;
+            BuildOptions();
+        }
+    }
+
+    private void RemoveColor()
+    {
+        if (_colorCount > 1)
+        {
+            _colorCount--;
+            BuildOptions();
+        }
+    }
+
+    private void BuildOptions()
+    {
+        _options = new HeatMapChartOptions
+        {
+            ChartPalette = _colors.Take(_colorCount).ToArray(),
+            ShowLegend = _showLegend,
+            ShowLegendLabels = _showLegendValues,
+            XAxisLabelPosition = _xAxisLabelPosition,
+            YAxisLabelPosition = _yAxisLabelPosition,
+            EnableSmoothGradient = _smoothGradient,
+            ShowLabels = _showValueLabels,
+            ShowToolTips = _showValueTooltips
+        };
+        StateHasChanged();
+    }
+
+
+    // Randomize = shuffle fixed values (positions only)
+    private void RandomizeData()
+    {
+        _isShuffled = true;
+        SetFixedData(shuffle: true);
+    }
+
+    // Reset to the original fixed ordering
+    private void ShowFixedData()
+    {
+        _isShuffled = false;
+        SetFixedData(shuffle: false);
+    }
+
+    private void SetFixedData(bool shuffle)
+    {
+        _xLabels = ["A", "B", "C"]; // 3 columns
+
+        var vals = _fixedValues.ToArray();
+        if (shuffle) Shuffle(vals);
+
+        _series = new List<ChartSeries<double>>
+{
+new() { Name = "A", Data = new[] { vals[0], vals[1], vals[2] } },
+new() { Name = "B", Data = new[] { vals[3], vals[4], vals[5] } },
+new() { Name = "C", Data = new[] { vals[6], vals[7], vals[8] } },
+};
+
+        BuildOptions();
+    }
+
+    // Fisher–Yates shuffle
+    private static void Shuffle<T>(T[] array)
+    {
+        for (int i = array.Length - 1; i > 0; i--)
+        {
+            int j = Random.Shared.Next(i + 1);
+            (array[i], array[j]) = (array[j], array[i]);
+        }
+    }
+}

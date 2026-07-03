@@ -1,0 +1,91 @@
+@page "/components/chipset"
+@using MudBlazor
+
+<MudText Class="mb-2" Typo="Typo.h6" Style="font-weight:700">Single Selection</MudText>
+
+<!-- First row: two-column dropdowns -->
+<MudGrid Class="mb-4">
+    <MudItem xs="12" sm="6">
+        <MudSelect T="Variant" Label="Variant" @bind-Value="_variant" Dense="true">
+            <MudSelectItem Value="@Variant.Filled">Filled</MudSelectItem>
+            <MudSelectItem Value="@Variant.Outlined">Outlined</MudSelectItem>
+            <MudSelectItem Value="@Variant.Text">Text</MudSelectItem>
+        </MudSelect>
+    </MudItem>
+    <MudItem xs="12" sm="6">
+        <MudSelect T="Size" Label="Size" @bind-Value="_size" Dense="true">
+            <MudSelectItem Value="@Size.Small">Small</MudSelectItem>
+            <MudSelectItem Value="@Size.Medium">Medium</MudSelectItem>
+            <MudSelectItem Value="@Size.Large">Large</MudSelectItem>
+        </MudSelect>
+    </MudItem>
+</MudGrid>
+
+<MudChipSet T="Color" @bind-SelectedValue="SelectedColor" SelectionMode="@SelectionMode" CheckMark Variant="_variant"
+    Size="_size">
+    <MudChip Text="purple" Color="Color.Primary" Value="@Color.Primary">Primary</MudChip>
+    <MudChip Text="pink" Color="Color.Secondary" Value="@Color.Secondary">Secondary</MudChip>
+    <MudChip Text="blue" Color="Color.Info" Value="@Color.Info">Info</MudChip>
+    <MudChip Text="green" Color="Color.Success" Value="@Color.Success">Success</MudChip>
+    <MudChip Text="orange" Color="Color.Warning" Value="@Color.Warning">Warning</MudChip>
+    <MudChip Text="red" Color="Color.Error" Value="@Color.Error">Error</MudChip>
+    <MudChip Text="black" Color="Color.Dark" Value="@Color.Dark">Dark</MudChip>
+</MudChipSet>
+
+<div class="d-flex flex-column align-left my-4">
+    @if (SelectedColor != default)
+    {
+        <MudText>You selected the <MudText Color="@SelectedColor" Inline>@SelectedColor.ToString()</MudText>
+            chip.</MudText>
+    }
+    else
+    {
+        <MudText>Nothing selected.</MudText>
+    }
+
+    <MudRadioGroup @bind-Value="SelectionMode" Class="mt-2">
+        <MudRadio Value="@SelectionMode.SingleSelection" Color="Color.Primary">SingleSelection</MudRadio>
+        <MudRadio Value="@SelectionMode.ToggleSelection" Color="Color.Primary">ToggleSelection</MudRadio>
+    </MudRadioGroup>
+
+    <MudText Class="mt-2" Typo="Typo.body2">*Toggle Selection allows to unselect the selected chip.</MudText>
+</div>
+
+<MudText Class="mt-12 mb-4" Typo="Typo.h6" Style="font-weight:700">Multi Selection</MudText>
+
+<!-- Reuse the same variant & size for multi-set -->
+<MudChipSet @bind-SelectedValues="_selected" SelectionMode="SelectionMode.MultiSelection" CheckMark="_checkMark"
+    Variant="_variant" Size="_size" Color="Color.Info">
+    <MudChip Value="@("Milk")" />
+    <MudChip Value="@("Eggs")" />
+    <MudChip Value="@("Soap")" />
+    <MudChip Value="@("Corn flakes")" />
+    <MudChip Value="@("Salad")" />
+    <MudChip Value="@("Apples")" />
+    <MudChip Value="@("Red wine")" />
+</MudChipSet>
+
+<div class="d-flex flex-column align-left my-4">
+    @if (_selected is { Count: > 0 })
+    {
+        <MudText>You selected @string.Join(", ", _selected.OrderBy(x => x))</MudText>
+    }
+    else
+    {
+        <MudText>Nothing selected.</MudText>
+    }
+
+    <MudCheckBox @bind-Value="_checkMark" Class="mt-2">Check marks</MudCheckBox>
+</div>
+
+@code {
+    private bool _checkMark = true;
+    private IReadOnlyCollection<string>? _selected;
+
+    public SelectionMode SelectionMode = SelectionMode.SingleSelection;
+    public Color SelectedColor;
+
+    // Dropdown-bound props
+    private Variant _variant = Variant.Filled;
+    private Size _size = Size.Medium;
+}

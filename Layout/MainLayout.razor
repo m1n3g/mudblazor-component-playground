@@ -5,14 +5,14 @@
 <MudThemeProvider @ref="_themeProvider" IsDarkMode="_isDark" />
 <!-- Theme="_theme" -->
 
-<MudLayout>
+<MudLayout Class="app-shell">
 
     <!-- Top AppBar -->
-    <MudAppBar Elevation="1" Color="Color.Primary" Fixed="true">
+    <MudAppBar Elevation="1" Color="Color.Primary" Fixed="true" Dense="true">
         <MudIconButton Icon="@Icons.Material.Filled.Menu" Color="Color.Inherit" Edge="Edge.Start"
             OnClick="ToggleDrawer" />
 
-        <MudText Typo="Typo.h6" Class="ml-2">MudPlayground</MudText>
+        <MudText Typo="Typo.h6" Class="app-shell-title">MudPlayground</MudText>
         <MudSpacer />
 
         <MudIconButton Icon="@Icons.Custom.Brands.GitHub" Href="https://github.com/m1n3g/mudblazor-figma-reference"
@@ -21,21 +21,23 @@
         <!-- Light / Dark toggle -->
         <MudIconButton Color="Color.Inherit"
             Icon="@(_isDark ? Icons.Material.Filled.LightMode : Icons.Material.Filled.DarkMode)"
-            AriaLabel="Toggle theme" OnClick="ToggleTheme" />
+            aria-label="Toggle theme" OnClick="ToggleTheme" />
     </MudAppBar>
 
     <!-- Sidebar Drawer -->
-    <MudDrawer @bind-Open="_drawerOpen" Variant="DrawerVariant.Persistent" Elevation="1" Width="260px"
-        MiniVariantWidth="72px" Anchor="Anchor.Start" Breakpoint="Breakpoint.Md">
-        <MudDrawerHeader>
-            <MudText Typo="Typo.subtitle1">Navigation</MudText>
-        </MudDrawerHeader>
-        <NavMenu />
+    <MudDrawer @bind-Open="_drawerOpen" Variant="DrawerVariant.Responsive" Elevation="0" Width="260px"
+        Anchor="Anchor.Start" Breakpoint="Breakpoint.Md" ClipMode="DrawerClipMode.Always"
+        Class="app-shell-drawer">
+        <div class="app-shell-drawer-content">
+            <NavMenu />
+        </div>
     </MudDrawer>
 
     <!-- Page content -->
-    <MudMainContent Class="pt-20 px-7">
-        @Body
+    <MudMainContent Class="app-shell-main">
+        <MudContainer MaxWidth="MaxWidth.False" Class="app-shell-body">
+            @Body
+        </MudContainer>
     </MudMainContent>
 
 </MudLayout>

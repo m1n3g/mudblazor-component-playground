@@ -1,0 +1,79 @@
+@page "/components/tabs"
+@using MudBlazor
+
+<div>
+    @foreach (var g in Groups)
+    {
+        <MudText Class="mt-8 mb-2" Typo="Typo.h6">
+            @($"ApplyEffectsToContainer {(g.ApplyEffectsToContainer ? "True" : "False")}  " +
+              $"Centered {(g.Centered ? "True" : "False")}  Elevation {g.Elevation}")
+        </MudText>
+
+        <MudGrid Class="mt-4" Spacing="2">
+            @foreach (var v in Variants)
+            {
+                <MudItem xs="12" sm="6" md="4" lg="4">
+                    <MudPaper Elevation="25" Class="pa-2">
+                        <MudText Typo="Typo.caption" Class="mb-2">
+                            @($"Border {(v.Border ? "On" : "Off")} • " +
+                              $"Outlined {(v.Outlined ? "On" : "Off")} • " +
+                              $"Rounded {(v.Rounded ? "On" : "Off")}")
+                        </MudText>
+
+                        <MudTabs Class="mb-4"
+                                 ApplyEffectsToContainer="@g.ApplyEffectsToContainer"
+                                 Border="@v.Border"
+                                 Centered="@g.Centered"
+                                 Elevation="@g.Elevation"
+                                 Outlined="@v.Outlined"
+                                 Rounded="@v.Rounded"
+                                 TabPanelsClass="pa-6">
+                            @DefaultPanels
+                        </MudTabs>
+                    </MudPaper>
+                </MudItem>
+            }
+        </MudGrid>
+    }
+</div>
+
+@code {
+    // Group by container effects + alignment + elevation
+    private record Group(bool ApplyEffectsToContainer, bool Centered, int Elevation);
+
+    // Visual variants inside each group
+    private record Variant(bool Border, bool Outlined, bool Rounded);
+
+    private readonly Group[] Groups =
+    {
+        new(false, false, 0),
+        new(false, true , 0),
+        new(true , false, 0),
+        new(true , true , 0),
+        new(false, false, 1),
+        new(false, true , 1),
+        new(true , false, 1),
+        new(true , true , 1),
+    };
+
+    // The six style permutations you were repeating
+    private readonly Variant[] Variants =
+    {
+        new(false, false, false),
+        new(true , false, false),
+        new(false, true , false),
+        new(false, false, true ),
+        new(true , false, true ),
+        new(false, true , true ),
+    };
+
+    // Reusable tabs content
+    private RenderFragment DefaultPanels => @<text>
+        <MudTabPanel Text="Tab One">
+            <MudText>Content One</MudText>
+        </MudTabPanel>
+        <MudTabPanel Text="Tab Disabled" Disabled="true">
+            <MudText>Content Disabled</MudText>
+        </MudTabPanel>
+    </text>;
+}

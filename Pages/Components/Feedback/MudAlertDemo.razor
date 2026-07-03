@@ -1,0 +1,127 @@
+@page "/components/alert"
+@using MudBlazor
+
+<MudGrid>
+    <!-- LEFT: Options -->
+    <MudItem md="4" xs="12">
+        <MudPaper Class="pa-4" Elevation="0">
+            <MudSelect T="Variant" Label="Variant" Dense="true" @bind-Value="_variant">
+                <MudSelectItem Value="Variant.Filled">Filled</MudSelectItem>
+                <MudSelectItem Value="Variant.Outlined">Outlined</MudSelectItem>
+                <MudSelectItem Value="Variant.Text">Text</MudSelectItem>
+            </MudSelect>
+
+            <MudSelect T="Severity" Label="Severity" Dense="true" Class="mt-2" @bind-Value="_severity">
+                <MudSelectItem Value="Severity.Normal">Normal</MudSelectItem>
+                <MudSelectItem Value="Severity.Info">Info</MudSelectItem>
+                <MudSelectItem Value="Severity.Success">Success</MudSelectItem>
+                <MudSelectItem Value="Severity.Warning">Warning</MudSelectItem>
+                <MudSelectItem Value="Severity.Error">Error</MudSelectItem>
+            </MudSelect>
+
+            <MudCheckBox @bind-Value="_dense" Label="Dense" Color="Color.Primary" Class="mt-2" />
+            <MudCheckBox @bind-Value="_noIcon" Label="No Icon" Color="Color.Primary" />
+
+            <!-- Shape -->
+            <MudSelect T="AlertShape" Label="Shape" Dense="true" Class="mt-2" @bind-Value="_shape">
+                <MudSelectItem Value="AlertShape.Default">Default</MudSelectItem>
+                <MudSelectItem Value="AlertShape.Rounded">Rounded (theme default)</MudSelectItem>
+                <MudSelectItem Value="AlertShape.Square">Square</MudSelectItem>
+            </MudSelect>
+
+            <!-- Elevation -->
+            <MudSlider Min="0" Max="25" Step="1" @bind-Value="_elevation" Color="Color.Info" Class="mt-4">
+                Elevation
+            </MudSlider>
+
+            <!-- Content alignment -->
+            <MudSelect T="HorizontalAlignment" Label="Content Alignment" Dense="true" Class="mt-2"
+                @bind-Value="_contentAlignment">
+                <MudSelectItem Value="HorizontalAlignment.Left">Left</MudSelectItem>
+                <MudSelectItem Value="HorizontalAlignment.Center">Center</MudSelectItem>
+                <MudSelectItem Value="HorizontalAlignment.Right">Right</MudSelectItem>
+                <MudSelectItem Value="HorizontalAlignment.Start">Start</MudSelectItem>
+                <MudSelectItem Value="HorizontalAlignment.End">End</MudSelectItem>
+            </MudSelect>
+
+            <!-- Content text -->
+            <MudTextField Label="Alert Content" Class="mt-2" @bind-Value="_content" />
+
+            <MudSelect T="string" Label="Icon" Dense="true" Class="mt-2" @bind-Value="_iconSelection">
+                <MudSelectItem Value="@DefaultIconOption">Default by severity</MudSelectItem>
+                <MudSelectItem Value="@Icons.Material.Filled.NotificationsActive">Notifications Active</MudSelectItem>
+                <MudSelectItem Value="@Icons.Material.Filled.Campaign">Campaign</MudSelectItem>
+                <MudSelectItem Value="@Icons.Material.Filled.Bolt">Bolt</MudSelectItem>
+                <MudSelectItem Value="@Icons.Material.Filled.Star">Star</MudSelectItem>
+            </MudSelect>
+
+            <!-- Close icon toggle only -->
+            <MudCheckBox @bind-Value="_showCloseIcon" Label="Show Close Icon" Color="Color.Primary" Class="mt-2" />
+
+            <MudSelect T="string" Label="Close Icon" Dense="true" Class="mt-2" @bind-Value="_closeIcon"
+                Disabled="@(!_showCloseIcon)">
+                <MudSelectItem Value="@Icons.Material.Filled.Close">Close</MudSelectItem>
+                <MudSelectItem Value="@Icons.Material.Filled.Cancel">Cancel</MudSelectItem>
+                <MudSelectItem Value="@Icons.Material.Filled.Clear">Clear</MudSelectItem>
+                <MudSelectItem Value="@Icons.Material.Filled.Done">Done</MudSelectItem>
+            </MudSelect>
+        </MudPaper>
+    </MudItem>
+
+    <!-- RIGHT: Preview -->
+    <MudItem md="8" xs="12" Class="d-flex align-center justify-center">
+        <MudPaper Class="pa-6" Elevation="0">
+            <MudAlert Style="width: 800px;" Severity="@_severity" Variant="@_variant" Dense="@_dense" NoIcon="@_noIcon"
+                Square="@IsSquare" Elevation="@_elevation" ContentAlignment="@_contentAlignment"
+                ShowCloseIcon="@_showCloseIcon" CloseIcon="@_closeIcon" Icon="@SelectedIcon"
+                CloseIconClicked="OnClosed" OnClick="OnAlertClicked">
+
+                @_content
+            </MudAlert>
+
+            <MudText Typo="Typo.caption" Class="mt-3">
+                Clicked: @_clickedCount | Closed: @_closedCount
+            </MudText>
+        </MudPaper>
+    </MudItem>
+</MudGrid>
+
+
+
+@code {
+    // Core options
+    private Variant _variant = Variant.Filled;
+    private Severity _severity = Severity.Info;
+    private bool _dense;
+    private bool _noIcon;
+
+    // Shape
+    private AlertShape _shape = AlertShape.Default;
+    private bool IsSquare => _shape == AlertShape.Square;
+
+    // Elevation
+    private int _elevation = 0;
+
+    // Content + alignment (built-in)
+    private string _content = "This is a customizable MudAlert.";
+    private HorizontalAlignment _contentAlignment = HorizontalAlignment.Left;
+
+    // Icon + close icon
+    private const string DefaultIconOption = "__DEFAULT__";
+    private string _iconSelection = DefaultIconOption;
+    private string _closeIcon = Icons.Material.Filled.Close;
+
+    // Events
+    private bool _showCloseIcon = true;
+    private int _clickedCount;
+    private int _closedCount;
+
+    private string? SelectedIcon => _iconSelection == DefaultIconOption ? null : _iconSelection;
+
+    private void OnAlertClicked(MouseEventArgs _)
+        => _clickedCount++;
+
+    private void OnClosed(MudAlert? _ = null) => _closedCount++; // event fires on close icon click
+
+    private enum AlertShape { Default, Rounded, Square }
+}

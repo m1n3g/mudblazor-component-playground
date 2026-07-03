@@ -1,0 +1,153 @@
+@page "/components/togglegroup"
+@using MudBlazor
+
+<MudGrid Spacing="3">
+
+    <!-- LEFT: examples -->
+    <MudItem xs="12" md="8">
+        <MudText Typo="Typo.subtitle1" Class="mb-2">Examples</MudText>
+
+        <MudPaper Class="pa-3">
+            <MudStack Spacing="3">
+
+                <!-- 1) Single selection -->
+                <MudText Typo="Typo.subtitle2">Single selection</MudText>
+                <MudToggleGroup T="string"
+                                SelectionMode="SelectionMode.SingleSelection"
+                                Color="@_color"
+                                Size="@GroupSize"
+                                Outlined="@_outlined"
+                                CheckMark="@_checkMark"
+                                FixedContent="@_fixedContent"
+                                Disabled="@_disabled"
+                                Delimiters="@_delimiters"
+                                Vertical="@_vertical"
+                                Class="@GetGroupClass()"
+                                @bind-Value="_single">
+                    <MudToggleItem Value="@("One")"   Text="@("One")"   />
+                    <MudToggleItem Value="@("Two")"   Text="@("Two")"   />
+                    <MudToggleItem Value="@("Three")" Text="@("Three")" />
+                </MudToggleGroup>
+                <MudText Typo="Typo.caption">Selected: @_single</MudText>
+
+                <MudDivider Class="my-2" />
+
+                <!-- 2) Multi selection -->
+                <MudText Typo="Typo.subtitle2">Multi selection</MudText>
+                <MudToggleGroup T="string"
+                                SelectionMode="SelectionMode.MultiSelection"
+                                Color="@_color"
+                                Size="@GroupSize"
+                                Outlined="@_outlined"
+                                CheckMark="@_checkMark"
+                                FixedContent="@_fixedContent"
+                                Disabled="@_disabled"
+                                Delimiters="@_delimiters"
+                                Vertical="@_vertical"
+                                Class="@GetGroupClass()"
+                                @bind-Values="SelectedFruits">
+                    <MudToggleItem Value="@("Apple")"  Text="@("Apple")"  />
+                    <MudToggleItem Value="@("Banana")" Text="@("Banana")" />
+                    <MudToggleItem Value="@("Cherry")" Text="@("Cherry")" />
+                    <MudToggleItem Value="@("Dates")"  Text="@("Dates")"  />
+                </MudToggleGroup>
+                <MudText Typo="Typo.caption">
+                    Selected (@_multi.Count): @string.Join(", ", _multi)
+                </MudText>
+
+                <MudDivider Class="my-2" />
+
+                <!-- 3) Toggle selection (can deselect to none) -->
+                <MudText Typo="Typo.subtitle2">Toggle selection (can be none)</MudText>
+                <MudToggleGroup T="string"
+                                SelectionMode="SelectionMode.ToggleSelection"
+                                Color="@_color"
+                                Size="@GroupSize"
+                                Outlined="@_outlined"
+                                CheckMark="@_checkMark"
+                                FixedContent="@_fixedContent"
+                                Disabled="@_disabled"
+                                Delimiters="@_delimiters"
+                                Vertical="@_vertical"
+                                Class="@GetGroupClass()"
+                                @bind-Value="_toggle">
+                    <MudToggleItem Value="@("Overview")" Text="@("OVERVIEW")" />
+                    <MudToggleItem Value="@("Details")"  Text="@("DETAILS")"  />
+                    <MudToggleItem Value="@("Settings")" Text="@("SETTINGS")" />
+                </MudToggleGroup>
+                <MudText Typo="Typo.caption">
+                    Active: @(string.IsNullOrEmpty(_toggle) ? "— none —" : _toggle)
+                </MudText>
+
+            </MudStack>
+        </MudPaper>
+    </MudItem>
+
+    <!-- RIGHT: controls -->
+    <MudItem xs="12" md="4">
+        <MudText Typo="Typo.subtitle1" Class="mb-2">Controls</MudText>
+
+        <MudPaper Class="pa-3">
+            <MudStack Row Spacing="2" AlignItems="AlignItems.Center" Class="controls-stack">
+                <!-- From your screenshot -->
+                <MudSwitch Class="control-item" @bind-Value="_checkMark"    Label="CheckMark"    Color="Color.Primary" />
+                <MudSwitch Class="control-item" @bind-Value="_fixedContent" Label="FixedContent" Color="Color.Primary" />
+                <MudSwitch Class="control-item" @bind-Value="_outlined"     Label="Outlined"     Color="Color.Primary" />
+                <MudSwitch Class="control-item" @bind-Value="_delimiters"   Label="Delimiters"   Color="Color.Primary" />
+                <MudSwitch Class="control-item" @bind-Value="_disabled"     Label="Disabled"     Color="Color.Primary" />
+                <MudSwitch Class="control-item" @bind-Value="_vertical"     Label="Vertical"     Color="Color.Primary" />
+
+                <MudSelect T="Color" Label="Color" @bind-Value="_color" Dense="true" Style="min-width:180px;">
+                    @foreach (var c in Enum.GetValues(typeof(Color)).Cast<Color>())
+                    {
+                        <MudSelectItem Value="@c">@c</MudSelectItem>
+                    }
+                </MudSelect>
+
+                <MudSelect T="Size" Label="Base Size" @bind-Value="_size" Dense="true" Style="min-width:180px;">
+                    @foreach (var s in Enum.GetValues(typeof(Size)).Cast<Size>())
+                    {
+                        <MudSelectItem Value="@s">@s</MudSelectItem>
+                    }
+                </MudSelect>
+
+            </MudStack>
+        </MudPaper>
+    </MudItem>
+
+</MudGrid>
+
+<style>
+  .controls-stack { display:flex; flex-wrap: wrap; }
+  .controls-stack .control-item { min-width: 160px; }
+</style>
+
+@code {
+    // ===== Example state
+    private string _single = "Two";
+
+    // Multi-selection: keep a HashSet, bind via IEnumerable proxy
+    private HashSet<string> _multi = new() { "Apple" };
+    private IEnumerable<string> SelectedFruits
+    {
+        get => _multi;
+        set => _multi = value?.ToHashSet() ?? new();
+    }
+
+    private string? _toggle = "Overview";
+
+    // ===== Controls
+    private bool _checkMark;
+    private bool _fixedContent;
+    private bool _outlined;      // when true, force Outlined look
+    private bool _delimiters;
+    private bool _disabled;
+    private bool _vertical;
+
+    private Color _color   = Color.Primary;
+    private Size  _size    = Size.Medium;
+
+    private Size GroupSize => _size;
+
+    private string? GetGroupClass() => _vertical ? "mud-width-full" : null;
+}
