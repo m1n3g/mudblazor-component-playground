@@ -1,10 +1,10 @@
 @page "/components/alert"
 @using MudBlazor
 
-<MudGrid>
+<MudGrid Spacing="0">
     <!-- LEFT: Options -->
-    <MudItem md="4" xs="12">
-        <MudPaper Class="pa-4" Elevation="0">
+    <MudItem xs="12" md="5" lg="4">
+        <MudPaper Class="pa-6 h-100 me-md-6 mb-4 mb-md-0" Elevation="0">
             <MudSelect T="Variant" Label="Variant" Dense="true" @bind-Value="_variant">
                 <MudSelectItem Value="Variant.Filled">Filled</MudSelectItem>
                 <MudSelectItem Value="Variant.Outlined">Outlined</MudSelectItem>
@@ -23,11 +23,13 @@
             <MudCheckBox @bind-Value="_noIcon" Label="No Icon" Color="Color.Primary" />
 
             <!-- Shape -->
-            <MudSelect T="AlertShape" Label="Shape" Dense="true" Class="mt-2" @bind-Value="_shape">
-                <MudSelectItem Value="AlertShape.Default">Default</MudSelectItem>
-                <MudSelectItem Value="AlertShape.Rounded">Rounded (theme default)</MudSelectItem>
+            <MudSelect T="AlertShape" Label="Corners" Dense="true" Class="mt-2" @bind-Value="_shape">
+                <MudSelectItem Value="AlertShape.Default">Theme Default</MudSelectItem>
                 <MudSelectItem Value="AlertShape.Square">Square</MudSelectItem>
             </MudSelect>
+            <MudText Typo="Typo.caption" Class="mud-secondary-text mt-1">
+                Rounded corners are controlled by the app theme in MudBlazor 9.6, not by a direct MudAlert parameter.
+            </MudText>
 
             <!-- Elevation -->
             <MudSlider Min="0" Max="25" Step="1" @bind-Value="_elevation" Color="Color.Info" Class="mt-4">
@@ -69,17 +71,19 @@
     </MudItem>
 
     <!-- RIGHT: Preview -->
-    <MudItem md="8" xs="12" Class="d-flex align-center justify-center">
-        <MudPaper Class="pa-6" Elevation="0">
-            <MudAlert Style="width: 800px;" Severity="@_severity" Variant="@_variant" Dense="@_dense" NoIcon="@_noIcon"
-                Square="@IsSquare" Elevation="@_elevation" ContentAlignment="@_contentAlignment"
-                ShowCloseIcon="@_showCloseIcon" CloseIcon="@_closeIcon" Icon="@SelectedIcon"
-                CloseIconClicked="OnClosed" OnClick="OnAlertClicked">
+    <MudItem xs="12" md="7" lg="8">
+        <MudPaper Class="pa-5 pa-sm-6 h-100 d-flex flex-column justify-center" Elevation="0">
+            <div class="d-flex justify-center">
+                <MudAlert Class="w-100" Style="max-width: 800px;" Severity="@_severity" Variant="@_variant" Dense="@_dense"
+                    NoIcon="@_noIcon" Square="@IsSquare" Elevation="@_elevation"
+                    ContentAlignment="@_contentAlignment" ShowCloseIcon="@_showCloseIcon" CloseIcon="@_closeIcon"
+                    Icon="@SelectedIcon" CloseIconClicked="OnClosed" OnClick="OnAlertClicked">
 
-                @_content
-            </MudAlert>
+                    @_content
+                </MudAlert>
+            </div>
 
-            <MudText Typo="Typo.caption" Class="mt-3">
+            <MudText Typo="Typo.caption" Class="mt-3 text-center">
                 Clicked: @_clickedCount | Closed: @_closedCount
             </MudText>
         </MudPaper>
@@ -123,5 +127,5 @@
 
     private void OnClosed(MudAlert? _ = null) => _closedCount++; // event fires on close icon click
 
-    private enum AlertShape { Default, Rounded, Square }
+    private enum AlertShape { Default, Square }
 }
