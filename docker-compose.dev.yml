@@ -1,0 +1,19 @@
+services:
+  mudplayground-dev:
+    image: mcr.microsoft.com/dotnet/sdk:10.0
+    container_name: mudplayground-dev
+    working_dir: /src
+    volumes:
+      - .:/src
+      - mudplayground-nuget:/root/.nuget/packages
+    ports:
+      - "5080:8080"
+    environment:
+      ASPNETCORE_ENVIRONMENT: Development
+      ASPNETCORE_URLS: "http://+:8080"
+      DOTNET_USE_POLLING_FILE_WATCHER: "1"
+      DOTNET_WATCH_SUPPRESS_LAUNCH_BROWSER: "1"
+    command: dotnet watch --project MudPlayground.csproj run --urls "http://0.0.0.0:8080"
+
+volumes:
+  mudplayground-nuget:

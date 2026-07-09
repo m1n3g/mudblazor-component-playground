@@ -1,0 +1,8 @@
+services:
+  mudplayground:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: mudplayground
+    ports:
+      - "8080:80"
