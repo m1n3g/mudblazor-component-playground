@@ -1,193 +1,381 @@
 @page "/components/appbar"
 @using MudBlazor
 
-<MudStack Spacing="1" Class="mb-4 px-2 px-sm-5 py-2">
-    <MudText Typo="Typo.h5" Style="font-weight: 600;">
-        App Bar
-    </MudText>
+<DemoPageLayout Title="App Bar"
+                Description="Displays actions, branding, navigation and screen titles. Keep the app bar persistent while browsing different pages to ease navigation and access to actions for users."
+                Variant="DemoPageLayoutVariant.Horizontal"
+                PreviewContentMaxWidth="1000px">
+    <Preview>
+        <MudPaper Class="w-100 overflow-hidden" Elevation="0" Style="border: 1px solid var(--mud-palette-lines-default);">
+            @if (_type == AppBarDemoType.Contextual)
+            {
+                <MudLayout Style="@PreviewShellStyle">
+                    <MudAppBar Color="@_color"
+                               Fixed="@_fixed"
+                               Bottom="@_bottom"
+                               Contextual="true"
+                               Dense="@_dense"
+                               Elevation="@_elevation">
+                        <MudIconButton Icon="@SelectedLeftIcon"
+                                       Color="Color.Inherit"
+                                       Edge="Edge.Start" />
+                        <MudSpacer />
+                        <MudIconButton Icon="@Icons.Material.Filled.FlipToBack"
+                                       Color="Color.Inherit"
+                                       OnClick="ResetContextSelection" />
+                    </MudAppBar>
 
-    <MudText Typo="Typo.body2" Style="color: var(--mud-palette-text-primary);">
-        Displays actions, branding, navigation and screen titles. Keep the app bar persistent while browsing different pages to ease navigation and access to actions for users.
-    </MudText>
-</MudStack>
-
-<MudGrid Spacing="0">
-    <!-- PREVIEW -->
-    <MudItem xs="12" Class="order-1 px-2 px-sm-0 mb-4">
-        <MudPaper Class="pa-2 pa-sm-5 pa-lg-6 h-100 d-flex flex-column gap-6" Elevation="0">
-            <div>
-                <MudText Typo="Typo.h6" Style="font-weight:700">Preview</MudText>
-                <MudText Typo="Typo.body2" Class="mt-1">
-                    Compare a basic app bar setup with a contextual selection state using the same controls below.
-                </MudText>
-            </div>
-
-            <MudStack Spacing="3">
-                <MudText Typo="Typo.subtitle1" Style="font-weight:600">Basic App Bar</MudText>
-
-                <MudAppBar Color="Color.Primary" Fixed="false" Dense="@dense" Elevation="@elevation">
-                    <MudIconButton Icon="@Icons.Material.Filled.Menu" Color="Color.Inherit" Edge="Edge.Start" />
-                    <MudImage Src="/images/mony.jpg" Width="200" Height="40" ObjectFit="ObjectFit.Cover" />
-                    <MudSpacer />
-                    <MudIconButton Icon="@Icons.Custom.Brands.GitHub" Color="Color.Inherit" />
-                </MudAppBar>
-
-                <MudAppBar Color="Color.Secondary" Fixed="false" Dense="@dense" Elevation="@elevation">
-                    <MudIconButton Icon="@Icons.Material.Filled.Menu" Color="Color.Inherit" Edge="Edge.Start" />
-                    <MudIconButton Icon="@Icons.Custom.Brands.GitHub" Color="Color.Inherit" />
-                </MudAppBar>
-
-                <MudAppBar Color="Color.Tertiary" Fixed="false" Dense="@dense" Elevation="@elevation">
-                    <MudIconButton Icon="@Icons.Material.Filled.Menu" Color="Color.Inherit" Edge="Edge.Start" />
-                    <MudIconButton Icon="@Icons.Custom.Brands.GitHub" Color="Color.Inherit" />
-                </MudAppBar>
-            </MudStack>
-
-            <MudDivider />
-
-            <MudStack Spacing="3">
-                <MudText Typo="Typo.subtitle1" Style="font-weight:600">Contextual App Bar</MudText>
-
-                <MudPaper Class="pa-4" Elevation="0" Style="border: 1px solid var(--mud-palette-lines-default);">
-                    <MudLayout>
-                        <MudAppBar Color="Color.Primary" Fixed="false" Contextual Dense="@dense" Elevation="@elevation">
-                            <MudIconButton Icon="@Icons.Material.Filled.Menu" Color="Color.Inherit" Edge="Edge.Start" />
-                            <MudSpacer />
-                            <MudIconButton
-                                Icon="@(Deleted > 0 ? @Icons.Material.Filled.FlipToBack : @Icons.Material.Filled.FlipToFront)"
-                                Color="Color.Inherit" OnClick="ResetItems" />
-                        </MudAppBar>
-
-                        <MudMainContent Class="pt-4">
-                            <div class="d-flex flex-wrap gap-4">
-                                @for (int i = 0; i < _images.Length; i++)
+                    <MudMainContent Class="@(_bottom ? "pb-4" : "pt-4")"
+                                    Style="margin-left: 0; margin-right: 0;">
+                        @if (_bottom)
+                        {
+                            <MudPaper Class="pa-4 d-flex flex-column justify-center" Square="true" Elevation="0">
+                                <MudText Typo="Typo.body1" Style="font-weight: 600;">Selected items</MudText>
+                                <MudText Typo="Typo.body2" Class="mt-1">
+                                    Simulates page content while the contextual action bar is anchored to the bottom.
+                                </MudText>
+                            </MudPaper>
+                        }
+                        else
+                        {
+                            <div class="d-flex flex-wrap justify-center gap-3 pa-4 mx-auto" style="max-width: 708px;">
+                                @for (var i = 0; i < _contextCards.Length; i++)
                                 {
                                     var index = i;
 
-                                    if (_images[index].IsDeleted) continue;
-
-                                    <MudPaper Width="200px" Height="150px" Elevation="0" Class="d-flex align-center justify-center"
-                                              Style="background-color:inherit">
-                                        <MudImage Src="@($"images/{_images[index].Title}.jpg")"
-                                                  Width="@_images[index].Width"
-                                                  Height="@_images[index].Height"
-                                                  Elevation="25"
-                                                  ObjectFit="ObjectFit.Cover"
-                                                  Class="rounded-lg"
-                                                  @onclick="@(() => SelectImage(index))" />
+                                    <MudPaper Class="@GetCardClass(index)"
+                                              Width="136px"
+                                              Height="96px"
+                                              Elevation="0"
+                                              Outlined="true"
+                                              @onclick="@(() => ToggleCardSelection(index))">
+                                        <MudText Typo="Typo.subtitle2" Align="Align.Center">@_contextCards[index]</MudText>
                                     </MudPaper>
                                 }
                             </div>
-                        </MudMainContent>
-                    </MudLayout>
+                        }
+                    </MudMainContent>
 
-                    <MudContextualActionBar Color="Color.Tertiary"
-                                            Fixed="false"
-                                            Visible="ShowContext"
-                                            Dense="@dense"
-                                            Elevation="@elevation">
-                        <MudIconButton Icon="@Icons.Material.Filled.Close" Color="Color.Inherit" Edge="Edge.Start"
-                                       OnClick="UnselectItems" />
-                        <MudText Class="pl-8" Typo="Typo.h6">@($"{_selected.Count} Selected")</MudText>
+                    <MudContextualActionBar Color="@_color"
+                                            Fixed="@_fixed"
+                                            Bottom="@_bottom"
+                                            Visible="@_showContextualState"
+                                            Dense="@_dense"
+                                            Elevation="@_elevation">
+                        <MudIconButton Icon="@SelectedLeftIcon"
+                                       Color="Color.Inherit"
+                                       Edge="Edge.Start"
+                                       OnClick="ToggleContextualState" />
+
+                        <MudText Typo="Typo.h6" Class="pl-4">@ContextualLabel</MudText>
                         <MudSpacer />
-                        <MudIconButton Icon="@Icons.Material.Filled.Share" Color="Color.Inherit" />
-                        <MudIconButton Icon="@Icons.Material.Filled.Edit" Color="Color.Inherit" />
-                        <MudIconButton Icon="@Icons.Material.Filled.Delete" Color="Color.Inherit" OnClick="DeleteSelectedItems" />
+
+                        @foreach (var action in ContextualActions)
+                        {
+                            <MudIconButton Icon="@action" Color="Color.Inherit" />
+                        }
                     </MudContextualActionBar>
-                </MudPaper>
-            </MudStack>
+                </MudLayout>
+            }
+            else
+            {
+                <div class="d-flex flex-column" style="@PreviewShellStyle">
+                    @if (_bottom)
+                    {
+                        <MudPaper Class="flex-grow-1 pa-4 d-flex flex-column justify-center" Square="true" Elevation="0">
+                            <MudList T="string" Dense="true" Class="py-0">
+                                @foreach (var item in _bottomItems)
+                                {
+                                    <MudListItem T="string" Icon="@item.Icon" IconColor="@item.Color">
+                                        @item.Label
+                                    </MudListItem>
+                                }
+                            </MudList>
+                        </MudPaper>
+                    }
+
+                    <MudAppBar Color="@_color"
+                               Fixed="@_fixed"
+                               Bottom="@_bottom"
+                               Dense="@_dense"
+                               Elevation="@_elevation">
+                        @if (_showNavigationIcon)
+                        {
+                            if (_withMenu)
+                            {
+                                <MudMenu Icon="@SelectedLeftIcon"
+                                         Color="Color.Inherit"
+                                         AnchorOrigin="Origin.BottomLeft"
+                                         TransformOrigin="Origin.TopLeft">
+                                    <MudMenuItem>Profile</MudMenuItem>
+                                    <MudMenuItem>Notifications</MudMenuItem>
+                                    <MudMenuItem>Settings</MudMenuItem>
+                                </MudMenu>
+                            }
+                            else
+                            {
+                                <MudIconButton Icon="@SelectedLeftIcon"
+                                               Color="Color.Inherit"
+                                               Edge="Edge.Start" />
+                            }
+                        }
+
+                        @if (_showTitle)
+                        {
+                            <MudText Typo="Typo.h6">@_titleText</MudText>
+                        }
+
+                        <MudSpacer />
+
+                        @if (_showEndAction)
+                        {
+                            @if (_rightAction == AppBarRightAction.Menu)
+                            {
+                                <MudMenu Icon="@SelectedRightIcon"
+                                         Color="Color.Inherit"
+                                         AnchorOrigin="Origin.BottomRight"
+                                         TransformOrigin="Origin.TopRight">
+                                    <MudMenuItem>Share</MudMenuItem>
+                                    <MudMenuItem>Bookmark</MudMenuItem>
+                                    <MudMenuItem>Archive</MudMenuItem>
+                                </MudMenu>
+                            }
+                            else
+                            {
+                                <MudIconButton Icon="@SelectedRightIcon" Color="Color.Inherit" />
+                            }
+                        }
+                    </MudAppBar>
+
+                    @if (!_bottom)
+                    {
+                        <MudPaper Class="flex-grow-1 pa-4" Square="true" Elevation="0">
+                            <MudText Typo="Typo.body1" Style="font-weight: 600;">Page content</MudText>
+                            <MudText Typo="Typo.body2" Class="mt-1">
+                                Use the controls below to switch app bar type, color, position, density, and actions.
+                            </MudText>
+                        </MudPaper>
+                    }
+                </div>
+            }
         </MudPaper>
-    </MudItem>
+    </Preview>
 
-    <!-- OPTIONS -->
-    <MudItem xs="12" Class="order-2 px-2 px-sm-0">
-        <MudPaper Class="pa-2 pa-sm-5 pa-lg-6 h-100 d-flex flex-column gap-3" Elevation="0">
-            <MudText Typo="Typo.h6" Style="font-weight:700">Options</MudText>
+    <Options>
+        <MudGrid Spacing="4" Justify="Justify.Center" Class="w-100">
+            <MudItem xs="12" md="6">
+                <MudSelect T="AppBarDemoType" Label="Type" Dense="true" @bind-Value="_type">
+                    <MudSelectItem Value="AppBarDemoType.Regular">Regular</MudSelectItem>
+                    <MudSelectItem Value="AppBarDemoType.Contextual">Contextual action bar</MudSelectItem>
+                </MudSelect>
+            </MudItem>
 
-            <MudSlider @bind-Value="@elevation"
-                       Min="0"
-                       Max="24"
-                       ValueLabel="true"
-                       Color="Color.Primary">
-                Elevation
-            </MudSlider>
+            <MudItem xs="12" md="6">
+                <MudSelect T="Color" Label="Color" Dense="true" @bind-Value="_color">
+                    <MudSelectItem Value="Color.Default">Default</MudSelectItem>
+                    <MudSelectItem Value="Color.Primary">Primary</MudSelectItem>
+                    <MudSelectItem Value="Color.Secondary">Secondary</MudSelectItem>
+                    <MudSelectItem Value="Color.Tertiary">Tertiary</MudSelectItem>
+                    <MudSelectItem Value="Color.Info">Info</MudSelectItem>
+                    <MudSelectItem Value="Color.Success">Success</MudSelectItem>
+                    <MudSelectItem Value="Color.Warning">Warning</MudSelectItem>
+                    <MudSelectItem Value="Color.Error">Error</MudSelectItem>
+                </MudSelect>
+            </MudItem>
 
-            <MudCheckBox @bind-Value="@dense"
-                         Label="Dense"
-                         Color="Color.Primary" />
+            <MudItem xs="12">
+                <div class="d-flex flex-wrap align-center justify-start" style="column-gap: 16px; row-gap: 4px;">
+                    <MudCheckBox @bind-Value="_fixed" Label="Fixed" Color="Color.Primary" />
+                    <MudCheckBox @bind-Value="_dense" Label="Dense" Color="Color.Primary" />
+                    <MudCheckBox @bind-Value="_bottom" Label="Bottom App Bar" Color="Color.Primary" />
+                    <MudCheckBox @bind-Value="_withMenu" Label="App Bar with Menu" Color="Color.Primary" Disabled="@(_type == AppBarDemoType.Contextual)" />
+                    <MudCheckBox @bind-Value="_showNavigationIcon" Label="Show Navigation Icon" Color="Color.Primary" Disabled="@(_type == AppBarDemoType.Contextual)" />
+                    <MudCheckBox @bind-Value="_showEndAction" Label="Show End Action" Color="Color.Primary" Disabled="@(_type == AppBarDemoType.Contextual)" />
+                    <MudCheckBox @bind-Value="_showTitle" Label="Show Title" Color="Color.Primary" Disabled="@(_type == AppBarDemoType.Contextual)" />
+                </div>
+            </MudItem>
 
-            <MudText Typo="Typo.caption" Class="mud-secondary-text" Style="line-height: 1.5;">
-                These controls apply to both the basic and contextual app bar previews above.
-            </MudText>
-        </MudPaper>
-    </MudItem>
-</MudGrid>
+            <MudItem xs="12" md="6">
+                <MudSelect T="string"
+                           Label="@(_type == AppBarDemoType.Contextual ? "Leading Action" : "Left Icon")"
+                           Dense="true"
+                           @bind-Value="_leftIcon">
+                    <MudSelectItem Value="@Icons.Material.Filled.Menu">Menu</MudSelectItem>
+                    <MudSelectItem Value="@Icons.Material.Filled.ArrowBack">Arrow Back</MudSelectItem>
+                    <MudSelectItem Value="@Icons.Material.Filled.Close">Close</MudSelectItem>
+                    <MudSelectItem Value="@Icons.Material.Filled.MoreVert">More Vert</MudSelectItem>
+                </MudSelect>
+            </MudItem>
 
-@code
-{
-    int elevation = 4;
-    bool dense = false;
-    private bool ShowContext => _selected.Count > 0;
+            <MudItem xs="12" md="6">
+                <MudSelect T="string"
+                           Label="@(_type == AppBarDemoType.Contextual ? "Primary Action" : "Right Icon")"
+                           Dense="true"
+                           @bind-Value="_rightIcon"
+                           Disabled="@(_type == AppBarDemoType.Contextual)">
+                    <MudSelectItem Value="@Icons.Custom.Brands.GitHub">GitHub</MudSelectItem>
+                    <MudSelectItem Value="@Icons.Material.Filled.FavoriteBorder">Favorite</MudSelectItem>
+                    <MudSelectItem Value="@Icons.Material.Filled.Search">Search</MudSelectItem>
+                    <MudSelectItem Value="@Icons.Material.Filled.MoreVert">More Vert</MudSelectItem>
+                </MudSelect>
+            </MudItem>
 
-    private readonly HashSet<Image> _selected = [];
-    private int Deleted => _images.Count(x => x.IsDeleted);
-    private readonly Image[] _images = [ new Image("sweden"), new Image("iceland"), new Image("castle") ];
+            <MudItem xs="12" md="6">
+                <MudSelect T="AppBarRightAction"
+                           Label="End Action Type"
+                           Dense="true"
+                           @bind-Value="_rightAction"
+                           Disabled="@(_type == AppBarDemoType.Contextual || !_showEndAction)">
+                    <MudSelectItem Value="AppBarRightAction.Icon">Icon Button</MudSelectItem>
+                    <MudSelectItem Value="AppBarRightAction.Menu">Menu</MudSelectItem>
+                </MudSelect>
+            </MudItem>
 
-    private void SelectImage(int index)
+            <MudItem xs="12" md="6">
+                <MudTextField Label="Title"
+                              @bind-Value="_titleText"
+                              Disabled="@(_type == AppBarDemoType.Contextual || !_showTitle)" />
+            </MudItem>
+
+            <MudItem xs="12">
+                <MudSlider Min="0"
+                           Max="24"
+                           Step="1"
+                           @bind-Value="_elevation"
+                           Color="Color.Info">
+                    Elevation
+                </MudSlider>
+            </MudItem>
+
+            <MudItem xs="12" md="6">
+                <MudNumericField T="int"
+                                 Label="Selected Count"
+                                 Min="0"
+                                 Max="@_contextCards.Length"
+                                 Immediate="true"
+                                 @bind-Value="_selectedCount"
+                                 Disabled="@(_type != AppBarDemoType.Contextual)" />
+            </MudItem>
+
+            <MudItem xs="12" md="6">
+                <MudCheckBox @bind-Value="_showContextualState"
+                             Label="Show Contextual State"
+                             Color="Color.Primary"
+                             Disabled="@(_type != AppBarDemoType.Contextual)" />
+            </MudItem>
+        </MudGrid>
+    </Options>
+</DemoPageLayout>
+
+@code {
+    private AppBarDemoType _type = AppBarDemoType.Regular;
+    private Color _color = Color.Primary;
+    private bool _fixed;
+    private bool _dense;
+    private bool _bottom;
+    private bool _withMenu;
+    private bool _showNavigationIcon = true;
+    private bool _showEndAction = true;
+    private bool _showTitle = true;
+    private bool _showContextualState = true;
+    private int _elevation = 4;
+    private int _selectedCount = 2;
+    private string _titleText = "MudPlayground";
+    private string _leftIcon = Icons.Material.Filled.Menu;
+    private string _rightIcon = Icons.Custom.Brands.GitHub;
+    private AppBarRightAction _rightAction = AppBarRightAction.Icon;
+
+    private readonly string[] _contextCards = ["Photo 1", "Photo 2", "Photo 3", "Photo 4", "Photo 5", "Photo 6"];
+    private readonly HashSet<int> _selectedCards = [0, 1];
+
+    private readonly (string Label, string Icon, Color Color)[] _bottomItems =
+    [
+        ("Bookmark Item 1", Icons.Material.Filled.Bookmark, Color.Default),
+        ("Bookmark Item 2", Icons.Material.Filled.Bookmark, Color.Primary),
+        ("Bookmark Item 3", Icons.Material.Filled.Bookmark, Color.Secondary),
+        ("Bookmark Item 4", Icons.Material.Filled.Bookmark, Color.Tertiary)
+    ];
+
+    private string SelectedLeftIcon => _leftIcon;
+    private string SelectedRightIcon => _rightIcon;
+
+    private string ContextualLabel => $"{Math.Max(_selectedCount, 0)} Selected";
+
+    private string PreviewShellStyle => _bottom
+        ? "min-height: 360px; background: var(--mud-palette-surface);"
+        : "min-height: 280px; background: var(--mud-palette-surface);";
+
+    private IEnumerable<string> ContextualActions =>
+        [Icons.Material.Filled.Share, Icons.Material.Filled.Edit, Icons.Material.Filled.Delete];
+
+    protected override void OnParametersSet()
     {
-        var image = _images[index];
-        bool isSelected = _selected.Contains(image);
+        SyncSelectedCards();
+    }
 
-        _images[index] = image with { Width = isSelected ? 200 : 100, Height = isSelected ? 150 : 75 };
+    private void ToggleContextualState()
+    {
+        _showContextualState = !_showContextualState;
+    }
 
-        if (isSelected)
-            _selected.Remove(image);
+    private void ToggleCardSelection(int index)
+    {
+        if (_selectedCards.Contains(index))
+            _selectedCards.Remove(index);
         else
-            _selected.Add(_images[index]);
+            _selectedCards.Add(index);
+
+        _selectedCount = _selectedCards.Count;
+        _showContextualState = _selectedCount > 0;
     }
 
-    private void UnselectItems()
+    private void ResetContextSelection()
     {
-        for (int index = 0; index < _images.Length; index++)
-        {
-            var image = _images[index];
+        _selectedCards.Clear();
+        _selectedCount = 0;
+        _showContextualState = false;
+    }
 
-            if (_selected.Contains(image))
-            {
-                _images[index] = image with { Width = 200, Height = 150 };
-            }
+    private string GetCardClass(int index)
+    {
+        var selected = _selectedCards.Contains(index);
+        var border = selected
+            ? "border: 2px solid var(--mud-palette-primary);"
+            : "border: 1px solid var(--mud-palette-lines-default);";
+
+        return $"pa-2 d-flex align-center justify-center rounded cursor-pointer";
+    }
+
+    private void SyncSelectedCards()
+    {
+        _selectedCount = Math.Clamp(_selectedCount, 0, _contextCards.Length);
+
+        if (_type != AppBarDemoType.Contextual)
+            return;
+
+        while (_selectedCards.Count > _selectedCount)
+        {
+            _selectedCards.Remove(_selectedCards.Max());
         }
 
-        _selected.Clear();
-    }
-
-    private void DeleteSelectedItems()
-    {
-        for (int index = 0; index < _images.Length; index++)
+        for (var i = 0; i < _contextCards.Length && _selectedCards.Count < _selectedCount; i++)
         {
-            var image = _images[index];
-
-            if (_selected.Contains(image))
-            {
-                _images[index] = image with { Width = 200, Height = 150, IsDeleted = true };
-            }
+            _selectedCards.Add(i);
         }
 
-        _selected.Clear();
+        if (_selectedCount == 0)
+            _showContextualState = false;
     }
 
-    private void ResetItems()
+    private enum AppBarDemoType
     {
-        for (int index = 0; index < _images.Length; index++)
-        {
-            var image = _images[index];
-
-            if (image.IsDeleted)
-            {
-                _images[index] = image with { IsDeleted = false };
-            }
-        }
+        Regular,
+        Contextual
     }
 
-    private record Image(string Title, int Width = 200, int Height = 150, bool IsDeleted = false);
+    private enum AppBarRightAction
+    {
+        Icon,
+        Menu
+    }
 }
