@@ -16,7 +16,7 @@
 .app-shell-body {
     min-height: calc(100vh - 48px);
     box-sizing: border-box;
-    padding: 24px;
+    padding: 32px;
 }
 
 .app-shell-drawer-content {
@@ -35,12 +35,7 @@
 }
 
 @media (max-width: 959.98px) {
-    .app-shell-main {
-        min-height: calc(100vh - 48px);
-    }
-
     .app-shell-body {
-        min-height: calc(100vh - 48px);
-        padding: 16px;
+        padding: 20px;
     }
 }
