@@ -1,78 +1,127 @@
 @page "/components/appbar"
 @using MudBlazor
 
-<MudText Typo="Typo.h6" Style="font-weight:700">Basic App Bar</MudText>
-<MudPaper Class="pa-6 my-3" Elevation="0">
-    <MudStack Spacing="3" AlignItems="AlignItems.Start">
-        <MudAppBar Color="Color.Primary" Fixed="false" Dense="@dense" Elevation="@elevation">
-            <MudIconButton Icon="@Icons.Material.Filled.Menu" Color="Color.Inherit" Edge="Edge.Start" />
-            <MudImage Src="/images/mony.jpg" Width="200" Height="40" ObjectFit="ObjectFit.Cover" />
-            <MudSpacer />
-            <MudIconButton Icon="@Icons.Custom.Brands.GitHub" Color="Color.Inherit" />
-        </MudAppBar>
+<MudStack Spacing="1" Class="mb-4 px-2 px-sm-5 py-2">
+    <MudText Typo="Typo.h5" Style="font-weight: 600;">
+        App Bar
+    </MudText>
 
-        <MudAppBar Color="Color.Secondary" Fixed="false" Dense="@dense" Elevation="@elevation">
-            <MudIconButton Icon="@Icons.Material.Filled.Menu" Color="Color.Inherit" Edge="Edge.Start" />
-            <MudIconButton Icon="@Icons.Custom.Brands.GitHub" Color="Color.Inherit" />
-        </MudAppBar>
+    <MudText Typo="Typo.body2" Style="color: var(--mud-palette-text-primary);">
+        Displays actions, branding, navigation and screen titles. Keep the app bar persistent while browsing different pages to ease navigation and access to actions for users.
+    </MudText>
+</MudStack>
 
-        <MudAppBar Color="Color.Tertiary" Fixed="false" Dense="@dense" Elevation="@elevation">
-            <MudIconButton Icon="@Icons.Material.Filled.Menu" Color="Color.Inherit" Edge="Edge.Start" />
-            <MudIconButton Icon="@Icons.Custom.Brands.GitHub" Color="Color.Inherit" />
-        </MudAppBar>
-
-        <MudGrid>
-            <MudItem md="6" sm="12">
-                <MudSlider @bind-Value="@elevation" Min="0" Max="24" ValueLabel="true">Elevation</MudSlider>
-            </MudItem>
-            <MudItem md="6" sm="12">
-                <MudSwitch @bind-Value="@dense" Label="Dense" Class="mt-6" Color="Color.Primary"></MudSwitch>
-            </MudItem>
-        </MudGrid>
-
-    </MudStack>
-</MudPaper>
-
-
-<MudText Class="mt-8" Typo="Typo.h6" Style="font-weight:700">Contextual App Bar</MudText>
-<MudPaper Class="pa-6 my-3" Elevation="0">
-    <MudLayout>
-        <MudAppBar Color="Color.Primary" Fixed="false" Contextual>
-            <MudIconButton Icon="@Icons.Material.Filled.Menu" Color="Color.Inherit" Edge="Edge.Start" />
-            <MudSpacer />
-            <MudIconButton
-                Icon="@(Deleted > 0 ? @Icons.Material.Filled.FlipToBack : @Icons.Material.Filled.FlipToFront)"
-                Color="Color.Inherit" OnClick="ResetItems" />
-        </MudAppBar>
-        <MudMainContent Class="pt-4">
-            <div class="d-flex flex-wrap gap-4">
-                @for (int i = 0; i < _images.Length; i++)
-                {
-                    var index = i;
-
-                    if (_images[index].IsDeleted) continue;
-
-                    <MudPaper Width="200px" Height="150px" Elevation="0" Class="d-flex align-center justify-center"
-                        Style="background-color:inherit">
-                        <MudImage Src="@($"images/{_images[index].Title}.jpg")" Width="@_images[index].Width"
-                            Height="@_images[index].Height" Elevation="25" ObjectFit="ObjectFit.Cover" Class="rounded-lg"
-                            @onclick="@(() => SelectImage(index))" />
-                    </MudPaper>
-                }
+<MudGrid Spacing="0">
+    <!-- PREVIEW -->
+    <MudItem xs="12" Class="order-1 px-2 px-sm-0 mb-4">
+        <MudPaper Class="pa-2 pa-sm-5 pa-lg-6 h-100 d-flex flex-column gap-6" Elevation="0">
+            <div>
+                <MudText Typo="Typo.h6" Style="font-weight:700">Preview</MudText>
+                <MudText Typo="Typo.body2" Class="mt-1">
+                    Compare a basic app bar setup with a contextual selection state using the same controls below.
+                </MudText>
             </div>
-        </MudMainContent>
-    </MudLayout>
 
-    <MudContextualActionBar Color="Color.Tertiary" Fixed="false" Visible="ShowContext">
-        <MudIconButton Icon="@Icons.Material.Filled.Close" Color="Color.Inherit" Edge="Edge.Start"
-            OnClick="UnselectItems" />
-        <MudText Class="pl-8" Typo="Typo.h6">@($"{_selected.Count} Selected") </MudText>
-        <MudSpacer />
-        <MudIconButton Icon="@Icons.Material.Filled.Share" Color="Color.Inherit" />
-        <MudIconButton Icon="@Icons.Material.Filled.Edit" Color="Color.Inherit" />
-        <MudIconButton Icon="@Icons.Material.Filled.Delete" Color="Color.Inherit" OnClick="DeleteSelectedItems" />
-    </MudContextualActionBar>
-</MudPaper>
+            <MudStack Spacing="3">
+                <MudText Typo="Typo.subtitle1" Style="font-weight:600">Basic App Bar</MudText>
+
+                <MudAppBar Color="Color.Primary" Fixed="false" Dense="@dense" Elevation="@elevation">
+                    <MudIconButton Icon="@Icons.Material.Filled.Menu" Color="Color.Inherit" Edge="Edge.Start" />
+                    <MudImage Src="/images/mony.jpg" Width="200" Height="40" ObjectFit="ObjectFit.Cover" />
+                    <MudSpacer />
+                    <MudIconButton Icon="@Icons.Custom.Brands.GitHub" Color="Color.Inherit" />
+                </MudAppBar>
+
+                <MudAppBar Color="Color.Secondary" Fixed="false" Dense="@dense" Elevation="@elevation">
+                    <MudIconButton Icon="@Icons.Material.Filled.Menu" Color="Color.Inherit" Edge="Edge.Start" />
+                    <MudIconButton Icon="@Icons.Custom.Brands.GitHub" Color="Color.Inherit" />
+                </MudAppBar>
+
+                <MudAppBar Color="Color.Tertiary" Fixed="false" Dense="@dense" Elevation="@elevation">
+                    <MudIconButton Icon="@Icons.Material.Filled.Menu" Color="Color.Inherit" Edge="Edge.Start" />
+                    <MudIconButton Icon="@Icons.Custom.Brands.GitHub" Color="Color.Inherit" />
+                </MudAppBar>
+            </MudStack>
+
+            <MudDivider />
+
+            <MudStack Spacing="3">
+                <MudText Typo="Typo.subtitle1" Style="font-weight:600">Contextual App Bar</MudText>
+
+                <MudPaper Class="pa-4" Elevation="0" Style="border: 1px solid var(--mud-palette-lines-default);">
+                    <MudLayout>
+                        <MudAppBar Color="Color.Primary" Fixed="false" Contextual Dense="@dense" Elevation="@elevation">
+                            <MudIconButton Icon="@Icons.Material.Filled.Menu" Color="Color.Inherit" Edge="Edge.Start" />
+                            <MudSpacer />
+                            <MudIconButton
+                                Icon="@(Deleted > 0 ? @Icons.Material.Filled.FlipToBack : @Icons.Material.Filled.FlipToFront)"
+                                Color="Color.Inherit" OnClick="ResetItems" />
+                        </MudAppBar>
+
+                        <MudMainContent Class="pt-4">
+                            <div class="d-flex flex-wrap gap-4">
+                                @for (int i = 0; i < _images.Length; i++)
+                                {
+                                    var index = i;
+
+                                    if (_images[index].IsDeleted) continue;
+
+                                    <MudPaper Width="200px" Height="150px" Elevation="0" Class="d-flex align-center justify-center"
+                                              Style="background-color:inherit">
+                                        <MudImage Src="@($"images/{_images[index].Title}.jpg")"
+                                                  Width="@_images[index].Width"
+                                                  Height="@_images[index].Height"
+                                                  Elevation="25"
+                                                  ObjectFit="ObjectFit.Cover"
+                                                  Class="rounded-lg"
+                                                  @onclick="@(() => SelectImage(index))" />
+                                    </MudPaper>
+                                }
+                            </div>
+                        </MudMainContent>
+                    </MudLayout>
+
+                    <MudContextualActionBar Color="Color.Tertiary"
+                                            Fixed="false"
+                                            Visible="ShowContext"
+                                            Dense="@dense"
+                                            Elevation="@elevation">
+                        <MudIconButton Icon="@Icons.Material.Filled.Close" Color="Color.Inherit" Edge="Edge.Start"
+                                       OnClick="UnselectItems" />
+                        <MudText Class="pl-8" Typo="Typo.h6">@($"{_selected.Count} Selected")</MudText>
+                        <MudSpacer />
+                        <MudIconButton Icon="@Icons.Material.Filled.Share" Color="Color.Inherit" />
+                        <MudIconButton Icon="@Icons.Material.Filled.Edit" Color="Color.Inherit" />
+                        <MudIconButton Icon="@Icons.Material.Filled.Delete" Color="Color.Inherit" OnClick="DeleteSelectedItems" />
+                    </MudContextualActionBar>
+                </MudPaper>
+            </MudStack>
+        </MudPaper>
+    </MudItem>
+
+    <!-- OPTIONS -->
+    <MudItem xs="12" Class="order-2 px-2 px-sm-0">
+        <MudPaper Class="pa-2 pa-sm-5 pa-lg-6 h-100 d-flex flex-column gap-3" Elevation="0">
+            <MudText Typo="Typo.h6" Style="font-weight:700">Options</MudText>
+
+            <MudSlider @bind-Value="@elevation"
+                       Min="0"
+                       Max="24"
+                       ValueLabel="true"
+                       Color="Color.Primary">
+                Elevation
+            </MudSlider>
+
+            <MudCheckBox @bind-Value="@dense"
+                         Label="Dense"
+                         Color="Color.Primary" />
+
+            <MudText Typo="Typo.caption" Class="mud-secondary-text" Style="line-height: 1.5;">
+                These controls apply to both the basic and contextual app bar previews above.
+            </MudText>
+        </MudPaper>
+    </MudItem>
+</MudGrid>
 
 @code
 {
