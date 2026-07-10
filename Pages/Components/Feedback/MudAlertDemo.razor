@@ -1,163 +1,34 @@
 @page "/components/alert"
 @using MudBlazor
 
-<MudStack Spacing="1" Class="mb-4 px-2 px-sm-0 py-2 mx-auto w-100" Style="max-width: 1120px;">
-    <MudText Typo="Typo.h5" Style="font-weight: 600;">
-        Alert
-    </MudText>
+<DemoPageLayout Title="Alert"
+                Description="Displays an important message which is statically embedded in the page content."
+                Variant="DemoPageLayoutVariant.Vertical">
+    <Preview>
+        <MudAlert Class="w-100"
+                  Severity="@_severity"
+                  Variant="@_variant"
+                  Dense="@_dense"
+                  NoIcon="@_noIcon"
+                  Square="@IsSquare"
+                  Elevation="@_elevation"
+                  ContentAlignment="@_contentAlignment"
+                  ShowCloseIcon="@_showCloseIcon"
+                  CloseIcon="@_closeIcon"
+                  Icon="@SelectedIcon"
+                  CloseIconClicked="OnClosed"
+                  OnClick="OnAlertClicked">
 
-    <MudText Typo="Typo.body2" Style="color: var(--mud-palette-text-primary);">
-        Displays an important message which is statically embedded in the page content.
-    </MudText>
-</MudStack>
+            @_content
+        </MudAlert>
 
-@*
-<MudGrid Spacing="0">
-    <!-- PREVIEW: Top on xs/md, right side on lg+ -->
-    <MudItem xs="12" md="12" lg="7" Class="order-1 order-lg-2 px-2 px-sm-0 mb-4 mb-lg-0">
-        <MudPaper Class="pa-0 pa-sm-5 pa-lg-6 h-100 d-flex flex-column justify-center" Elevation="0">
-            <div class="d-flex justify-center">
-                <MudAlert Class="w-100"
-                          Style="max-width: 800px;"
-                          Severity="@_severity"
-                          Variant="@_variant"
-                          Dense="@_dense"
-                          NoIcon="@_noIcon"
-                          Square="@IsSquare"
-                          Elevation="@_elevation"
-                          ContentAlignment="@_contentAlignment"
-                          ShowCloseIcon="@_showCloseIcon"
-                          CloseIcon="@_closeIcon"
-                          Icon="@SelectedIcon"
-                          CloseIconClicked="OnClosed"
-                          OnClick="OnAlertClicked">
-
-                    @_content
-                </MudAlert>
-            </div>
-
-            <MudText Typo="Typo.caption" Class="mt-3 text-center">
-                Clicked: @_clickedCount | Closed: @_closedCount
-            </MudText>
-        </MudPaper>
-    </MudItem>
-
-    <!-- OPTIONS: Below on xs/md, left side on lg+ -->
-    <MudItem xs="12" md="12" lg="5" Class="order-2 order-lg-1 px-2 px-sm-0">
-        <MudPaper Class="pa-2 pa-sm-5 pa-lg-6 h-100 me-lg-6 d-flex flex-column gap-2" Elevation="0">
-            <MudSelect T="Variant" Label="Variant" Dense="true" @bind-Value="_variant">
-                <MudSelectItem Value="Variant.Filled">Filled</MudSelectItem>
-                <MudSelectItem Value="Variant.Outlined">Outlined</MudSelectItem>
-                <MudSelectItem Value="Variant.Text">Text</MudSelectItem>
-            </MudSelect>
-
-            <MudSelect T="Severity" Label="Severity" Dense="true" @bind-Value="_severity">
-                <MudSelectItem Value="Severity.Normal">Normal</MudSelectItem>
-                <MudSelectItem Value="Severity.Info">Info</MudSelectItem>
-                <MudSelectItem Value="Severity.Success">Success</MudSelectItem>
-                <MudSelectItem Value="Severity.Warning">Warning</MudSelectItem>
-                <MudSelectItem Value="Severity.Error">Error</MudSelectItem>
-            </MudSelect>
-
-            <div class="d-flex flex-wrap align-center gap-1">
-                <MudCheckBox @bind-Value="_dense"
-                             Label="Dense"
-                             Color="Color.Primary" />
-
-                <MudCheckBox @bind-Value="_noIcon"
-                             Label="No Icon"
-                             Color="Color.Primary" />
-            </div>
-
-            <MudSelect T="AlertShape" Label="Corners" Dense="true" @bind-Value="_shape">
-                <MudSelectItem Value="AlertShape.Default">Theme Default</MudSelectItem>
-                <MudSelectItem Value="AlertShape.Square">Square</MudSelectItem>
-            </MudSelect>
-
-            <MudText Typo="Typo.caption" Class="mud-secondary-text" Style="line-height: 1.5;">
-                Rounded corners are controlled by the app theme in MudBlazor 9.6, not by a direct MudAlert parameter.
-            </MudText>
-
-            <MudSlider Min="0"
-                       Max="25"
-                       Step="1"
-                       @bind-Value="_elevation"
-                       Color="Color.Info">
-                Elevation
-            </MudSlider>
-
-            <MudSelect T="HorizontalAlignment"
-                       Label="Content Alignment"
-                       Dense="true"
-                       @bind-Value="_contentAlignment">
-                <MudSelectItem Value="HorizontalAlignment.Left">Left</MudSelectItem>
-                <MudSelectItem Value="HorizontalAlignment.Center">Center</MudSelectItem>
-                <MudSelectItem Value="HorizontalAlignment.Right">Right</MudSelectItem>
-                <MudSelectItem Value="HorizontalAlignment.Start">Start</MudSelectItem>
-                <MudSelectItem Value="HorizontalAlignment.End">End</MudSelectItem>
-            </MudSelect>
-
-            <MudTextField Label="Alert Content"
-                          @bind-Value="_content" />
-
-            <MudSelect T="string"
-                       Label="Icon"
-                       Dense="true"
-                       @bind-Value="_iconSelection">
-                <MudSelectItem Value="@DefaultIconOption">Default by severity</MudSelectItem>
-                <MudSelectItem Value="@Icons.Material.Filled.NotificationsActive">Notifications Active</MudSelectItem>
-                <MudSelectItem Value="@Icons.Material.Filled.Campaign">Campaign</MudSelectItem>
-                <MudSelectItem Value="@Icons.Material.Filled.Bolt">Bolt</MudSelectItem>
-                <MudSelectItem Value="@Icons.Material.Filled.Star">Star</MudSelectItem>
-            </MudSelect>
-
-            <MudCheckBox @bind-Value="_showCloseIcon"
-                         Label="Show Close Icon"
-                         Color="Color.Primary" />
-
-            <MudSelect T="string"
-                       Label="Close Icon"
-                       Dense="true"
-                       @bind-Value="_closeIcon"
-                       Disabled="@(!_showCloseIcon)">
-                <MudSelectItem Value="@Icons.Material.Filled.Close">Close</MudSelectItem>
-                <MudSelectItem Value="@Icons.Material.Filled.Cancel">Cancel</MudSelectItem>
-                <MudSelectItem Value="@Icons.Material.Filled.Clear">Clear</MudSelectItem>
-                <MudSelectItem Value="@Icons.Material.Filled.Done">Done</MudSelectItem>
-            </MudSelect>
-        </MudPaper>
-    </MudItem>
-</MudGrid>
-*@
-
-<div class="mx-auto px-2 px-sm-0 d-flex flex-column gap-4" style="max-width: 1120px;">
-    <MudPaper Class="pa-2 pa-sm-5 pa-lg-6 d-flex flex-column align-center justify-center gap-3" Elevation="0">
-        <div class="w-100 mx-auto" style="max-width: 800px;">
-            <MudAlert Class="w-100"
-                      Severity="@_severity"
-                      Variant="@_variant"
-                      Dense="@_dense"
-                      NoIcon="@_noIcon"
-                      Square="@IsSquare"
-                      Elevation="@_elevation"
-                      ContentAlignment="@_contentAlignment"
-                      ShowCloseIcon="@_showCloseIcon"
-                      CloseIcon="@_closeIcon"
-                      Icon="@SelectedIcon"
-                      CloseIconClicked="OnClosed"
-                      OnClick="OnAlertClicked">
-
-                @_content
-            </MudAlert>
-        </div>
-
-        <MudText Typo="Typo.caption" Class="text-center">
+        <MudText Typo="Typo.caption" Class="d-block mt-2">
             Clicked: @_clickedCount | Closed: @_closedCount
         </MudText>
-    </MudPaper>
+    </Preview>
 
-    <MudPaper Class="pa-2 pa-sm-5 pa-lg-6 mx-auto w-100 d-flex flex-column gap-3" Elevation="0" Style="max-width: 960px;">
-        <MudGrid Spacing="3" Justify="Justify.Center">
+    <Options>
+        <MudGrid Spacing="4" Justify="Justify.Center" Class="w-100">
             <MudItem xs="12" md="6">
                 <MudSelect T="Variant" Label="Variant" Dense="true" @bind-Value="_variant">
                     <MudSelectItem Value="Variant.Filled">Filled</MudSelectItem>
@@ -177,7 +48,7 @@
             </MudItem>
 
             <MudItem xs="12">
-                <div class="d-flex flex-wrap align-center justify-center gap-4">
+                <div class="d-flex flex-wrap align-center justify-start" style="column-gap: 16px; row-gap: 0px;">
                     <MudCheckBox @bind-Value="_dense"
                                  Label="Dense"
                                  Color="Color.Primary" />
@@ -193,7 +64,12 @@
             </MudItem>
 
             <MudItem xs="12" md="6">
-                <MudSelect T="AlertShape" Label="Corners" Dense="true" @bind-Value="_shape">
+                <MudSelect T="AlertShape"
+                           Label="Corners"
+                           Dense="true"
+                           HelperText="Rounded corners are controlled by the app theme in MudBlazor 9.6, not by a direct MudAlert parameter."
+                           HelperTextOnFocus="false"
+                           @bind-Value="_shape">
                     <MudSelectItem Value="AlertShape.Default">Theme Default</MudSelectItem>
                     <MudSelectItem Value="AlertShape.Square">Square</MudSelectItem>
                 </MudSelect>
@@ -210,12 +86,6 @@
                     <MudSelectItem Value="HorizontalAlignment.Start">Start</MudSelectItem>
                     <MudSelectItem Value="HorizontalAlignment.End">End</MudSelectItem>
                 </MudSelect>
-            </MudItem>
-
-            <MudItem xs="12">
-                <MudText Typo="Typo.caption" Class="mud-secondary-text text-center" Style="line-height: 1.5;">
-                    Rounded corners are controlled by the app theme in MudBlazor 9.6, not by a direct MudAlert parameter.
-                </MudText>
             </MudItem>
 
             <MudItem xs="12">
@@ -259,8 +129,8 @@
                 </MudSelect>
             </MudItem>
         </MudGrid>
-    </MudPaper>
-</div>
+    </Options>
+</DemoPageLayout>
 
 
 @code {
