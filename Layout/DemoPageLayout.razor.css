@@ -1,11 +1,26 @@
 .demo-page-panels {
     display: grid;
-    gap: 16px;
+    gap: 24px;
+}
+
+::deep .demo-page-options-horizontal {
+    padding-top: 0;
+    padding-bottom: 0;
+}
+
+::deep .demo-page-options-vertical {
+    padding-top: 12px;
+    padding-bottom: 12px;
 }
 
 @media (min-width: 1280px) {
     .demo-page-panels {
-        grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr);
+        grid-template-columns: minmax(0, 45fr) minmax(0, 55fr);
         align-items: start;
+    }
+
+    ::deep .demo-page-options-horizontal {
+        padding-top: 24px;
+        padding-bottom: 24px;
     }
 }

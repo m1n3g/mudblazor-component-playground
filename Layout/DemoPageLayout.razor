@@ -1,6 +1,6 @@
 @using Microsoft.AspNetCore.Components
 
-<MudStack Spacing="1" Class="demo-page-title mb-4 py-2 px-0 mx-auto w-100" Style="@($"max-width: {ContentMaxWidth};")">
+<MudStack Spacing="1" Class="demo-page-title mb-4 pa-3 mx-auto w-100" Style="@($"max-width: {ContentMaxWidth};")">
     <MudText Typo="Typo.h5" Style="font-weight: 600;">
         @Title
     </MudText>
@@ -18,11 +18,11 @@
     case DemoPageLayoutVariant.Horizontal:
         <div class="demo-page-content demo-page-horizontal mx-auto d-flex flex-column gap-4" style="@($"max-width: {ContentMaxWidth};")">
             <div class="demo-page-panels">
-                <MudPaper Class="demo-page-preview py-3 py-lg-6 px-0 d-flex flex-column align-center justify-center gap-3" Elevation="0">
+                <MudPaper Class="demo-page-preview pa-3 d-flex flex-column align-center justify-center gap-3" Elevation="0">
                     @RenderPreview()
                 </MudPaper>
 
-                <MudPaper Class="demo-page-options py-0 py-lg-3 px-0 w-100 d-flex flex-column" Elevation="0">
+                <MudPaper Class="demo-page-options demo-page-options-horizontal pa-3 w-100 d-flex flex-column" Elevation="0">
                     @Options
                 </MudPaper>
             </div>
@@ -31,7 +31,7 @@
 
     case DemoPageLayoutVariant.PreviewOnly:
         <div class="demo-page-content mx-auto d-flex flex-column gap-4" style="@($"max-width: {ContentMaxWidth};")">
-            <MudPaper Class="demo-page-preview py-3 py-lg-6 px-0 d-flex flex-column align-center justify-center gap-3" Elevation="0">
+            <MudPaper Class="demo-page-preview py-3 py-lg-6 px-3 d-flex flex-column align-center justify-center gap-3" Elevation="0">
                 @RenderPreview()
             </MudPaper>
         </div>
@@ -46,11 +46,11 @@
     case DemoPageLayoutVariant.Vertical:
     default:
         <div class="demo-page-content mx-auto d-flex flex-column gap-4" style="@($"max-width: {ContentMaxWidth};")">
-            <MudPaper Class="demo-page-preview py-3 py-lg-6 px-0 d-flex flex-column align-center justify-center gap-3" Elevation="0">
+            <MudPaper Class="demo-page-preview py-3 py-lg-6 px-3 d-flex flex-column align-center justify-center gap-3" Elevation="0">
                 @RenderPreview()
             </MudPaper>
 
-            <MudPaper Class="demo-page-options py-0 py-lg-3 px-0 w-100 d-flex flex-column" Elevation="0">
+            <MudPaper Class="demo-page-options demo-page-options-vertical px-3 w-100 d-flex flex-column" Elevation="0">
                 @Options
             </MudPaper>
         </div>
