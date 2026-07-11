@@ -1,0 +1,187 @@
+@page "/components/badge"
+@using MudBlazor
+
+<DemoPageLayout Title="Badge"
+                Description="Badges show notifications, counts, or status information on navigation items and icons."
+                Variant="DemoPageLayoutVariant.Vertical">
+    <Preview>
+        <div class="d-flex justify-center w-100">
+            <MudBadge Origin="@Origin"
+                      Content="@BadgeContent"
+                      Color="@BadgeColor"
+                      Overlap="@Overlap"
+                      Dot="@Dot"
+                      Bordered="@Bordered"
+                      Icon="@BadgeIcon"
+                      Max="@Max"
+                      Elevation="@Elevation">
+                @if (SelectedTestComponent == "MudIcon")
+                {
+                    <MudIcon Icon="@Icons.Custom.Brands.MudBlazor" Color="Color.Default" Size="Size.Large" />
+                }
+                else if (SelectedTestComponent == "MudButton")
+                {
+                    <MudButton Color="Color.Primary" Variant="Variant.Filled">MudButton</MudButton>
+                }
+                else if (SelectedTestComponent == "MudIconButton")
+                {
+                    <MudIconButton Icon="@Icons.Material.Filled.Email" Color="Color.Default" />
+                }
+                else if (SelectedTestComponent == "MudText")
+                {
+                    <MudText>MudText</MudText>
+                }
+                else if (SelectedTestComponent == "MudAvatar")
+                {
+                    <MudAvatar Size="Size.Large" Class="ma-2">
+                        <MudImage Src="images/mony.jpg" />
+                    </MudAvatar>
+                }
+                else if (SelectedTestComponent == "MudChip")
+                {
+                    <MudChip T="string" Label="true" Color="Color.Warning" Style="color:black;">Radioactive Areas</MudChip>
+                }
+            </MudBadge>
+        </div>
+    </Preview>
+
+    <Options>
+        <MudGrid Spacing="4" Justify="Justify.Center" Class="w-100">
+            <MudItem xs="12" md="6">
+                <MudSelect T="string"
+                           Label="Component"
+                           Dense="true"
+                           Value="@SelectedTestComponent"
+                           ValueChanged="OnSelectedTestComponent">
+                    <MudSelectItem T="string" Value="@("MudIcon")">MudIcon</MudSelectItem>
+                    <MudSelectItem T="string" Value="@("MudButton")">MudButton</MudSelectItem>
+                    <MudSelectItem T="string" Value="@("MudIconButton")">MudIconButton</MudSelectItem>
+                    <MudSelectItem T="string" Value="@("MudText")">MudText</MudSelectItem>
+                    <MudSelectItem T="string" Value="@("MudAvatar")">MudAvatar</MudSelectItem>
+                    <MudSelectItem T="string" Value="@("MudChip")">MudChip</MudSelectItem>
+                </MudSelect>
+            </MudItem>
+
+            <MudItem xs="12" md="6">
+                <MudSelect Label="Badge Origin" Dense="true" @bind-Value="Origin">
+                    <MudSelectItem Value="Origin.TopLeft">TopLeft</MudSelectItem>
+                    <MudSelectItem Value="Origin.TopCenter">TopCenter</MudSelectItem>
+                    <MudSelectItem Value="Origin.TopRight">TopRight</MudSelectItem>
+                    <MudSelectItem Value="Origin.CenterLeft">CenterLeft</MudSelectItem>
+                    <MudSelectItem Value="Origin.CenterCenter">CenterCenter</MudSelectItem>
+                    <MudSelectItem Value="Origin.CenterRight">CenterRight</MudSelectItem>
+                    <MudSelectItem Value="Origin.BottomLeft">BottomLeft</MudSelectItem>
+                    <MudSelectItem Value="Origin.BottomCenter">BottomCenter</MudSelectItem>
+                    <MudSelectItem Value="Origin.BottomRight">BottomRight</MudSelectItem>
+                </MudSelect>
+            </MudItem>
+
+            <MudItem xs="12" md="6">
+                <MudSelect T="Color" Label="Color" Dense="true" @bind-Value="BadgeColor">
+                    <MudSelectItem Value="Color.Default">Default</MudSelectItem>
+                    <MudSelectItem Value="Color.Primary">Primary</MudSelectItem>
+                    <MudSelectItem Value="Color.Secondary">Secondary</MudSelectItem>
+                    <MudSelectItem Value="Color.Tertiary">Tertiary</MudSelectItem>
+                    <MudSelectItem Value="Color.Info">Info</MudSelectItem>
+                    <MudSelectItem Value="Color.Success">Success</MudSelectItem>
+                    <MudSelectItem Value="Color.Warning">Warning</MudSelectItem>
+                    <MudSelectItem Value="Color.Error">Error</MudSelectItem>
+                    <MudSelectItem Value="Color.Dark">Dark</MudSelectItem>
+                </MudSelect>
+            </MudItem>
+
+            <MudItem xs="12" md="6">
+                <MudNumericField T="int"
+                                 Label="Max"
+                                 Min="1"
+                                 Max="999"
+                                 Immediate="true"
+                                 @bind-Value="Max" />
+            </MudItem>
+
+            <MudItem xs="12">
+                <MudSlider Min="0"
+                           Max="24"
+                           Step="1"
+                           @bind-Value="Elevation"
+                           Color="Color.Info">
+                    @($"Elevation: {Elevation}")
+                </MudSlider>
+            </MudItem>
+
+            <MudItem xs="12">
+                <div class="d-flex flex-wrap align-center justify-start" style="column-gap: 16px; row-gap: 4px;">
+                    <MudCheckBox @bind-Value="Dot" Label="Dot" Color="Color.Primary" />
+                    <MudCheckBox @bind-Value="Overlap" Label="Overlap" Color="Color.Primary" />
+                    <MudCheckBox @bind-Value="Bordered" Label="Bordered" Color="Color.Primary" />
+                    <MudCheckBox T="bool" ValueChanged="AddIcon" Label="Icon" Color="Color.Primary" />
+                </div>
+            </MudItem>
+
+            <MudItem xs="12" sm="6">
+                <MudButton OnClick="AddValue"
+                           Variant="Variant.Filled"
+                           Size="Size.Small"
+                           Color="Color.Primary"
+                           FullWidth="true">
+                    Add @AddNumber
+                </MudButton>
+            </MudItem>
+
+            <MudItem xs="12" sm="6">
+                <MudButton OnClick="ClearContent"
+                           Variant="Variant.Filled"
+                           Size="Size.Small"
+                           Color="Color.Secondary"
+                           FullWidth="true">
+                    Clear
+                </MudButton>
+            </MudItem>
+        </MudGrid>
+    </Options>
+</DemoPageLayout>
+
+@code {
+    public Origin Origin { get; set; } = Origin.TopRight;
+    public Color BadgeColor { get; set; } = Color.Default;
+    public bool Dot { get; set; }
+    public bool Overlap { get; set; }
+    public bool Bordered { get; set; }
+    public string? BadgeIcon { get; set; }
+    public int Max { get; set; } = 99;
+    public int Elevation { get; set; }
+
+    public string SelectedTestComponent { get; set; } = "MudChip";
+    public string AddNumber { get; set; } = "1";
+
+    public int? BadgeContent { get; set; }
+
+    public void OnSelectedTestComponent(string value) => SelectedTestComponent = value;
+
+    public void AddIcon()
+    {
+        if (string.IsNullOrEmpty(BadgeIcon))
+            BadgeIcon = Icons.Custom.Uncategorized.Radioactive;
+        else
+            BadgeIcon = null;
+    }
+
+    public void AddValue()
+    {
+        if (BadgeContent == null)
+        {
+            AddNumber = "25";
+            BadgeContent = 1;
+        }
+        else
+        {
+            BadgeContent += 25;
+        }
+    }
+
+    public void ClearContent()
+    {
+        AddNumber = "1";
+        BadgeContent = null;
+    }
+}

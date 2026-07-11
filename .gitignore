@@ -1,6 +1,13 @@
 bin/
 obj/
+
 *.user
 *.suo
 *.db
 *.log
+
+.env
+.env.*
+
+docker-data/
+# /docker-compose.dev.yml

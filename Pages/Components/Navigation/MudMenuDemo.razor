@@ -1,0 +1,175 @@
+@page "/components/menu"
+@using MudBlazor
+@inject ISnackbar Snackbar
+
+<MudGrid Spacing="2">
+
+    <!-- 1) Basic actions menu -->
+    <MudItem xs="12" md="6" lg="4">
+        <MudPaper Class="pa-5">
+            <MudText Typo="Typo.h6" Class="mb-2">Basic</MudText>
+
+            <MudStack Row Spacing="2" AlignItems="AlignItems.Center">
+                <MudSwitch Color="Color.Primary" @bind-Value="_dense">Dense</MudSwitch>
+                <MudSwitch Color="Color.Primary" @bind-Value="_disabled">Disabled</MudSwitch>
+                <MudNumericField T="int" Label="Elevation" @bind-Value="_elevation" Min="0" Max="25" Immediate Style="width:120px" />
+            </MudStack>
+
+            <MudSelect T="Variant" Label="Trigger Variant" @bind-Value="_variant" Dense Class="mt-2" Style="max-width:220px">
+                <MudSelectItem Value="Variant.Filled">Filled</MudSelectItem>
+                <MudSelectItem Value="Variant.Outlined">Outlined</MudSelectItem>
+                <MudSelectItem Value="Variant.Text">Text</MudSelectItem>
+            </MudSelect>
+
+            <div class="mt-3">
+                <MudMenu Color="Color.Primary"
+                         Variant="@_variant"
+                         Dense="@_dense"
+                         Disabled="@_disabled"
+                         DropShadow="@(_elevation > 0)"
+                         PopoverClass="@($"mud-elevation-{_elevation}")"
+                         Label="Actions"
+                         Icon="@Icons.Material.Filled.MoreVert">
+
+                    <MudMenuItem OnClick="@(()=> Snackbar.Add("Edit clicked", Severity.Info))" Icon="@Icons.Material.Filled.Edit">Edit</MudMenuItem>
+                    <MudMenuItem OnClick="@(()=> Snackbar.Add("Duplicate clicked", Severity.Success))" Icon="@Icons.Material.Filled.ContentCopy">Duplicate</MudMenuItem>
+                    <MudMenuItem Disabled Icon="@Icons.Material.Filled.Archive">Archive (disabled)</MudMenuItem>
+                    <MudDivider />
+                    <MudMenuItem OnClick="@(()=> Snackbar.Add("Delete clicked", Severity.Error))" Icon="@Icons.Material.Filled.DeleteForever">Delete</MudMenuItem>
+                </MudMenu>
+            </div>
+        </MudPaper>
+    </MudItem>
+
+    <!-- 2) Settings (keep open, toggle options) -->
+    <MudItem xs="12" md="6" lg="4">
+        <MudPaper Class="pa-5">
+            <MudText Typo="Typo.h6" Class="mb-2">Keep-open settings</MudText>
+
+            <MudSwitch Color="Color.Primary" @bind-Value="_closeOnItemClick">Close on item click</MudSwitch>
+
+            <div class="mt-3">
+                <MudMenu Color="Color.Secondary"
+                         Variant="Variant.Outlined"
+                         Label="Settings"
+                         Icon="@Icons.Material.Filled.Tune">
+                    <MudMenuItem AutoClose="@_closeOnItemClick">
+                        <MudCheckBox @bind-Value="_optNotifications" Color="Color.Primary" Label="Notifications" />
+                    </MudMenuItem>
+                    <MudMenuItem AutoClose="@_closeOnItemClick">
+                        <MudCheckBox @bind-Value="_optAutoSave" Color="Color.Primary" Label="Auto save" />
+                    </MudMenuItem>
+                    <MudMenuItem AutoClose="@_closeOnItemClick">
+                        <MudCheckBox @bind-Value="_optCompact" Color="Color.Primary" Label="Compact mode" />
+                    </MudMenuItem>
+                    <MudDivider />
+                    <MudMenuItem AutoClose="@_closeOnItemClick" OnClick="@ApplySettings" Icon="@Icons.Material.Filled.CheckCircle">Apply</MudMenuItem>
+                </MudMenu>
+            </div>
+
+            <MudText Class="mt-2" Typo="Typo.caption">
+                Notifications: <b>@_optNotifications</b> • Auto save: <b>@_optAutoSave</b> • Compact: <b>@_optCompact</b>
+            </MudText>
+        </MudPaper>
+    </MudItem>
+
+    <!-- 3) Positioning (anchor & transform origins) -->
+    <MudItem xs="12" md="12" lg="4">
+        <MudPaper Class="pa-5">
+            <MudText Typo="Typo.h6" Class="mb-2">Positioning</MudText>
+
+            <MudStack Row Spacing="2">
+                <MudSelect T="Origin" Label="Anchor Origin" @bind-Value="_anchor" Dense Style="max-width:220px">
+                    @foreach (var o in _origins) { <MudSelectItem Value="@o">@o</MudSelectItem> }
+                </MudSelect>
+                <MudSelect T="Origin" Label="Transform Origin" @bind-Value="_transform" Dense Style="max-width:220px">
+                    @foreach (var o in _origins) { <MudSelectItem Value="@o">@o</MudSelectItem> }
+                </MudSelect>
+            </MudStack>
+
+            <div class="mt-3">
+                <MudMenu Color="Color.Info"
+                         Variant="Variant.Filled"
+                         Label="Open menu"
+                         Icon="@Icons.Material.Filled.Place"
+                         AnchorOrigin="@_anchor"
+                         TransformOrigin="@_transform">
+                    <MudMenuItem>Alpha</MudMenuItem>
+                    <MudMenuItem>Bravo</MudMenuItem>
+                    <MudMenuItem>Charlie</MudMenuItem>
+                </MudMenu>
+            </div>
+        </MudPaper>
+    </MudItem>
+
+</MudGrid>
+
+<MudMenu Label="Open Menu with Icons">
+    <MudMenuItem Disabled="true" Icon="@Icons.Material.Filled.Chair" Label="Chair" />
+    <MudMenuItem Icon="@Icons.Material.Filled.DoorFront" IconColor="Color.Secondary" Label="Door" />
+    <MudMenuItem Icon="@Icons.Material.Filled.Window" IconColor="Color.Tertiary" Label="Window" />
+</MudMenu>
+
+<MudMenu Variant="Variant.Filled" Label="Open Menu with Icons Dense" Dense="true">
+    <MudMenuItem Disabled="true" Icon="@Icons.Material.Filled.Chair" Label="Chair" />
+    <MudMenuItem Icon="@Icons.Material.Filled.DoorFront" IconColor="Color.Secondary" Label="Door" />
+    <MudMenuItem Icon="@Icons.Material.Filled.Window" IconColor="Color.Tertiary" Label="Window" />
+</MudMenu>
+
+<MudMenu Label="Open menu with divider">
+    <MudMenuItem Label="Preview" Icon="@Icons.Material.Filled.Visibility" />
+    <MudMenuItem Label="Share" Icon="@Icons.Material.Filled.Share" />
+    <MudMenuItem Label="Get Link" Icon="@Icons.Material.Filled.Link" />
+    <MudDivider />
+    <MudMenuItem Label="Remove" Icon="@Icons.Material.Filled.Delete" />
+</MudMenu>
+
+<MudMenu Icon="@Icons.Material.Filled.MoreVert"
+         AriaLabel="Open user menu">
+    <MudMenuItem Label="Profile" />
+    <MudMenuItem Label="My account" />
+    <MudMenuItem Label="Logout" />
+</MudMenu>
+
+<MudMenu Icon="@Icons.Material.Filled.Settings"
+         Color="Color.Primary"
+         AriaLabel="Open user menu">
+    <MudMenuItem Label="Profile" />
+    <MudMenuItem Label="My account" />
+    <MudMenuItem Label="Logout" />
+</MudMenu>
+
+<MudMenu Icon="@Icons.Material.Filled.Favorite"
+         Color="Color.Secondary"
+         AriaLabel="Open user menu">
+    <MudMenuItem Label="Profile" />
+    <MudMenuItem Label="My account" />
+    <MudMenuItem Label="Logout" />
+</MudMenu>
+
+@code {
+    // Basic demo state
+    private bool _dense;
+    private bool _disabled;
+    private int _elevation = 1; // default 1
+    private Variant _variant = Variant.Filled;
+
+    // Keep-open demo
+    private bool _closeOnItemClick = false;
+    private bool _optNotifications = true;
+    private bool _optAutoSave = true;
+    private bool _optCompact;
+
+    private void ApplySettings()
+        => Snackbar.Add($"Applied: Notifications={_optNotifications}, AutoSave={_optAutoSave}, Compact={_optCompact}", Severity.Success);
+
+    // Positioning demo
+    private Origin _anchor = Origin.TopLeft;
+    private Origin _transform = Origin.TopLeft;
+    private readonly Origin[] _origins = new[]
+    {
+        Origin.TopLeft, Origin.TopCenter, Origin.TopRight,
+        Origin.CenterLeft, Origin.CenterCenter, Origin.CenterRight,
+        Origin.BottomLeft, Origin.BottomCenter, Origin.BottomRight
+    };
+}
