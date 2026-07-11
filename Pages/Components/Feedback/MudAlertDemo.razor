@@ -135,8 +135,8 @@
 
 @code {
     // Core options
-    private Variant _variant = Variant.Filled;
-    private Severity _severity = Severity.Info;
+    private Variant _variant = Variant.Text;
+    private Severity _severity = Severity.Normal;
     private bool _dense;
     private bool _noIcon;
 
@@ -149,7 +149,7 @@
 
     // Content + alignment (built-in)
     private string _content = "This is a customizable MudAlert.";
-    private HorizontalAlignment _contentAlignment = HorizontalAlignment.Left;
+    private HorizontalAlignment _contentAlignment = HorizontalAlignment.Start;
 
     // Icon + close icon
     private const string DefaultIconOption = "__DEFAULT__";
@@ -157,7 +157,7 @@
     private string _closeIcon = Icons.Material.Filled.Close;
 
     // Events
-    private bool _showCloseIcon = true;
+    private bool _showCloseIcon;
     private int _clickedCount;
     private int _closedCount;
 
