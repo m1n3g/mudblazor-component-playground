@@ -1,5 +1,3 @@
-[**README**](README.md) · **🎨 Figma UI Kit**
-
 # MudBlazor Component Playground
 
 ![.NET](https://img.shields.io/badge/.NET-10-512BD4?logo=dotnet&logoColor=white)
@@ -43,6 +41,14 @@ The preview responds immediately as the selected options change, making it easie
 - Blazor WebAssembly architecture
 - Docker support
 - Figma design system development workflow
+
+## 🎨 Figma UI Kit
+
+[![Open in Figma](https://img.shields.io/badge/Open%20in-Figma-F24E1E?logo=figma&logoColor=white)](https://www.figma.com/community/file/1432408934517112427/mudblazor-ui-kit-design-system-for-blazor)
+
+This playground is developed alongside the **MudBlazor UI Kit: Design System for Blazor**, created and maintained by the same author for designers and developers building Blazor applications with MudBlazor.
+
+The UI kit closely follows MudBlazor’s component naming, structure, variants, and design principles, helping maintain consistency between Figma designs and MudBlazor implementations.
 
 ## 🧱 Component Coverage
 
