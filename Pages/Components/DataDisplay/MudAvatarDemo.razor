@@ -190,33 +190,29 @@
                 </MudItem>
 
                 <MudItem xs="12">
-                    <div class="d-flex flex-column flex-md-row align-start w-100" style="column-gap: 16px; row-gap: 4px;">
-                        <div class="w-100" style="max-width: 50%;">
-                            <MudCheckBox @bind-Value="_groupOutlined"
-                                         Label="Outlined"
-                                         Color="Color.Primary" />
-                        </div>
-
-                        @if (_groupOutlined)
-                        {
-                            <div class="w-100" style="max-width: 50%;">
-                                <MudSelect T="Color"
-                                           Label="Outline Color"
-                                           Dense="true"
-                                           @bind-Value="_groupOutlineColor">
-                                    <MudSelectItem Value="Color.Default">Default</MudSelectItem>
-                                    <MudSelectItem Value="Color.Primary">Primary</MudSelectItem>
-                                    <MudSelectItem Value="Color.Secondary">Secondary</MudSelectItem>
-                                    <MudSelectItem Value="Color.Tertiary">Tertiary</MudSelectItem>
-                                    <MudSelectItem Value="Color.Info">Info</MudSelectItem>
-                                    <MudSelectItem Value="Color.Success">Success</MudSelectItem>
-                                    <MudSelectItem Value="Color.Warning">Warning</MudSelectItem>
-                                    <MudSelectItem Value="Color.Error">Error</MudSelectItem>
-                                </MudSelect>
-                            </div>
-                        }
-                    </div>
+                    <MudCheckBox @bind-Value="_groupOutlined"
+                                 Label="Outlined"
+                                 Color="Color.Primary" />
                 </MudItem>
+
+                @if (_groupOutlined)
+                {
+                    <MudItem xs="12">
+                        <MudSelect T="Color"
+                                   Label="Outline Color"
+                                   Dense="true"
+                                   @bind-Value="_groupOutlineColor">
+                            <MudSelectItem Value="Color.Default">Default</MudSelectItem>
+                            <MudSelectItem Value="Color.Primary">Primary</MudSelectItem>
+                            <MudSelectItem Value="Color.Secondary">Secondary</MudSelectItem>
+                            <MudSelectItem Value="Color.Tertiary">Tertiary</MudSelectItem>
+                            <MudSelectItem Value="Color.Info">Info</MudSelectItem>
+                            <MudSelectItem Value="Color.Success">Success</MudSelectItem>
+                            <MudSelectItem Value="Color.Warning">Warning</MudSelectItem>
+                            <MudSelectItem Value="Color.Error">Error</MudSelectItem>
+                        </MudSelect>
+                    </MudItem>
+                }
 
             }
 
