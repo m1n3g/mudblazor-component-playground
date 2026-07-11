@@ -1,161 +1,362 @@
 @page "/components/avatar"
 @using MudBlazor
+@using Microsoft.AspNetCore.Components.Rendering
 
-<MudText Typo="Typo.h6" Style="font-weight:700">Avatar Playground</MudText>
+<DemoPageLayout Title="Avatar"
+                Description="Represents a component which displays circular user profile pictures, icons or text."
+                Variant="DemoPageLayoutVariant.Vertical">
+    <Preview>
+        <MudStack Spacing="3" Class="w-100">
+            <MudPaper Elevation="0">
+                <div class="d-flex align-center justify-center">
+                    @if (_previewMode == AvatarPreviewMode.Avatar)
+                    {
+                        @RenderPrimaryAvatar()
+                    }
+                    else
+                    {
+                        @RenderAvatarGroup()
+                    }
+                </div>
+            </MudPaper>
+        </MudStack>
+    </Preview>
 
-<MudPaper Class="pa-6 my-3" Elevation="0">
-    <MudGrid>
-        <!-- Controls -->
-        <MudItem xs="12" md="4">
-            <MudStack Spacing="2">
-                <MudSelect T="Variant" Label="Variant" @bind-Value="_variant">
-                    <MudSelectItem Value="Variant.Text">Text</MudSelectItem>
-                    <MudSelectItem Value="Variant.Filled">Filled</MudSelectItem>
-                    <MudSelectItem Value="Variant.Outlined">Outlined</MudSelectItem>
+    <Options>
+        <MudGrid Spacing="4" Justify="Justify.Center" Class="w-100">
+            <MudItem xs="12">
+                <MudRadioGroup T="AvatarPreviewMode"
+                               @bind-Value="_previewMode">
+                    <MudRadio T="AvatarPreviewMode" Value="AvatarPreviewMode.Avatar" Color="Color.Primary">Avatar</MudRadio>
+                    <MudRadio T="AvatarPreviewMode" Value="AvatarPreviewMode.Group" Color="Color.Primary">Avatar Group</MudRadio>
+                </MudRadioGroup>
+            </MudItem>
+
+            <MudItem xs="12" md="6">
+                <MudSelect T="AvatarContentType" Label="Content Type" Dense="true" @bind-Value="_contentType">
+                    <MudSelectItem Value="AvatarContentType.Text">Text</MudSelectItem>
+                    <MudSelectItem Value="AvatarContentType.Icon">Icon</MudSelectItem>
+                    <MudSelectItem Value="AvatarContentType.Image">Image</MudSelectItem>
                 </MudSelect>
+            </MudItem>
 
-                <!-- Text input is always enabled now -->
-                <MudTextField Label="Text" @bind-Value="_text" />
+            @if (_contentType != AvatarContentType.Image)
+            {
+                <MudItem xs="12" md="6">
+                    <MudSelect T="Variant" Label="Variant" Dense="true" @bind-Value="_variant">
+                        <MudSelectItem Value="Variant.Text">Text</MudSelectItem>
+                        <MudSelectItem Value="Variant.Filled">Filled</MudSelectItem>
+                        <MudSelectItem Value="Variant.Outlined">Outlined</MudSelectItem>
+                    </MudSelect>
+                </MudItem>
+            }
+            else
+            {
+                <MudItem xs="12" md="6">
+                    <MudSelect T="string"
+                               Label="Image"
+                               Dense="true"
+                               @bind-Value="_imagePath">
+                        <MudSelectItem Value="@("images/mony.jpg")">Mony</MudSelectItem>
+                        <MudSelectItem Value="@("images/castle.jpg")">Castle</MudSelectItem>
+                        <MudSelectItem Value="@("images/sweden.jpg")">Sweden</MudSelectItem>
+                    </MudSelect>
+                </MudItem>
+            }
 
-                <MudSelect T="Color" Label="Color" @bind-Value="_color">
-                    <MudSelectItem Value="Color.Default">Default</MudSelectItem>
-                    <MudSelectItem Value="Color.Primary">Primary</MudSelectItem>
-                    <MudSelectItem Value="Color.Secondary">Secondary</MudSelectItem>
-                    <MudSelectItem Value="Color.Tertiary">Tertiary</MudSelectItem>
-                    <MudSelectItem Value="Color.Info">Info</MudSelectItem>
-                    <MudSelectItem Value="Color.Success">Success</MudSelectItem>
-                    <MudSelectItem Value="Color.Warning">Warning</MudSelectItem>
-                    <MudSelectItem Value="Color.Error">Error</MudSelectItem>
-                    <MudSelectItem Value="Color.Dark">Dark</MudSelectItem>
-                </MudSelect>
+            @if (_contentType == AvatarContentType.Text)
+            {
+                <MudItem xs="12" md="6">
+                    <MudTextField Label="Text"
+                                  MaxLength="2"
+                                  @bind-Value="_text" />
+                </MudItem>
 
-                <MudSelect T="Size" Label="Size" @bind-Value="_size">
+                <MudItem xs="12" md="6">
+                    <MudSelect T="Color" Label="Color" Dense="true" @bind-Value="_color">
+                        <MudSelectItem Value="Color.Default">Default</MudSelectItem>
+                        <MudSelectItem Value="Color.Primary">Primary</MudSelectItem>
+                        <MudSelectItem Value="Color.Secondary">Secondary</MudSelectItem>
+                        <MudSelectItem Value="Color.Tertiary">Tertiary</MudSelectItem>
+                        <MudSelectItem Value="Color.Info">Info</MudSelectItem>
+                        <MudSelectItem Value="Color.Success">Success</MudSelectItem>
+                        <MudSelectItem Value="Color.Warning">Warning</MudSelectItem>
+                        <MudSelectItem Value="Color.Error">Error</MudSelectItem>
+                        <MudSelectItem Value="Color.Dark">Dark</MudSelectItem>
+                    </MudSelect>
+                </MudItem>
+            }
+            else if (_contentType == AvatarContentType.Icon)
+            {
+                <MudItem xs="12" md="6">
+                    <MudSelect T="string"
+                               Label="Icon"
+                               Dense="true"
+                               @bind-Value="_icon">
+                        <MudSelectItem Value="@Icons.Material.Filled.Person">Person</MudSelectItem>
+                        <MudSelectItem Value="@Icons.Material.Filled.Face">Face</MudSelectItem>
+                        <MudSelectItem Value="@Icons.Material.Filled.Pets">Pets</MudSelectItem>
+                        <MudSelectItem Value="@Icons.Material.Filled.Bolt">Bolt</MudSelectItem>
+                    </MudSelect>
+                </MudItem>
+
+                <MudItem xs="12" md="6">
+                    <MudSelect T="Color" Label="Color" Dense="true" @bind-Value="_color">
+                        <MudSelectItem Value="Color.Default">Default</MudSelectItem>
+                        <MudSelectItem Value="Color.Primary">Primary</MudSelectItem>
+                        <MudSelectItem Value="Color.Secondary">Secondary</MudSelectItem>
+                        <MudSelectItem Value="Color.Tertiary">Tertiary</MudSelectItem>
+                        <MudSelectItem Value="Color.Info">Info</MudSelectItem>
+                        <MudSelectItem Value="Color.Success">Success</MudSelectItem>
+                        <MudSelectItem Value="Color.Warning">Warning</MudSelectItem>
+                        <MudSelectItem Value="Color.Error">Error</MudSelectItem>
+                        <MudSelectItem Value="Color.Dark">Dark</MudSelectItem>
+                    </MudSelect>
+                </MudItem>
+            }
+
+            <MudItem xs="12" md="6">
+                <MudSelect T="Size" Label="Size" Dense="true" @bind-Value="_size">
                     <MudSelectItem Value="Size.Small">Small</MudSelectItem>
                     <MudSelectItem Value="Size.Medium">Medium</MudSelectItem>
                     <MudSelectItem Value="Size.Large">Large</MudSelectItem>
                 </MudSelect>
+            </MudItem>
 
-                <!-- Shape dropdown: Default (circle), Rounded, Square -->
-                <MudSelect T="AvatarShape" Label="Shape" @bind-Value="_shape">
+            <MudItem xs="12" md="6">
+                <MudSelect T="AvatarShape" Label="Shape" Dense="true" @bind-Value="_shape">
                     <MudSelectItem Value="AvatarShape.Default">Default</MudSelectItem>
                     <MudSelectItem Value="AvatarShape.Rounded">Rounded</MudSelectItem>
                     <MudSelectItem Value="AvatarShape.Square">Square</MudSelectItem>
                 </MudSelect>
+            </MudItem>
 
-                <MudDivider Class="my-2" />
-                <!-- Badge controls were removed previously -->
-            </MudStack>
-        </MudItem>
+            <MudItem xs="12">
+                <MudSlider Min="0" Max="24" Step="1" @bind-Value="_elevation" Color="Color.Info">
+                    Elevation
+                </MudSlider>
+            </MudItem>
 
-        <!-- Previews -->
-        <MudItem xs="12" md="8">
-            <!-- FIX: Use MudGrid (not MudStack) so MudItem children are valid -->
-            <MudGrid Justify="Justify.FlexEnd" Class="align-center">
-                <MudItem xs="3" md="3">
-                    <MudText Typo="Typo.subtitle2" Class="mb-2">Live Preview (Text)</MudText>
-                    <MudPaper Class="pa-6 d-inline-block" Elevation="1">
-                        @AvatarText()
-                    </MudPaper>
+            @if (_previewMode == AvatarPreviewMode.Avatar)
+            {
+                <MudItem xs="12">
+                    <div class="d-flex flex-wrap align-center justify-start" style="column-gap: 16px; row-gap: 4px;">
+                        <MudCheckBox @bind-Value="_showBadge" Label="Show Badge" Color="Color.Primary" />
+                    </div>
                 </MudItem>
 
-                <MudItem xs="3" md="3">
-                    <MudText Typo="Typo.subtitle2" Class="mb-2">Live Preview (Icon)</MudText>
-                    <MudPaper Class="pa-6 d-inline-block" Elevation="1">
-                        <MudAvatar Color="@_color" Variant="@_variant" Size="@_size" Square="@(IsSquare)" Rounded="@(IsRounded)">
-                            <MudIcon Icon="@_icon" />
-                        </MudAvatar>
-                    </MudPaper>
+                @if (_showBadge)
+                {
+                    <MudItem xs="12" md="6">
+                        <MudSelect T="Color"
+                                   Label="Badge Color"
+                                   Dense="true"
+                                   @bind-Value="_badgeColor">
+                            <MudSelectItem Value="Color.Default">Default</MudSelectItem>
+                            <MudSelectItem Value="Color.Primary">Primary</MudSelectItem>
+                            <MudSelectItem Value="Color.Secondary">Secondary</MudSelectItem>
+                            <MudSelectItem Value="Color.Success">Success</MudSelectItem>
+                            <MudSelectItem Value="Color.Warning">Warning</MudSelectItem>
+                            <MudSelectItem Value="Color.Error">Error</MudSelectItem>
+                        </MudSelect>
+                    </MudItem>
+
+                    <MudItem xs="12" md="6">
+                        <MudSelect T="string"
+                                   Label="Badge Icon"
+                                   Dense="true"
+                                   @bind-Value="_badgeIcon">
+                            <MudSelectItem Value="@Icons.Material.Filled.Check">Check</MudSelectItem>
+                            <MudSelectItem Value="@Icons.Material.Filled.Notifications">Notifications</MudSelectItem>
+                            <MudSelectItem Value="@Icons.Material.Filled.Remove">Remove</MudSelectItem>
+                            <MudSelectItem Value="@Icons.Material.Filled.Star">Star</MudSelectItem>
+                        </MudSelect>
+                    </MudItem>
+                }
+            }
+
+            @if (_previewMode == AvatarPreviewMode.Group)
+            {
+                <MudItem xs="12" md="6">
+                    <MudSlider Min="0" Max="6" Step="1" @bind-Value="_groupMax" Color="Color.Primary">
+                        Max Avatars
+                    </MudSlider>
                 </MudItem>
 
-                <MudItem xs="3" md="3">
-                    <MudText Typo="Typo.subtitle2" Class="mb-2">Live Preview (Image)</MudText>
-                    <MudPaper Class="pa-6 d-inline-block" Elevation="1">
-                        <!-- IMAGE PREVIEW LEFT UNCHANGED -->
-                        <MudAvatar Size="@_size" Square="@(IsSquare)" Rounded="@(IsRounded)">
-                            <MudImage Src="images/mony.jpg" />
-                        </MudAvatar>
-                    </MudPaper>
+                <MudItem xs="12" md="6">
+                    <MudSlider Min="0" Max="16" Step="1" @bind-Value="_groupSpacing" Color="Color.Info">
+                        Spacing
+                    </MudSlider>
                 </MudItem>
 
-                <MudItem xs="3" md="3">
-                    <MudText Typo="Typo.subtitle2" Class="mb-2">Live Preview (Badges)</MudText>
-                    <MudPaper Class="pa-6 d-inline-block" Elevation="1">
-                        <MudBadge Color="Color.Error" Icon="@Icons.Material.Filled.Remove" Overlap="true" Bordered="true">
-                            <MudAvatar Size="@_size" Square="@(IsSquare)" Rounded="@(IsRounded)">
-                                <MudImage Src="images/mony.jpg" />
-                            </MudAvatar>
-                        </MudBadge>
-                    </MudPaper>
-                </MudItem>
-            </MudGrid>
+                <MudItem xs="12">
+                    <div class="d-flex flex-column flex-md-row align-start w-100" style="column-gap: 16px; row-gap: 4px;">
+                        <div class="w-100" style="max-width: 50%;">
+                            <MudCheckBox @bind-Value="_groupOutlined"
+                                         Label="Outlined"
+                                         Color="Color.Primary" />
+                        </div>
 
-            <MudGrid>
-                <MudItem xs="12" sm="12">
-                    <MudText Typo="Typo.subtitle2" Class="mt-6 mb-2">Group Preview</MudText>
-                    <MudAvatarGroup Max="@_groupMax" Spacing="@_groupSpacing" MaxColor="Color.Primary">
-                        <MudAvatar Color="Color.Primary" Variant="@_variant" Size="@_size" Square="@(IsSquare)" Rounded="@(IsRounded)">
-                            @_text
-                        </MudAvatar>
-                        <MudAvatar Color="Color.Secondary" Variant="@_variant" Size="@_size" Square="@(IsSquare)" Rounded="@(IsRounded)">
-                            U
-                        </MudAvatar>
-                        <MudAvatar Color="Color.Tertiary" Variant="@_variant" Size="@_size" Square="@(IsSquare)" Rounded="@(IsRounded)">
-                            D
-                        </MudAvatar>
-                        <MudAvatar Size="@_size" Square="@(IsSquare)" Rounded="@(IsRounded)">
-                            <MudImage Src="images/mony.jpg" />
-                        </MudAvatar>
-                        <MudAvatar Size="@_size" Square="@(IsSquare)" Rounded="@(IsRounded)">
-                            <MudImage Src="images/castle.jpg" />
-                        </MudAvatar>
-                        <MudAvatar Size="@_size" Square="@(IsSquare)" Rounded="@(IsRounded)">
-                            <MudImage Src="images/sweden.jpg" />
-                        </MudAvatar>
-                    </MudAvatarGroup>
+                        @if (_groupOutlined)
+                        {
+                            <div class="w-100" style="max-width: 50%;">
+                                <MudSelect T="Color"
+                                           Label="Outline Color"
+                                           Dense="true"
+                                           @bind-Value="_groupOutlineColor">
+                                    <MudSelectItem Value="Color.Default">Default</MudSelectItem>
+                                    <MudSelectItem Value="Color.Primary">Primary</MudSelectItem>
+                                    <MudSelectItem Value="Color.Secondary">Secondary</MudSelectItem>
+                                    <MudSelectItem Value="Color.Tertiary">Tertiary</MudSelectItem>
+                                    <MudSelectItem Value="Color.Info">Info</MudSelectItem>
+                                    <MudSelectItem Value="Color.Success">Success</MudSelectItem>
+                                    <MudSelectItem Value="Color.Warning">Warning</MudSelectItem>
+                                    <MudSelectItem Value="Color.Error">Error</MudSelectItem>
+                                </MudSelect>
+                            </div>
+                        }
+                    </div>
                 </MudItem>
 
-                <MudItem xs="12" sm="12">
-                    <MudGrid>
-                        <MudItem xs="12" sm="6">
-                            <MudSlider Min="0" Max="6" Step="0" @bind-Value="_groupMax" Color="Color.Primary">
-                                Max Avatars
-                            </MudSlider>
-                        </MudItem>
-                        <MudItem xs="12" sm="6">
-                            <MudSlider Min="0" Max="16" Step="0" @bind-Value="_groupSpacing" Color="Color.Info">
-                                Spacing
-                            </MudSlider>
-                        </MudItem>
-                    </MudGrid>
-                </MudItem>
-            </MudGrid>
-        </MudItem>
-    </MudGrid>
-</MudPaper>
+            }
+
+        </MudGrid>
+    </Options>
+</DemoPageLayout>
 
 @code {
+    private AvatarPreviewMode _previewMode = AvatarPreviewMode.Avatar;
+    private AvatarContentType _contentType = AvatarContentType.Text;
     private Variant _variant = Variant.Filled;
-
     private string _text = "M";
-    private readonly string _icon = Icons.Material.Filled.Person;
-
-    private Color _color = Color.Primary;
+    private string _icon = Icons.Material.Filled.Person;
+    private string _imagePath = "images/mony.jpg";
+    private Color _color = Color.Default;
     private Size _size = Size.Medium;
-
-    // Shape
-    private AvatarShape _shape = AvatarShape.Default; // Default = circle
+    private AvatarShape _shape = AvatarShape.Default;
+    private int _elevation;
+    private bool _showBadge;
+    private Color _badgeColor = Color.Error;
+    private string _badgeIcon = Icons.Material.Filled.Remove;
+    private int _groupMax = int.MaxValue;
+    private int _groupSpacing = 3;
+    private bool _groupOutlined = true;
+    private Color _groupOutlineColor = Color.Primary;
     private bool IsSquare => _shape == AvatarShape.Square;
     private bool IsRounded => _shape == AvatarShape.Rounded;
+    private string SelectedImage => _imagePath;
 
-    // Group
-    private int _groupMax = 3;
-    private int _groupSpacing = 0;
+    private RenderFragment RenderPrimaryAvatar() => builder =>
+    {
+        if (_showBadge)
+        {
+            builder.OpenComponent<MudBadge>(0);
+            builder.AddAttribute(1, "Color", _badgeColor);
+            builder.AddAttribute(2, "Icon", _badgeIcon);
+            builder.AddAttribute(3, "Overlap", true);
+            builder.AddAttribute(4, "Bordered", true);
+            builder.AddAttribute(5, "ChildContent", (RenderFragment)RenderAvatarContent);
+            builder.CloseComponent();
+        }
+        else
+        {
+            builder.AddContent(6, RenderAvatarContent);
+        }
+    };
 
-    // --- avatar renderer (text) ---
-    private RenderFragment AvatarText() =>
-        @<MudAvatar Color="@_color" Variant="@_variant" Size="@_size" Square="@(IsSquare)" Rounded="@(IsRounded)">
-            @_text
-        </MudAvatar>;
+    private void RenderAvatarContent(RenderTreeBuilder builder)
+    {
+        builder.OpenComponent<MudAvatar>(0);
+        builder.AddAttribute(1, "Color", _contentType == AvatarContentType.Image ? Color.Default : _color);
+        builder.AddAttribute(2, "Variant", _variant);
+        builder.AddAttribute(3, "Size", _size);
+        builder.AddAttribute(4, "Square", IsSquare);
+        builder.AddAttribute(5, "Rounded", IsRounded);
+        builder.AddAttribute(6, "Elevation", _elevation);
+        builder.AddAttribute(7, "ChildContent", (RenderFragment)(avatarBuilder =>
+        {
+            switch (_contentType)
+            {
+                case AvatarContentType.Icon:
+                    avatarBuilder.OpenComponent<MudIcon>(0);
+                    avatarBuilder.AddAttribute(1, "Icon", _icon);
+                    avatarBuilder.CloseComponent();
+                    break;
+                case AvatarContentType.Image:
+                    avatarBuilder.OpenComponent<MudImage>(0);
+                    avatarBuilder.AddAttribute(1, "Src", SelectedImage);
+                    avatarBuilder.CloseComponent();
+                    break;
+                case AvatarContentType.Text:
+                default:
+                    avatarBuilder.AddContent(0, _text);
+                    break;
+            }
+        }));
+        builder.CloseComponent();
+    }
 
-    private enum AvatarShape { Default, Rounded, Square } // Default = circle
+    private RenderFragment RenderAvatarGroup() => builder =>
+    {
+        builder.OpenComponent<MudAvatarGroup>(0);
+        builder.AddAttribute(1, "Max", _groupMax);
+        builder.AddAttribute(2, "Spacing", _groupSpacing);
+        builder.AddAttribute(3, "Outlined", _groupOutlined);
+        builder.AddAttribute(4, "OutlineColor", _groupOutlineColor);
+        builder.AddAttribute(5, "ChildContent", (RenderFragment)(groupBuilder =>
+        {
+            BuildGroupAvatar(groupBuilder, 0, _color, _text, null);
+            BuildGroupAvatar(groupBuilder, 10, Color.Secondary, "U", null);
+            BuildGroupAvatar(groupBuilder, 20, Color.Tertiary, "D", null);
+            BuildGroupAvatar(groupBuilder, 30, Color.Default, null, "images/mony.jpg");
+            BuildGroupAvatar(groupBuilder, 40, Color.Default, null, "images/castle.jpg");
+            BuildGroupAvatar(groupBuilder, 50, Color.Default, null, "images/sweden.jpg");
+        }));
+        builder.CloseComponent();
+    };
+
+    private void BuildGroupAvatar(RenderTreeBuilder builder, int seq, Color color, string? text, string? imageSrc)
+    {
+        builder.OpenComponent<MudAvatar>(seq);
+        builder.AddAttribute(seq + 1, "Color", imageSrc is null ? color : Color.Default);
+        builder.AddAttribute(seq + 2, "Variant", _variant);
+        builder.AddAttribute(seq + 3, "Size", _size);
+        builder.AddAttribute(seq + 4, "Square", IsSquare);
+        builder.AddAttribute(seq + 5, "Rounded", IsRounded);
+        builder.AddAttribute(seq + 6, "Elevation", _elevation);
+        builder.AddAttribute(seq + 7, "ChildContent", (RenderFragment)(avatarBuilder =>
+        {
+            if (imageSrc is not null)
+            {
+                avatarBuilder.OpenComponent<MudImage>(0);
+                avatarBuilder.AddAttribute(1, "Src", imageSrc);
+                avatarBuilder.CloseComponent();
+            }
+            else
+            {
+                avatarBuilder.AddContent(0, text);
+            }
+        }));
+        builder.CloseComponent();
+    }
+
+    private enum AvatarPreviewMode
+    {
+        Avatar,
+        Group
+    }
+
+    private enum AvatarContentType
+    {
+        Text,
+        Icon,
+        Image
+    }
+
+    private enum AvatarShape
+    {
+        Default,
+        Rounded,
+        Square
+    }
 }

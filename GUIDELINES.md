@@ -23,3 +23,6 @@
 - Use `DemoPageLayoutVariant.PreviewOnly` when a page only needs the title and preview section.
 - Use `DemoPageLayoutVariant.Custom` only when the page structure genuinely does not fit the shared patterns.
 - Let `app-shell-body` control global horizontal page padding; demo pages should avoid reintroducing separate left and right wrapper padding unless a page has a specific exception.
+- Initialize demo component state from the component API defaults whenever the API documentation states a default value.
+- If a demo exposes non-default behavior, make it a deliberate user selection instead of the initial page state.
+- If the API documentation does not explicitly state a default, prefer the component's natural default value and note that assumption in code comments or changelog only when it affects behavior.
