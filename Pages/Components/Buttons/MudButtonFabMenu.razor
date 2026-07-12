@@ -1,0 +1,169 @@
+@page "/components/buttonfabmenu"
+@using MudBlazor
+
+<DemoPageLayout Title="Floating Action Button Menu"
+                Description="A menu appearing from a MudFab that displays a list of items."
+                Variant="DemoPageLayoutVariant.Horizontal">
+    <Preview>
+        <div class="w-100 d-flex justify-center" style="padding: 88px 0 32px;">
+                <MudStack Spacing="2" AlignItems="AlignItems.Center">
+                <MudFabMenu @key="CurrentFabIcon"
+                            @bind-Open="_open"
+                            StartIcon="@CurrentFabIcon"
+                            Color="@_color"
+                            Size="@_size"
+                            Fixed="@_fixed"
+                            Direction="@_direction"
+                            Anchor="@_anchor"
+                            UseCloseIcon="@_useCloseIcon"
+                            DampenItemsBackgroundColor="@_dampenItemsBackgroundColor"
+                            AlignItems="@_alignItems"
+                            OpenOnMouseHover="@_openOnMouseHover"
+                            CloseOnMenuItemClicked="@_closeOnMenuItemClicked"
+                            Label="@_label">
+                    <MudFabMenuItem Label="Create"
+                                    StartIcon="@Icons.Material.Filled.AddCircle"
+                                    Color="Color.Primary"
+                                    Size="@_itemSize"
+                                    OnClick="@(() => OnMenuItemClick("Create"))" />
+                    <MudFabMenuItem Label="Edit"
+                                    StartIcon="@Icons.Material.Filled.Edit"
+                                    Color="Color.Secondary"
+                                    Size="@_itemSize"
+                                    OnClick="@(() => OnMenuItemClick("Edit"))" />
+                    <MudFabMenuItem Label="Share"
+                                    StartIcon="@Icons.Material.Filled.Share"
+                                    Color="Color.Info"
+                                    Size="@_itemSize"
+                                    OnClick="@(() => OnMenuItemClick("Share"))" />
+                </MudFabMenu>
+
+                <MudText Typo="Typo.caption">
+                    Last action: @_lastAction
+                </MudText>
+            </MudStack>
+        </div>
+    </Preview>
+
+    <Options>
+        <MudGrid Spacing="4" Justify="Justify.Center" Class="w-100">
+            <MudItem xs="12" md="6">
+                <MudTextField ShrinkLabel Label="Label"
+                              @bind-Value="_label" />
+            </MudItem>
+
+            <MudItem xs="12" md="6">
+                <MudSelect T="Color"
+                           Label="Color"
+                           Dense="true"
+                           @bind-Value="_color">
+                    <MudSelectItem Value="Color.Default">Default</MudSelectItem>
+                    <MudSelectItem Value="Color.Primary">Primary</MudSelectItem>
+                    <MudSelectItem Value="Color.Secondary">Secondary</MudSelectItem>
+                    <MudSelectItem Value="Color.Tertiary">Tertiary</MudSelectItem>
+                    <MudSelectItem Value="Color.Info">Info</MudSelectItem>
+                    <MudSelectItem Value="Color.Success">Success</MudSelectItem>
+                    <MudSelectItem Value="Color.Warning">Warning</MudSelectItem>
+                    <MudSelectItem Value="Color.Error">Error</MudSelectItem>
+                    <MudSelectItem Value="Color.Dark">Dark</MudSelectItem>
+                </MudSelect>
+            </MudItem>
+
+            <MudItem xs="12" md="6">
+                <MudSelect T="Size"
+                           Label="FAB Size"
+                           Dense="true"
+                           @bind-Value="_size">
+                    <MudSelectItem Value="Size.Small">Small</MudSelectItem>
+                    <MudSelectItem Value="Size.Medium">Medium</MudSelectItem>
+                    <MudSelectItem Value="Size.Large">Large</MudSelectItem>
+                </MudSelect>
+            </MudItem>
+
+            <MudItem xs="12" md="6">
+                <MudSelect T="Size"
+                           Label="Item Size"
+                           Dense="true"
+                           @bind-Value="_itemSize">
+                    <MudSelectItem Value="Size.Small">Small</MudSelectItem>
+                    <MudSelectItem Value="Size.Medium">Medium</MudSelectItem>
+                    <MudSelectItem Value="Size.Large">Large</MudSelectItem>
+                </MudSelect>
+            </MudItem>
+
+            <MudItem xs="12" md="6">
+                <MudSelect T="Direction"
+                           Label="Direction"
+                           Dense="true"
+                           @bind-Value="_direction">
+                    <MudSelectItem Value="Direction.Top">Top</MudSelectItem>
+                    <MudSelectItem Value="Direction.Bottom">Bottom</MudSelectItem>
+                    <MudSelectItem Value="Direction.Start">Start</MudSelectItem>
+                    <MudSelectItem Value="Direction.End">End</MudSelectItem>
+                </MudSelect>
+            </MudItem>
+
+            <MudItem xs="12" md="6">
+                <MudSelect T="AlignItems"
+                           Label="Align Items"
+                           Dense="true"
+                           @bind-Value="_alignItems">
+                    <MudSelectItem Value="AlignItems.Start">Start</MudSelectItem>
+                    <MudSelectItem Value="AlignItems.Center">Center</MudSelectItem>
+                    <MudSelectItem Value="AlignItems.End">End</MudSelectItem>
+                </MudSelect>
+            </MudItem>
+
+            @if (_fixed)
+            {
+                <MudItem xs="12">
+                    <MudSelect T="Origin"
+                               Label="Anchor"
+                               Dense="true"
+                               @bind-Value="_anchor">
+                        <MudSelectItem Value="Origin.TopLeft">Top Left</MudSelectItem>
+                        <MudSelectItem Value="Origin.TopRight">Top Right</MudSelectItem>
+                        <MudSelectItem Value="Origin.BottomLeft">Bottom Left</MudSelectItem>
+                        <MudSelectItem Value="Origin.BottomRight">Bottom Right</MudSelectItem>
+                    </MudSelect>
+                </MudItem>
+            }
+
+            <MudItem xs="12">
+                <div class="d-flex flex-wrap align-center justify-start" style="column-gap: 16px; row-gap: 4px;">
+                    <MudCheckBox @bind-Value="_open" Label="Open" Color="Color.Primary" />
+                    <MudCheckBox @bind-Value="_fixed" Label="Fixed" Color="Color.Primary" />
+                    <MudCheckBox @bind-Value="_useCloseIcon" Label="Use Close Icon" Color="Color.Primary" />
+                    <MudCheckBox @bind-Value="_dampenItemsBackgroundColor" Label="Dampen Items Background" Color="Color.Primary" />
+                    <MudCheckBox @bind-Value="_openOnMouseHover" Label="Open On Mouse Hover" Color="Color.Primary" />
+                    <MudCheckBox @bind-Value="_closeOnMenuItemClicked" Label="Close On Item Click" Color="Color.Primary" />
+                </div>
+            </MudItem>
+        </MudGrid>
+    </Options>
+</DemoPageLayout>
+
+@code {
+    private string _label = string.Empty;
+    private string _lastAction = "None";
+    private bool _open;
+    private bool _fixed;
+    private bool _useCloseIcon = true;
+    private bool _dampenItemsBackgroundColor = true;
+    private bool _openOnMouseHover = true;
+    private bool _closeOnMenuItemClicked = true;
+    private Color _color = Color.Default;
+    private Size _size = Size.Medium;
+    private Size _itemSize = Size.Medium;
+    private Direction _direction = Direction.Top;
+    private Origin _anchor = Origin.BottomRight;
+    private AlignItems _alignItems = AlignItems.Center;
+    private string CurrentFabIcon => _useCloseIcon && _open
+        ? Icons.Material.Filled.Close
+        : Icons.Material.Filled.Add;
+
+    private void OnMenuItemClick(string action)
+    {
+        _lastAction = action;
+    }
+}

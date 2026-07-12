@@ -40,13 +40,25 @@
                 </MudSelect>
             </MudItem>
 
-            @if (_contentType != AvatarContentType.Image)
+            @if (_contentType == AvatarContentType.Text)
             {
                 <MudItem xs="12" md="6">
-                    <MudSelect T="Variant" Label="Variant" Dense="true" @bind-Value="_variant">
-                        <MudSelectItem Value="Variant.Text">Text</MudSelectItem>
-                        <MudSelectItem Value="Variant.Filled">Filled</MudSelectItem>
-                        <MudSelectItem Value="Variant.Outlined">Outlined</MudSelectItem>
+                    <MudTextField Label="Text"
+                                  MaxLength="2"
+                                  @bind-Value="_text" />
+                </MudItem>
+            }
+            else if (_contentType == AvatarContentType.Icon)
+            {
+                <MudItem xs="12" md="6">
+                    <MudSelect T="string"
+                               Label="Icon"
+                               Dense="true"
+                               @bind-Value="_icon">
+                        <MudSelectItem Value="@Icons.Material.Filled.Person">Person</MudSelectItem>
+                        <MudSelectItem Value="@Icons.Material.Filled.Face">Face</MudSelectItem>
+                        <MudSelectItem Value="@Icons.Material.Filled.Pets">Pets</MudSelectItem>
+                        <MudSelectItem Value="@Icons.Material.Filled.Bolt">Bolt</MudSelectItem>
                     </MudSelect>
                 </MudItem>
             }
@@ -64,39 +76,13 @@
                 </MudItem>
             }
 
-            @if (_contentType == AvatarContentType.Text)
+            @if (_contentType != AvatarContentType.Image)
             {
                 <MudItem xs="12" md="6">
-                    <MudTextField Label="Text"
-                                  MaxLength="2"
-                                  @bind-Value="_text" />
-                </MudItem>
-
-                <MudItem xs="12" md="6">
-                    <MudSelect T="Color" Label="Color" Dense="true" @bind-Value="_color">
-                        <MudSelectItem Value="Color.Default">Default</MudSelectItem>
-                        <MudSelectItem Value="Color.Primary">Primary</MudSelectItem>
-                        <MudSelectItem Value="Color.Secondary">Secondary</MudSelectItem>
-                        <MudSelectItem Value="Color.Tertiary">Tertiary</MudSelectItem>
-                        <MudSelectItem Value="Color.Info">Info</MudSelectItem>
-                        <MudSelectItem Value="Color.Success">Success</MudSelectItem>
-                        <MudSelectItem Value="Color.Warning">Warning</MudSelectItem>
-                        <MudSelectItem Value="Color.Error">Error</MudSelectItem>
-                        <MudSelectItem Value="Color.Dark">Dark</MudSelectItem>
-                    </MudSelect>
-                </MudItem>
-            }
-            else if (_contentType == AvatarContentType.Icon)
-            {
-                <MudItem xs="12" md="6">
-                    <MudSelect T="string"
-                               Label="Icon"
-                               Dense="true"
-                               @bind-Value="_icon">
-                        <MudSelectItem Value="@Icons.Material.Filled.Person">Person</MudSelectItem>
-                        <MudSelectItem Value="@Icons.Material.Filled.Face">Face</MudSelectItem>
-                        <MudSelectItem Value="@Icons.Material.Filled.Pets">Pets</MudSelectItem>
-                        <MudSelectItem Value="@Icons.Material.Filled.Bolt">Bolt</MudSelectItem>
+                    <MudSelect T="Variant" Label="Variant" Dense="true" @bind-Value="_variant">
+                        <MudSelectItem Value="Variant.Text">Text</MudSelectItem>
+                        <MudSelectItem Value="Variant.Filled">Filled</MudSelectItem>
+                        <MudSelectItem Value="Variant.Outlined">Outlined</MudSelectItem>
                     </MudSelect>
                 </MudItem>
 

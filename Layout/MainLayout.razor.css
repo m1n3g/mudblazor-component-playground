@@ -39,3 +39,9 @@
         padding: 8px;
     }
 }
+
+@media (max-width: 300px) {
+    .app-shell-title-wrap {
+        display: none !important;
+    }
+}

@@ -1,37 +1,208 @@
 @page "/components/card"
 @using MudBlazor
 
-<MudText Class="mb-2" Typo="Typo.h6" Style="font-weight:700">Card</MudText>
-<MudCard Outlined="@_outlined" Class="mb-2" Style="max-width: 800px;">
-    <MudCardHeader>
-        <CardHeaderAvatar>
-            <MudAvatar Color="Color.Secondary">I</MudAvatar>
-        </CardHeaderAvatar>
-        <CardHeaderContent>
-            <MudText Typo="Typo.body1">Istra Croatia</MudText>
-            <MudText Typo="Typo.body2">Peninsula in Europe</MudText>
-        </CardHeaderContent>
-        <CardHeaderActions>
-            <MudIconButton Icon="@Icons.Material.Filled.Settings" Color="Color.Default" />
-        </CardHeaderActions>
-    </MudCardHeader>
-    <MudCardMedia Image="images/sweden.jpg" Height="250" />
-    <MudCardContent>
-        <MudText>Story of the day</MudText>
-        <MudText Typo="Typo.body2">Old paint found on a stone house door. This photo was taken in a small village in
-            Istra Croatia.</MudText>
-    </MudCardContent>
-    <MudCardActions>
-        <MudIconButton Icon="@Icons.Material.Filled.Favorite" Color="Color.Default" />
-        <MudIconButton Icon="@Icons.Material.Filled.Share" Color="Color.Default" />
-    </MudCardActions>
-</MudCard>
+<DemoPageLayout Title="Card"
+                Description="Cards contain actions, text, or media like images or graphics. Keeping a card to a single subject keeps the design clean."
+                Variant="DemoPageLayoutVariant.Horizontal"
+                PreviewContentMaxWidth="900px">
+    <Preview>
+        <div class="d-flex justify-center w-100">
+                <MudCard Style="@CardStyle"
+                         Outlined="@_outlined"
+                         Elevation="@_elevation"
+                         Square="@_square"
+                         ContentPadding="@_contentPadding">
+                @if (_showHeader)
+                {
+                    <MudCardHeader>
+                        <CardHeaderAvatar>
+                            <MudAvatar Color="@_avatarColor">I</MudAvatar>
+                        </CardHeaderAvatar>
+                        <CardHeaderContent>
+                            <MudText Typo="Typo.body1">@_title</MudText>
+                            <MudText Typo="Typo.body2">@_subtitle</MudText>
+                        </CardHeaderContent>
+                        <CardHeaderActions>
+                            <MudIconButton Icon="@Icons.Material.Filled.Settings" Color="Color.Default" />
+                        </CardHeaderActions>
+                    </MudCardHeader>
+                }
 
-<!-- Outlined control -->
-<MudStack Spacing="2" Class="mb-3">
-    <MudSwitch T="bool" @bind-Value="_outlined" Label="Outlined" Color="Color.Primary" />
-</MudStack>
+                @if (_showMedia)
+                {
+                    <MudCardMedia Image="@SelectedImage"
+                                  Height="@_mediaHeight"
+                                  Title="@_title" />
+                }
+
+                <MudCardContent>
+                    <MudText Typo="Typo.subtitle1">Story of the day</MudText>
+                    <MudText Typo="Typo.body2">@_bodyText</MudText>
+                </MudCardContent>
+
+                @if (_showActions)
+                {
+                    <MudCardActions Class="@ActionsClass">
+                        <MudButton Variant="Variant.Text" Color="Color.Primary" Class="mr-1">Explore</MudButton>
+                        <MudButton Variant="Variant.Text" Color="Color.Default">Learn More</MudButton>
+                    </MudCardActions>
+                }
+            </MudCard>
+        </div>
+    </Preview>
+
+    <Options>
+        <MudGrid Spacing="4" Justify="Justify.Center" Class="w-100">
+            <MudItem xs="12" md="6">
+                <MudTextField ShrinkLabel Label="Title"
+                              Clearable="true"
+                              @bind-Value="_title" />
+            </MudItem>
+
+            <MudItem xs="12" md="6">
+                <MudTextField ShrinkLabel Label="Subtitle"
+                              Clearable="true"
+                              @bind-Value="_subtitle" />
+            </MudItem>
+
+            <MudItem xs="12">
+                <MudTextField ShrinkLabel Label="Body Text"
+                              Lines="1"
+                              Clearable="true"
+                              @bind-Value="_bodyText" />
+            </MudItem>
+
+            <MudItem xs="12" md="6">
+                <MudSelect T="string"
+                           Label="Media Preset"
+                           Dense="true"
+                           @bind-Value="_imagePath">
+                    <MudSelectItem Value="@("images/sweden.jpg")">Sweden</MudSelectItem>
+                    <MudSelectItem Value="@("images/castle.jpg")">Castle</MudSelectItem>
+                    <MudSelectItem Value="@("images/mony.jpg")">Mony</MudSelectItem>
+                </MudSelect>
+            </MudItem>
+
+            <MudItem xs="12" md="6">
+                <MudSelect T="CardWidthPreset"
+                           Label="Width Preset"
+                           Dense="true"
+                           @bind-Value="_widthPreset">
+                    <MudSelectItem Value="CardWidthPreset.Compact">Compact</MudSelectItem>
+                    <MudSelectItem Value="CardWidthPreset.Comfortable">Comfortable</MudSelectItem>
+                    <MudSelectItem Value="CardWidthPreset.Wide">Wide</MudSelectItem>
+                </MudSelect>
+            </MudItem>
+
+            <MudItem xs="12">
+                <MudSlider Min="0" Max="24" Step="1" @bind-Value="_elevation" Color="Color.Info">
+                    @($"Elevation: {_elevation}")
+                </MudSlider>
+            </MudItem>
+
+            <MudItem xs="12">
+                <div class="d-flex flex-wrap align-center justify-start" style="column-gap: 16px; row-gap: 4px;">
+                    <MudCheckBox @bind-Value="_showHeader" Label="Show Header" Color="Color.Primary" />
+                    <MudCheckBox @bind-Value="_outlined" Label="Outlined" Color="Color.Primary" />
+                    <MudCheckBox @bind-Value="_showMedia" Label="Show Media" Color="Color.Primary" />
+                    <MudCheckBox @bind-Value="_showActions" Label="Show Actions" Color="Color.Primary" />
+                    <MudCheckBox @bind-Value="_square" Label="Square" Color="Color.Primary" />
+                    <MudCheckBox @bind-Value="_contentPadding" Label="Content Padding" Color="Color.Primary" />
+                </div>
+            </MudItem>
+
+            @if (_showHeader)
+            {
+                <MudItem xs="12" md="6">
+                    <MudSelect T="Color"
+                               Label="Avatar Color"
+                               Dense="true"
+                               @bind-Value="_avatarColor">
+                        <MudSelectItem Value="Color.Default">Default</MudSelectItem>
+                        <MudSelectItem Value="Color.Primary">Primary</MudSelectItem>
+                        <MudSelectItem Value="Color.Secondary">Secondary</MudSelectItem>
+                        <MudSelectItem Value="Color.Tertiary">Tertiary</MudSelectItem>
+                        <MudSelectItem Value="Color.Info">Info</MudSelectItem>
+                        <MudSelectItem Value="Color.Success">Success</MudSelectItem>
+                        <MudSelectItem Value="Color.Warning">Warning</MudSelectItem>
+                        <MudSelectItem Value="Color.Error">Error</MudSelectItem>
+                        <MudSelectItem Value="Color.Dark">Dark</MudSelectItem>
+                    </MudSelect>
+                </MudItem>
+            }
+
+            @if (_showMedia)
+            {
+                <MudItem xs="12" md="6">
+                    <MudSlider Min="160" Max="320" Step="10" @bind-Value="_mediaHeight" Color="Color.Primary">
+                        @($"Media Height: {_mediaHeight}px")
+                    </MudSlider>
+                </MudItem>
+            }
+
+            @if (_showActions)
+            {
+                <MudItem xs="12">
+                    <MudSelect T="CardActionsAlignment"
+                               Label="Actions Alignment"
+                               Dense="true"
+                               @bind-Value="_actionsAlignment">
+                        <MudSelectItem Value="CardActionsAlignment.Start">Start</MudSelectItem>
+                        <MudSelectItem Value="CardActionsAlignment.End">End</MudSelectItem>
+                        <MudSelectItem Value="CardActionsAlignment.SpaceBetween">Space Between</MudSelectItem>
+                    </MudSelect>
+                </MudItem>
+            }
+        </MudGrid>
+    </Options>
+</DemoPageLayout>
 
 @code {
-    private bool _outlined = false;
+    private string _title = "Istra Croatia";
+    private string _bodyText = "Old paint found on a stone house door. This photo was taken in a small village in Istra Croatia.";
+    private string _subtitle = "Peninsula in Europe";
+    private string _imagePath = "images/sweden.jpg";
+    private CardWidthPreset _widthPreset = CardWidthPreset.Comfortable;
+    private int _elevation = 1;
+    private int _mediaHeight = 250;
+    private bool _showHeader = true;
+    private bool _outlined;
+    private bool _showMedia = true;
+    private bool _showActions = true;
+    private bool _square;
+    private bool _contentPadding = true;
+    private CardActionsAlignment _actionsAlignment = CardActionsAlignment.Start;
+    private Color _avatarColor = Color.Secondary;
+
+    private string SelectedImage => _imagePath;
+
+    private string CardStyle => $"width: min(100%, {CardWidthValue});";
+
+    private string CardWidthValue => _widthPreset switch
+    {
+        CardWidthPreset.Compact => "360px",
+        CardWidthPreset.Wide => "520px",
+        _ => "420px"
+    };
+
+    private string ActionsClass => _actionsAlignment switch
+    {
+        CardActionsAlignment.End => "justify-end",
+        CardActionsAlignment.SpaceBetween => "justify-space-between",
+        _ => "justify-start"
+    };
+
+    private enum CardWidthPreset
+    {
+        Compact,
+        Comfortable,
+        Wide
+    }
+
+    private enum CardActionsAlignment
+    {
+        Start,
+        End,
+        SpaceBetween
+    }
 }

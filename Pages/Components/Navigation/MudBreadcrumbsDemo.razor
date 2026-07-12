@@ -1,27 +1,221 @@
 @page "/components/breadcrumbs"
 @using MudBlazor
 
-<MudBreadcrumbs Items="_items"></MudBreadcrumbs>
-<MudBreadcrumbs Items="_items" Separator=">"></MudBreadcrumbs>
-<MudBreadcrumbs Items="_items">
-    <SeparatorTemplate>
-        <MudIcon Icon="@Icons.Material.Filled.ArrowForward" Size="Size.Small" />
-    </SeparatorTemplate>
-</MudBreadcrumbs>
-<MudBreadcrumbs Items="_items2"></MudBreadcrumbs>
-<MudBreadcrumbs Items="_items" MaxItems="4"></MudBreadcrumbs>
+<DemoPageLayout Title="Breadcrumbs"
+                Description="Represents a series of links used to show the user's current location."
+                Variant="DemoPageLayoutVariant.Vertical">
+    <Preview>
+        <div class="d-flex justify-center w-100">
+            @if (_separatorType == BreadcrumbSeparatorType.Icon)
+            {
+                @if (_maxItems is byte maxItems)
+                {
+                    <MudBreadcrumbs @key="BreadcrumbPreviewKey" Items="@BreadcrumbItems" MaxItems="@maxItems">
+                        <SeparatorTemplate>
+                            <MudIcon Icon="@SelectedSeparatorIcon" Size="Size.Small" />
+                        </SeparatorTemplate>
+                    </MudBreadcrumbs>
+                }
+                else
+                {
+                    <MudBreadcrumbs @key="BreadcrumbPreviewKey" Items="@BreadcrumbItems">
+                        <SeparatorTemplate>
+                            <MudIcon Icon="@SelectedSeparatorIcon" Size="Size.Small" />
+                        </SeparatorTemplate>
+                    </MudBreadcrumbs>
+                }
+            }
+            else if (_separatorType == BreadcrumbSeparatorType.Text)
+            {
+                @if (_maxItems is byte maxItems)
+                {
+                    <MudBreadcrumbs @key="BreadcrumbPreviewKey" Items="@BreadcrumbItems"
+                                    Separator="@SelectedSeparatorText"
+                                    MaxItems="@maxItems" />
+                }
+                else
+                {
+                    <MudBreadcrumbs @key="BreadcrumbPreviewKey" Items="@BreadcrumbItems"
+                                    Separator="@SelectedSeparatorText" />
+                }
+            }
+            else if (_maxItems is byte maxItems)
+            {
+                <MudBreadcrumbs @key="BreadcrumbPreviewKey" Items="@BreadcrumbItems"
+                                MaxItems="@maxItems" />
+            }
+            else
+            {
+                <MudBreadcrumbs @key="BreadcrumbPreviewKey" Items="@BreadcrumbItems" />
+            }
+        </div>
+    </Preview>
+
+    <Options>
+        <MudGrid Spacing="4" Justify="Justify.FlexStart" Class="w-100">
+            <MudItem xs="12" md="6">
+                <MudSelect T="BreadcrumbPreset"
+                           Label="Preset"
+                           Dense="true"
+                           @bind-Value="_preset">
+                    <MudSelectItem Value="BreadcrumbPreset.Basic">Basic</MudSelectItem>
+                    <MudSelectItem Value="BreadcrumbPreset.Content">Content</MudSelectItem>
+                    <MudSelectItem Value="BreadcrumbPreset.Account">Account</MudSelectItem>
+                    <MudSelectItem Value="BreadcrumbPreset.Library">Library</MudSelectItem>
+                </MudSelect>
+            </MudItem>
+
+            <MudItem xs="12" md="6">
+                <MudSelect T="BreadcrumbSeparatorType"
+                           Label="Separator Type"
+                           Dense="true"
+                           @bind-Value="_separatorType">
+                    <MudSelectItem Value="BreadcrumbSeparatorType.Default">Default</MudSelectItem>
+                    <MudSelectItem Value="BreadcrumbSeparatorType.Text">Text</MudSelectItem>
+                    <MudSelectItem Value="BreadcrumbSeparatorType.Icon">Icon</MudSelectItem>
+                </MudSelect>
+            </MudItem>
+
+            <MudItem xs="12" md="6">
+                <MudSlider T="byte"
+                           Min="3"
+                           Max="7"
+                           Step="1"
+                           Color="Color.Primary"
+                           @bind-Value="_itemsCount">
+                    @($"Items Count: {_itemsCount}")
+                </MudSlider>
+            </MudItem>
+
+            <MudItem xs="12" md="6">
+                <MudSlider T="byte"
+                           Min="2"
+                           Max="6"
+                           Step="1"
+                           Color="Color.Info"
+                           @bind-Value="_maxItemsValue">
+                    @($"Max Items: {_maxItemsValue}")
+                </MudSlider>
+            </MudItem>
+
+            @if (_separatorType == BreadcrumbSeparatorType.Text)
+            {
+                <MudItem xs="12" md="6">
+                    <MudSelect T="string"
+                               Label="Separator"
+                               Dense="true"
+                               @bind-Value="_selectedSeparatorText">
+                        <MudSelectItem T="string" Value="@("/")">Slash (/)</MudSelectItem>
+                        <MudSelectItem T="string" Value="@(">")">Angle (>)</MudSelectItem>
+                        <MudSelectItem T="string" Value="@("-")">Dash (-)</MudSelectItem>
+                    </MudSelect>
+                </MudItem>
+            }
+
+            @if (_separatorType == BreadcrumbSeparatorType.Icon)
+            {
+                <MudItem xs="12" md="6">
+                    <MudSelect T="string"
+                               Label="Separator Icon"
+                               Dense="true"
+                               @bind-Value="_selectedSeparatorIcon">
+                        <MudSelectItem T="string" Value="@Icons.Material.Filled.ChevronRight">Chevron Right</MudSelectItem>
+                        <MudSelectItem T="string" Value="@Icons.Material.Filled.ArrowForward">Arrow Forward</MudSelectItem>
+                    </MudSelect>
+                </MudItem>
+            }
+
+            <MudItem xs="12">
+                <div class="d-flex flex-wrap align-center justify-start" style="column-gap: 16px; row-gap: 4px;">
+                    <MudCheckBox @bind-Value="_showIcons"
+                                 Label="Show Icons"
+                                 Color="Color.Primary" />
+                    <MudCheckBox @bind-Value="_disableLastItem"
+                                 Label="Disable Last Item"
+                                 Color="Color.Primary" />
+                    <MudCheckBox @bind-Value="_limitItems"
+                                 Label="Use Max Items"
+                                 Color="Color.Primary" />
+                </div>
+            </MudItem>
+        </MudGrid>
+    </Options>
+</DemoPageLayout>
 
 @code {
-    private List<BreadcrumbItem> _items =
-    [
-        new("Home", href: "/components/breadcrumbs"),
-        new("Link 1", href: "/components/breadcrumbs"),
-        new("Link 2", href: null, disabled: true)
-    ];
-    private List<BreadcrumbItem> _items2 =
-    [
-        new("Home", href: "/components/breadcrumbs", icon: Icons.Material.Filled.Home),
-        new("Videos", href: "/components/breadcrumbs", icon: Icons.Material.Filled.VideoLibrary),
-        new("Create", href: null, disabled: true, icon: Icons.Material.Filled.Create)
-    ];
+    private BreadcrumbPreset _preset = BreadcrumbPreset.Basic;
+    private BreadcrumbSeparatorType _separatorType = BreadcrumbSeparatorType.Default;
+    private string _selectedSeparatorText = "/";
+    private string _selectedSeparatorIcon = Icons.Material.Filled.ChevronRight;
+    private byte _itemsCount = 4;
+    private byte _maxItemsValue = 4;
+    private bool _showIcons;
+    private bool _disableLastItem = true;
+    private bool _limitItems;
+
+    private byte? _maxItems => _limitItems ? _maxItemsValue : null;
+
+    private string SelectedSeparatorText => string.IsNullOrWhiteSpace(_selectedSeparatorText) ? "/" : _selectedSeparatorText;
+
+    private string SelectedSeparatorIcon => string.IsNullOrWhiteSpace(_selectedSeparatorIcon)
+        ? Icons.Material.Filled.ChevronRight
+        : _selectedSeparatorIcon;
+
+    private List<BreadcrumbItem> BreadcrumbItems => BuildItems();
+
+    private string BreadcrumbPreviewKey =>
+        $"{_separatorType}|{SelectedSeparatorText}|{SelectedSeparatorIcon}|{_maxItems}|{_preset}|{_itemsCount}|{_showIcons}|{_disableLastItem}";
+
+    private List<BreadcrumbItem> BuildItems()
+    {
+        var labels = GetPresetLabels(_preset).Take(_itemsCount).ToList();
+        var items = new List<BreadcrumbItem>(labels.Count);
+
+        for (var index = 0; index < labels.Count; index++)
+        {
+            var isLast = index == labels.Count - 1;
+            var href = isLast ? null : "/components/breadcrumbs";
+            var disabled = isLast && _disableLastItem;
+            var icon = _showIcons ? GetIconForIndex(index) : null;
+
+            items.Add(new BreadcrumbItem(labels[index], href, disabled, icon));
+        }
+
+        return items;
+    }
+
+    private static IEnumerable<string> GetPresetLabels(BreadcrumbPreset preset) => preset switch
+    {
+        BreadcrumbPreset.Basic => ["Home", "Components", "Navigation", "Breadcrumbs", "Examples", "Playground", "Current"],
+        BreadcrumbPreset.Content => ["Home", "Docs", "Articles", "Design", "Accessibility", "Patterns", "Breadcrumbs"],
+        BreadcrumbPreset.Account => ["Home", "Workspace", "Settings", "Account", "Security", "Sessions", "Current"],
+        BreadcrumbPreset.Library => ["Home", "Media", "Videos", "Tutorials", "MudBlazor", "Navigation", "Breadcrumbs"],
+        _ => ["Home", "Components", "Navigation", "Breadcrumbs"]
+    };
+
+    private static string GetIconForIndex(int index) => index switch
+    {
+        0 => Icons.Material.Filled.Home,
+        1 => Icons.Material.Filled.Dashboard,
+        2 => Icons.Material.Filled.Folder,
+        3 => Icons.Material.Filled.Tune,
+        4 => Icons.Material.Filled.CollectionsBookmark,
+        5 => Icons.Material.Filled.Article,
+        _ => Icons.Material.Filled.ChevronRight
+    };
+
+    private enum BreadcrumbPreset
+    {
+        Basic,
+        Content,
+        Account,
+        Library
+    }
+
+    private enum BreadcrumbSeparatorType
+    {
+        Default,
+        Text,
+        Icon
+    }
 }
