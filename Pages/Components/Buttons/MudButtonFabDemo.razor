@@ -1,31 +1,126 @@
 @page "/components/buttonfab"
 @using MudBlazor
 
-<MudGrid>
-    <!-- Size selector -->
-    <MudItem xs="12" md="3">
-        <MudSelect T="Size" Label="FAB Size" Dense="true" @bind-Value="_fabSize" Class="mb-3">
-            <MudSelectItem Value="Size.Small">Small</MudSelectItem>
-            <MudSelectItem Value="Size.Medium">Medium</MudSelectItem>
-            <MudSelectItem Value="Size.Large">Large</MudSelectItem>
-        </MudSelect>
-    </MudItem>
+<DemoPageLayout Title="Floating Action Button"
+                Description="Represents a floating action button."
+                Variant="DemoPageLayoutVariant.Vertical">
+    <Preview>
+        <div class="d-flex flex-wrap justify-center align-center w-100" style="gap: 16px;">
+            <MudFab Color="@_primaryColor"
+                    StartIcon="@Icons.Material.Filled.Add"
+                    Size="@_fabSize"
+                    DropShadow="@_dropShadow" />
 
-    <!-- Your FABs (now sized by the selector) -->
-    <MudItem xs="12" md="9">
-        <MudPaper Class="pa-12" Elevation="1">
-            <MudStack Spacing="4">
-                <MudFab Color="Color.Primary" StartIcon="@Icons.Material.Filled.Add" Size="@_fabSize" />
-                <MudFab Color="Color.Secondary" StartIcon="@Icons.Material.Filled.Edit" Size="@_fabSize" />
-                <MudFab Color="Color.Tertiary" StartIcon="@Icons.Material.Filled.ShoppingCart" DropShadow="false"
-                    Size="@_fabSize" />
-                <MudFab StartIcon="@Icons.Material.Filled.Bookmark" Label="Bookmark" Size="@_fabSize" />
-                <MudFab StartIcon="@Icons.Material.Filled.Save" Disabled="true" Size="@_fabSize" />
-            </MudStack>
-        </MudPaper>
-    </MudItem>
-</MudGrid>
+            <MudFab Color="@_secondaryColor"
+                    StartIcon="@Icons.Material.Filled.Edit"
+                    Size="@_fabSize"
+                    DropShadow="@_dropShadow" />
+
+            <MudFab Color="@_tertiaryColor"
+                    StartIcon="@Icons.Material.Filled.ShoppingCart"
+                    Size="@_fabSize"
+                    DropShadow="@_dropShadow" />
+
+            <MudFab Color="@_extendedColor"
+                    StartIcon="@SelectedStartIcon"
+                    EndIcon="@SelectedEndIcon"
+                    Label="@_label"
+                    Size="@_fabSize"
+                    DropShadow="@_dropShadow" />
+
+            <MudFab StartIcon="@Icons.Material.Filled.Save"
+                    Disabled="@_disabled"
+                    Size="@_fabSize"
+                    DropShadow="@_dropShadow" />
+        </div>
+    </Preview>
+
+    <Options>
+        <MudGrid Spacing="4" Justify="Justify.Center" Class="w-100">
+            <MudItem xs="12">
+                <MudSelect T="Size"
+                           Label="Size"
+                           Dense="true"
+                           @bind-Value="_fabSize">
+                    <MudSelectItem Value="Size.Small">Small</MudSelectItem>
+                    <MudSelectItem Value="Size.Medium">Medium</MudSelectItem>
+                    <MudSelectItem Value="Size.Large">Large</MudSelectItem>
+                </MudSelect>
+            </MudItem>
+
+            <MudItem xs="12" md="6">
+                <MudSelect T="Color"
+                           Label="Extended Color"
+                           Dense="true"
+                           @bind-Value="_extendedColor">
+                    <MudSelectItem Value="Color.Default">Default</MudSelectItem>
+                    <MudSelectItem Value="Color.Primary">Primary</MudSelectItem>
+                    <MudSelectItem Value="Color.Secondary">Secondary</MudSelectItem>
+                    <MudSelectItem Value="Color.Tertiary">Tertiary</MudSelectItem>
+                    <MudSelectItem Value="Color.Info">Info</MudSelectItem>
+                    <MudSelectItem Value="Color.Success">Success</MudSelectItem>
+                    <MudSelectItem Value="Color.Warning">Warning</MudSelectItem>
+                    <MudSelectItem Value="Color.Error">Error</MudSelectItem>
+                    <MudSelectItem Value="Color.Dark">Dark</MudSelectItem>
+                </MudSelect>
+            </MudItem>
+
+            <MudItem xs="12" md="6">
+                <MudTextField Label="Extended Label"
+                              @bind-Value="_label" />
+            </MudItem>
+
+            <MudItem xs="12" md="6">
+                <MudSelect T="string"
+                           Label="Start Icon"
+                           Dense="true"
+                           @bind-Value="_startIconSelection">
+                    <MudSelectItem Value="@NoIconOption">None</MudSelectItem>
+                    <MudSelectItem Value="@Icons.Material.Filled.Bookmark">Bookmark</MudSelectItem>
+                    <MudSelectItem Value="@Icons.Material.Filled.Star">Star</MudSelectItem>
+                    <MudSelectItem Value="@Icons.Material.Filled.Edit">Edit</MudSelectItem>
+                    <MudSelectItem Value="@Icons.Material.Filled.Save">Save</MudSelectItem>
+                </MudSelect>
+            </MudItem>
+
+            <MudItem xs="12" md="6">
+                <MudSelect T="string"
+                           Label="End Icon"
+                           Dense="true"
+                           @bind-Value="_endIconSelection">
+                    <MudSelectItem Value="@NoIconOption">None</MudSelectItem>
+                    <MudSelectItem Value="@Icons.Material.Filled.ArrowForward">Arrow Forward</MudSelectItem>
+                    <MudSelectItem Value="@Icons.Material.Filled.ChevronRight">Chevron Right</MudSelectItem>
+                    <MudSelectItem Value="@Icons.Material.Filled.OpenInNew">Open In New</MudSelectItem>
+                    <MudSelectItem Value="@Icons.Material.Filled.Done">Done</MudSelectItem>
+                </MudSelect>
+            </MudItem>
+
+            <MudItem xs="12">
+                <div class="d-flex flex-wrap align-center justify-start" style="column-gap: 16px; row-gap: 4px;">
+                    <MudCheckBox @bind-Value="_dropShadow" Label="Drop Shadow" Color="Color.Primary" />
+                    <MudCheckBox @bind-Value="_disabled" Label="Disable Save FAB" Color="Color.Primary" />
+                </div>
+            </MudItem>
+        </MudGrid>
+    </Options>
+</DemoPageLayout>
 
 @code {
+    private const string NoIconOption = "__NONE__";
+
     private Size _fabSize = Size.Medium;
+    private string _label = "Bookmark";
+    private Color _extendedColor = Color.Default;
+    private bool _dropShadow = true;
+    private bool _disabled = true;
+    private string _startIconSelection = Icons.Material.Filled.Bookmark;
+    private string _endIconSelection = NoIconOption;
+
+    private const Color _primaryColor = Color.Primary;
+    private const Color _secondaryColor = Color.Secondary;
+    private const Color _tertiaryColor = Color.Tertiary;
+
+    private string? SelectedStartIcon => _startIconSelection == NoIconOption ? null : _startIconSelection;
+    private string? SelectedEndIcon => _endIconSelection == NoIconOption ? null : _endIconSelection;
 }

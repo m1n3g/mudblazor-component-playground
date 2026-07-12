@@ -1,15 +1,66 @@
 @page "/components/buttongroup"
 @using MudBlazor
 
-<MudText Typo="Typo.h6" Style="font-weight:700">MudButtonGroup – Customizable</MudText>
+<DemoPageLayout Title="Button Group"
+                Description="Groups related MudButton components together visually."
+                Variant="DemoPageLayoutVariant.Vertical">
+    <Preview>
+        <div class="d-flex flex-wrap justify-center align-center w-100" style="column-gap: 24px; row-gap: 12px">
+            <div style="@PrimaryGroupStyle">
+                <MudButtonGroup Color="@_color"
+                                Variant="@_variant"
+                                Size="@_size"
+                                Vertical="@_vertical"
+                                DropShadow="@_dropShadow"
+                                FullWidth="@_fullWidth">
+                    <MudButton>One</MudButton>
+                    <MudButton>Two</MudButton>
+                    <MudButton>Three</MudButton>
+                </MudButtonGroup>
+            </div>
 
-<MudPaper Class="pa-4 my-3" Elevation="0">
-    <MudGrid>
+            <div style="@SecondaryGroupStyle">
+                <MudButtonGroup Color="@_color"
+                                Variant="@_variant"
+                                Size="@_size"
+                                Vertical="@_vertical"
+                                DropShadow="@_dropShadow"
+                                FullWidth="@_fullWidth">
+                    <MudIconButton Icon="@Icons.Material.Filled.AccessAlarm"
+                                   Color="@ResolvedIconColor"
+                                   Style="@ResolvedIconStyle" />
+                    <MudToggleIconButton Icon="@Icons.Material.Filled.AlarmOff"
+                                         ToggledIcon="@Icons.Material.Filled.AlarmOn"
+                                         Color="@ResolvedIconColor"
+                                         ToggledColor="@ResolvedIconColor"
+                                         Style="@ResolvedIconStyle" />
+                    <MudButton StartIcon="@Icons.Material.Filled.AlarmAdd"
+                               Color="@_color">
+                        Add Alarm
+                    </MudButton>
+                </MudButtonGroup>
+            </div>
+        </div>
+    </Preview>
 
-        <!-- Controls -->
-        <MudItem xs="12" md="4">
-            <MudStack Spacing="2">
-                <MudSelect T="Color" Label="Color" @bind-Value="_color" Dense="true">
+    <Options>
+        <MudGrid Spacing="4" Justify="Justify.Center" Class="w-100">
+            <MudItem xs="12" md="6">
+                <MudSelect T="Variant"
+                           Label="Variant"
+                           Dense="true"
+                           @bind-Value="_variant">
+                    <MudSelectItem Value="Variant.Text">Text</MudSelectItem>
+                    <MudSelectItem Value="Variant.Outlined">Outlined</MudSelectItem>
+                    <MudSelectItem Value="Variant.Filled">Filled</MudSelectItem>
+                </MudSelect>
+            </MudItem>
+
+            <MudItem xs="12" md="6">
+                <MudSelect T="Color"
+                           Label="Color"
+                           Dense="true"
+                           @bind-Value="_color">
                     <MudSelectItem Value="Color.Default">Default</MudSelectItem>
                     <MudSelectItem Value="Color.Primary">Primary</MudSelectItem>
                     <MudSelectItem Value="Color.Secondary">Secondary</MudSelectItem>
@@ -20,50 +71,64 @@
                     <MudSelectItem Value="Color.Error">Error</MudSelectItem>
                     <MudSelectItem Value="Color.Dark">Dark</MudSelectItem>
                 </MudSelect>
+            </MudItem>
 
-                <MudSelect T="Variant" Label="Variant" Dense="true" @bind-Value="_variant">
-                    <MudSelectItem Value="Variant.Filled">Filled</MudSelectItem>
-                    <MudSelectItem Value="Variant.Outlined">Outlined</MudSelectItem>
-                    <MudSelectItem Value="Variant.Text">Text</MudSelectItem>
+            <MudItem xs="12">
+                <MudSelect T="Size"
+                           Label="Size"
+                           Dense="true"
+                           @bind-Value="_size">
+                    <MudSelectItem Value="Size.Small">Small</MudSelectItem>
+                    <MudSelectItem Value="Size.Medium">Medium</MudSelectItem>
+                    <MudSelectItem Value="Size.Large">Large</MudSelectItem>
                 </MudSelect>
+            </MudItem>
 
-                <MudStack Row="true" Spacing="3">
-                    <MudSwitch T="bool" @bind-Value="_vertical" Label="Vertical" Color="Color.Primary" />
-                    <MudSwitch T="bool" @bind-Value="_dropShadow" Label="DropShadow" Color="Color.Primary"
-                        Disabled="@(_variant != Variant.Filled)" />
-                </MudStack>
+            <MudItem xs="12">
+                <div class="d-flex flex-wrap align-center justify-start" style="column-gap: 16px; row-gap: 4px;">
+                    <MudCheckBox @bind-Value="_vertical" Label="Vertical" Color="Color.Primary" />
+                    <MudCheckBox @bind-Value="_fullWidth" Label="Full Width" Color="Color.Primary" />
+                    <MudCheckBox @bind-Value="_dropShadow" Label="Drop Shadow" Color="Color.Primary" />
+                </div>
+            </MudItem>
 
-                <MudText Typo="Typo.caption" Class="mt-6">*DropShadow applies to Filled variant.</MudText>
-            </MudStack>
-        </MudItem>
-
-        <!-- Preview -->
-        <MudItem xs="12" md="8" Class="d-flex align-center justify-center">
-            <MudStack Row="true" Spacing="3">
-                <MudButtonGroup Class="ma-3" Color="@_color" Variant="@_variant" Vertical="@_vertical"
-                    DropShadow="@_dropShadow" Size="Size.Medium">
-                    <MudButton>One</MudButton>
-                    <MudButton>Two</MudButton>
-                    <MudButton>Three</MudButton>
-                </MudButtonGroup>
-
-                <MudButtonGroup Class="ma-3" Color="@_color" Variant="@_variant" Vertical="@_vertical"
-                    DropShadow="@_dropShadow" Size="Size.Medium">
-                    <MudIconButton Icon="@Icons.Material.Filled.AccessAlarm"></MudIconButton>
-                    <MudToggleIconButton Icon="@Icons.Material.Filled.AlarmOff" Color="@Color.Error"
-                        ToggledIcon="@Icons.Material.Filled.AlarmOn" ToggledColor="@Color.Success" />
-                    <MudButton StartIcon="@Icons.Material.Filled.AlarmAdd" IconColor="Color.Warning">Add alarm
-                    </MudButton>
-                </MudButtonGroup>
-            </MudStack>
-        </MudItem>
-
-    </MudGrid>
-</MudPaper>
+        </MudGrid>
+    </Options>
+</DemoPageLayout>
 
 @code {
-    private bool _vertical = false;
-    private Color _color = Color.Primary;
-    private Variant _variant = Variant.Filled;
+    private Variant _variant = Variant.Text;
+    private Color _color = Color.Default;
+    private Size _size = Size.Medium;
+    private bool _vertical;
+    private bool _fullWidth;
     private bool _dropShadow = true;
+
+    private string PrimaryGroupStyle => _fullWidth ? "width: min(100%, 420px);" : string.Empty;
+    private string SecondaryGroupStyle => _fullWidth ? "width: min(100%, 520px);" : string.Empty;
+    private Color ResolvedIconColor => NormalizeIconOnlyColor(_color);
+    private string? ResolvedIconStyle => ShouldUseLightIconColor ? "color: white !important;" : null;
+
+    private Color NormalizeIconOnlyColor(Color color)
+    {
+        if (_variant != Variant.Filled)
+            return color;
+
+        return color switch
+        {
+            Color.Primary or
+            Color.Secondary or
+            Color.Tertiary or
+            Color.Info or
+            Color.Success or
+            Color.Warning or
+            Color.Error or
+            Color.Dark => Color.Inherit,
+            _ => color
+        };
+    }
+
+    private bool ShouldUseLightIconColor =>
+        _variant == Variant.Filled &&
+        _color != Color.Default;
 }

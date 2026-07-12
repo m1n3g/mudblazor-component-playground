@@ -1,127 +1,214 @@
 @page "/components/button"
 @using MudBlazor
 
-<MudGrid>
-    <!-- LEFT: Options -->
-    <MudItem md="4" xs="12">
-        <MudPaper Class="pa-4" Elevation="0">
-            <MudText Typo="Typo.h6" Class="mb-4" Style="font-weight:700">Button Options</MudText>
-
-            <MudSelect T="Variant" Label="Variant" Dense="true" @bind-Value="_variant">
-                <MudSelectItem Value="Variant.Filled">Filled</MudSelectItem>
-                <MudSelectItem Value="Variant.Outlined">Outlined</MudSelectItem>
-                <MudSelectItem Value="Variant.Text">Text</MudSelectItem>
-            </MudSelect>
-
-            <MudSelect T="Size" Label="Size" Dense="true" Class="mt-2" @bind-Value="_size">
-                <MudSelectItem Value="Size.Small">Small</MudSelectItem>
-                <MudSelectItem Value="Size.Medium">Medium</MudSelectItem>
-                <MudSelectItem Value="Size.Large">Large</MudSelectItem>
-            </MudSelect>
-
-            <MudCheckBox @bind-Value="_dropShadow" Label="DropShadow" Color="Color.Primary" Class="mt-2" />
-            <MudCheckBox @bind-Value="_fullWidth" Label="FullWidth" Color="Color.Primary" />
-            <MudCheckBox @bind-Value="_useStartIcon" Label="StartIcon" Color="Color.Primary" />
-            <MudCheckBox @bind-Value="_useEndIcon" Label="EndIcon" Color="Color.Primary" />
-
-            <!-- NEW: keep loading forever until Reset is clicked -->
-            <MudCheckBox @bind-Value="_continuousLoading" Label="Continuous loading" Color="Color.Primary" Class="mt-2" />
-        </MudPaper>
-    </MudItem>
-
-    <!-- RIGHT: Preview -->
-    <MudItem md="8" xs="12" Class="d-flex align-center justify-center">
-        <MudPaper Class="pa-6" Elevation="0" Style="width:100%;max-width:800px;">
-
-            <MudText Typo="Typo.subtitle1" Class="mb-2">Normal Button</MudText>
-            <MudButton Color="Color.Primary" Variant="@_variant" Size="@_size" FullWidth="@_fullWidth"
-                       DropShadow="@_dropShadow" StartIcon="@(_useStartIcon ? _startIcon : null)"
-                       EndIcon="@(_useEndIcon ? _endIcon : null)">
-                Submit
-            </MudButton>
-
-            <MudText Typo="Typo.subtitle1" Class="mt-6 mb-2">Loading Button</MudText>
-
-            <div class="d-flex align-center">
-                <MudButton Color="Color.Secondary" Variant="@_variant" Size="@_size" FullWidth="@_fullWidth"
-                           DropShadow="@_dropShadow" StartIcon="@(_useStartIcon ? _startIcon : null)"
-                           EndIcon="@(_useEndIcon ? _endIcon : null)" Disabled="@_processing" OnClick="ProcessSomething">
-
-                    @if (_processing)
-                    {
-                        <MudProgressCircular Class="ms-n1" Size="Size.Small" Indeterminate="true" />
-                        <MudText Class="ms-2">Processing</MudText>
-                    }
-                    else
-                    {
-                        <MudText>Click me</MudText>
-                    }
-                </MudButton>
-
-                <!-- NEW: Reset button to stop loading immediately -->
-                <MudButton Variant="Variant.Text" Color="Color.Error" Class="ml-3"
-                           Disabled="@(!_processing)" OnClick="ResetLoading">
-                    Reset Loading
-                </MudButton>
+<DemoPageLayout Title="Button"
+                Description="Represents a button for actions, links, and commands."
+                Variant="DemoPageLayoutVariant.Vertical">
+    <Preview>
+        <MudStack Spacing="2" AlignItems="AlignItems.Center" Class="w-100">
+            <div class="d-flex justify-center w-100">
+                @if (_type == ButtonDemoType.Loading)
+                {
+                    <MudButton Color="@_color"
+                               Variant="@_variant"
+                               Size="@_size"
+                               FullWidth="@_fullWidth"
+                               Disabled="true"
+                               DropShadow="@_dropShadow"
+                               Ripple="@_ripple"
+                               StartIcon="@SelectedStartIcon"
+                               EndIcon="@SelectedEndIcon">
+                        <MudProgressCircular Class="me-2" Size="Size.Small" Indeterminate="true" />
+                        @_loadingLabel
+                    </MudButton>
+                }
+                else if (_type == ButtonDemoType.Link)
+                {
+                    <MudButton Color="@_color"
+                               Variant="@_variant"
+                               Size="@_size"
+                               FullWidth="@_fullWidth"
+                               Disabled="@_disabled"
+                               DropShadow="@_dropShadow"
+                               Ripple="@_ripple"
+                               StartIcon="@SelectedStartIcon"
+                               EndIcon="@SelectedEndIcon"
+                               Href="@_href"
+                               Target="@( _openInNewTab ? "_blank" : null )"
+                               OnClick="OnButtonClick">
+                        @_label
+                    </MudButton>
+                }
+                else
+                {
+                    <MudButton Color="@_color"
+                               Variant="@_variant"
+                               Size="@_size"
+                               FullWidth="@_fullWidth"
+                               Disabled="@_disabled"
+                               DropShadow="@_dropShadow"
+                               Ripple="@_ripple"
+                               StartIcon="@SelectedStartIcon"
+                               EndIcon="@SelectedEndIcon"
+                               OnClick="OnButtonClick">
+                        @_label
+                    </MudButton>
+                }
             </div>
 
-        </MudPaper>
-    </MudItem>
-</MudGrid>
+            <MudText Typo="Typo.caption">
+                Clicked: @_clickedCount
+            </MudText>
+        </MudStack>
+    </Preview>
+
+    <Options>
+        <MudGrid Spacing="4" Justify="Justify.Center" Class="w-100">
+            <MudItem xs="12" md="6">
+                <MudSelect T="Variant"
+                           Label="Variant"
+                           Dense="true"
+                           @bind-Value="_variant">
+                    <MudSelectItem Value="Variant.Text">Text</MudSelectItem>
+                    <MudSelectItem Value="Variant.Outlined">Outlined</MudSelectItem>
+                    <MudSelectItem Value="Variant.Filled">Filled</MudSelectItem>
+                </MudSelect>
+            </MudItem>
+
+            <MudItem xs="12" md="6">
+                <MudSelect T="Color"
+                           Label="Color"
+                           Dense="true"
+                           @bind-Value="_color">
+                    <MudSelectItem Value="Color.Default">Default</MudSelectItem>
+                    <MudSelectItem Value="Color.Primary">Primary</MudSelectItem>
+                    <MudSelectItem Value="Color.Secondary">Secondary</MudSelectItem>
+                    <MudSelectItem Value="Color.Tertiary">Tertiary</MudSelectItem>
+                    <MudSelectItem Value="Color.Info">Info</MudSelectItem>
+                    <MudSelectItem Value="Color.Success">Success</MudSelectItem>
+                    <MudSelectItem Value="Color.Warning">Warning</MudSelectItem>
+                    <MudSelectItem Value="Color.Error">Error</MudSelectItem>
+                    <MudSelectItem Value="Color.Dark">Dark</MudSelectItem>
+                </MudSelect>
+            </MudItem>
+
+            <MudItem xs="12" md="6">
+                <MudSelect T="Size"
+                           Label="Size"
+                           Dense="true"
+                           @bind-Value="_size">
+                    <MudSelectItem Value="Size.Small">Small</MudSelectItem>
+                    <MudSelectItem Value="Size.Medium">Medium</MudSelectItem>
+                    <MudSelectItem Value="Size.Large">Large</MudSelectItem>
+                </MudSelect>
+            </MudItem>
+
+            <MudItem xs="12" md="6">
+                <MudSelect T="ButtonDemoType"
+                           Label="Type"
+                           Dense="true"
+                           @bind-Value="_type">
+                    <MudSelectItem Value="ButtonDemoType.Regular">Regular</MudSelectItem>
+                    <MudSelectItem Value="ButtonDemoType.Loading">Loading</MudSelectItem>
+                    <MudSelectItem Value="ButtonDemoType.Link">Link</MudSelectItem>
+                </MudSelect>
+            </MudItem>
+
+            <MudItem xs="12">
+                <MudTextField Label="Label"
+                              @bind-Value="_label" />
+            </MudItem>
+
+            @if (_type == ButtonDemoType.Loading)
+            {
+                <MudItem xs="12">
+                    <MudTextField Label="Loading Label"
+                                  @bind-Value="_loadingLabel" />
+                </MudItem>
+            }
+
+            @if (_type == ButtonDemoType.Link)
+            {
+                <MudItem xs="12">
+                    <MudTextField Label="Href"
+                                  @bind-Value="_href" />
+                </MudItem>
+            }
+
+            <MudItem xs="12" md="6">
+                <MudSelect T="string"
+                           Label="Start Icon"
+                           Dense="true"
+                           @bind-Value="_startIconSelection">
+                    <MudSelectItem Value="@NoIconOption">None</MudSelectItem>
+                    <MudSelectItem Value="@Icons.Material.Filled.Add">Add</MudSelectItem>
+                    <MudSelectItem Value="@Icons.Material.Filled.ArrowBack">Arrow Back</MudSelectItem>
+                    <MudSelectItem Value="@Icons.Material.Filled.Check">Check</MudSelectItem>
+                    <MudSelectItem Value="@Icons.Material.Filled.Menu">Menu</MudSelectItem>
+                </MudSelect>
+            </MudItem>
+
+            <MudItem xs="12" md="6">
+                <MudSelect T="string"
+                           Label="End Icon"
+                           Dense="true"
+                           @bind-Value="_endIconSelection">
+                    <MudSelectItem Value="@NoIconOption">None</MudSelectItem>
+                    <MudSelectItem Value="@Icons.Material.Filled.ArrowForward">Arrow Forward</MudSelectItem>
+                    <MudSelectItem Value="@Icons.Material.Filled.ChevronRight">Chevron Right</MudSelectItem>
+                    <MudSelectItem Value="@Icons.Material.Filled.OpenInNew">Open In New</MudSelectItem>
+                    <MudSelectItem Value="@Icons.Material.Filled.Send">Send</MudSelectItem>
+                </MudSelect>
+            </MudItem>
+
+            <MudItem xs="12">
+                <div class="d-flex flex-wrap align-center justify-start" style="column-gap: 16px; row-gap: 4px;">
+                    <MudCheckBox @bind-Value="_disabled" Label="Disabled" Color="Color.Primary" />
+                    <MudCheckBox @bind-Value="_fullWidth" Label="Full Width" Color="Color.Primary" />
+                    <MudCheckBox @bind-Value="_dropShadow" Label="Drop Shadow" Color="Color.Primary" />
+                    <MudCheckBox @bind-Value="_ripple" Label="Ripple" Color="Color.Primary" />
+                    @if (_type == ButtonDemoType.Link)
+                    {
+                        <MudCheckBox @bind-Value="_openInNewTab" Label="Open In New Tab" Color="Color.Primary" />
+                    }
+                </div>
+            </MudItem>
+        </MudGrid>
+    </Options>
+</DemoPageLayout>
 
 @code {
-    private Variant _variant = Variant.Filled;
+    private const string NoIconOption = "__NONE__";
+
+    private ButtonDemoType _type = ButtonDemoType.Regular;
+    private Variant _variant = Variant.Text;
+    private Color _color = Color.Default;
     private Size _size = Size.Medium;
-
-    private bool _dropShadow = true;
+    private string _label = "Button";
+    private string _loadingLabel = "Processing";
+    private string _href = "https://github.com/m1n3g/mudblazor-component-playground";
+    private bool _openInNewTab = true;
+    private bool _disabled;
     private bool _fullWidth;
-    private bool _useStartIcon;
-    private bool _useEndIcon;
+    private bool _dropShadow = true;
+    private bool _ripple = true;
+    private string _startIconSelection = NoIconOption;
+    private string _endIconSelection = NoIconOption;
+    private int _clickedCount;
 
-    // default icons (no picker)
-    private readonly string _startIcon = Icons.Material.Filled.Add;
-    private readonly string _endIcon   = Icons.Material.Filled.ArrowForward;
+    private string? SelectedStartIcon => _startIconSelection == NoIconOption ? null : _startIconSelection;
+    private string? SelectedEndIcon => _endIconSelection == NoIconOption ? null : _endIconSelection;
 
-    // Loading state
-    private bool _processing = false;
-    private bool _continuousLoading = false;       // <-- option you can toggle
-    private CancellationTokenSource? _loadingCts;  // for cancel/reset
-    private readonly int _delayMs = 2000;          // your simulated work time
-
-    private async Task ProcessSomething()
+    private void OnButtonClick(MouseEventArgs _)
     {
-        if (_processing) return;
-
-        _processing = true;
-        _loadingCts = new CancellationTokenSource();
-        try
-        {
-            if (_continuousLoading)
-            {
-                // keep spinner running until ResetLoading() cancels
-                await Task.Delay(Timeout.InfiniteTimeSpan, _loadingCts.Token);
-            }
-            else
-            {
-                await Task.Delay(_delayMs, _loadingCts.Token);
-            }
-        }
-        catch (OperationCanceledException)
-        {
-            // expected when reset is clicked
-        }
-        finally
-        {
-            _processing = false;
-            _loadingCts.Dispose();
-            _loadingCts = null;
-            StateHasChanged();
-        }
+        if (!_disabled)
+            _clickedCount++;
     }
 
-    private Task ResetLoading()
+    private enum ButtonDemoType
     {
-        _loadingCts?.Cancel();   // cancels both finite and continuous waits
-        return Task.CompletedTask;
+        Regular,
+        Loading,
+        Link
     }
 }

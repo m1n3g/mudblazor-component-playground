@@ -1,159 +1,166 @@
 @page "/components/toggleiconbutton"
 @using MudBlazor
 
-<MudGrid Spacing="3">
+<DemoPageLayout Title="Toggle Icon Button"
+                Description="An icon button that toggles between two distinct states, useful for on/off or favorite/unfavorite scenarios."
+                Variant="DemoPageLayoutVariant.Vertical">
+    <Preview>
+        <MudStack Spacing="2" AlignItems="AlignItems.Center" Class="w-100">
+            <MudToggleIconButton @bind-Toggled="_toggled"
+                                 Icon="@_icon"
+                                 ToggledIcon="@_toggledIcon"
+                                 Color="@_color"
+                                 ToggledColor="@_toggledColor"
+                                 Size="@_size"
+                                 Variant="@_variant"
+                                 ToggledVariant="@_toggledVariant"
+                                 Edge="@_edge"
+                                 Ripple="@_ripple"
+                                 DropShadow="@_dropShadow"
+                                 Disabled="@_disabled"
+                                 aria-label="@_ariaLabel" />
 
-    <!-- LEFT: examples -->
-    <MudItem xs="12" md="8">
-        <MudText Typo="Typo.subtitle1" Class="mb-2">Examples</MudText>
+            <MudText Typo="Typo.caption">
+                Toggled: @_toggled
+            </MudText>
+        </MudStack>
+    </Preview>
 
-        <MudPaper Class="pa-3">
-            <MudStack Spacing="2">
-
-                <!-- Row of independent toggles -->
-                <MudStack Row Spacing="2" AlignItems="AlignItems.Center" Class="wrap-row">
-                    <MudText Class="mr-2" Typo="Typo.subtitle2">Quick toggles:</MudText>
-
-                    <!-- Favorite -->
-                    <MudToggleIconButton
-                        @bind-Toggled="_fav"
-                        Icon="@Icons.Material.Outlined.FavoriteBorder"
-                        ToggledIcon="@Icons.Material.Filled.Favorite"
-                        Color="@_color" Size="@_size" Edge="@_edge"
-                        Disabled="@_disabled" Ripple="@(!_disableRipple)"
-                        aria-label="Favorite" />
-
-                    <!-- Visibility -->
-                    <MudToggleIconButton
-                        @bind-Toggled="_visible"
-                        Icon="@Icons.Material.Outlined.VisibilityOff"
-                        ToggledIcon="@Icons.Material.Filled.Visibility"
-                        Color="@_color" Size="@_size" Edge="@_edge"
-                        Disabled="@_disabled" Ripple="@(!_disableRipple)"
-                        aria-label="Visibility" />
-
-                    <!-- Mic (mute) -->
-                    <MudToggleIconButton
-                        @bind-Toggled="_micOn"
-                        Icon="@Icons.Material.Outlined.MicOff"
-                        ToggledIcon="@Icons.Material.Filled.Mic"
-                        Color="@_color" Size="@_size" Edge="@_edge"
-                        Disabled="@_disabled" Ripple="@(!_disableRipple)"
-                        aria-label="Mic" />
-
-                    <!-- Notifications -->
-                    <MudToggleIconButton
-                        @bind-Toggled="_notifications"
-                        Icon="@Icons.Material.Outlined.NotificationsNone"
-                        ToggledIcon="@Icons.Material.Filled.Notifications"
-                        Color="@_color" Size="@_size" Edge="@_edge"
-                        Disabled="@_disabled" Ripple="@(!_disableRipple)"
-                        aria-label="Notifications" />
-                </MudStack>
-
-                <!-- Live state preview -->
-                <MudText Typo="Typo.caption" Class="mt-1">
-                    Favorite: @_fav • Visible: @_visible • MicOn: @_micOn • Notifications: @_notifications
-                </MudText>
-
-                <MudDivider Class="my-2" />
-
-                <!-- Dynamic toggle with selectable icon pair -->
-                <MudStack Spacing="2">
-                    <MudText Typo="Typo.subtitle2">Dynamic toggle (choose icon pair)</MudText>
-
-                    <MudSelect T="string" Label="Icon pair" @bind-Value="_selectedPairKey" Dense="true" Style="max-width:280px;">
-                        @foreach (var kv in _pairs.Keys)
-                        {
-                            <MudSelectItem Value="@kv">@kv</MudSelectItem>
-                        }
-                    </MudSelect>
-
-                    <MudStack Row Spacing="2" AlignItems="AlignItems.Center">
-                        <MudToggleIconButton
-                            @bind-Toggled="_dynamicState"
-                            Icon="@_pairs[_selectedPairKey].Off"
-                            ToggledIcon="@_pairs[_selectedPairKey].On"
-                            Color="@_color" Size="@_size" Edge="@_edge"
-                            Disabled="@_disabled" Ripple="@(!_disableRipple)"
-                            aria-label="Dynamic toggle" />
-                        <MudText Typo="Typo.body2">State: @_dynamicState</MudText>
-                    </MudStack>
-                </MudStack>
-
-            </MudStack>
-        </MudPaper>
-    </MudItem>
-
-    <!-- RIGHT: customization controls -->
-    <MudItem xs="12" md="4">
-        <MudText Typo="Typo.subtitle1" Class="mb-2">Controls</MudText>
-
-        <MudPaper Class="pa-3">
-            <MudStack Row Spacing="2" AlignItems="AlignItems.Center" Class="controls-stack">
-                <MudSwitch  Class="control-item" @bind-Value="_disabled"       Label="Disabled"        Color="Color.Primary" />
-                <MudSwitch  Class="control-item" @bind-Value="_disableRipple"  Label="Disable Ripple"  Color="Color.Primary" />
-
-                <MudSelect  T="Color" Label="Color"       @bind-Value="_color" Dense="true" Style="min-width:160px;">
-                    @foreach (var c in Enum.GetValues(typeof(Color)).Cast<Color>())
-                    {
-                        <MudSelectItem Value="@c">@c</MudSelectItem>
-                    }
+    <Options>
+        <MudGrid Spacing="4" Justify="Justify.Center" Class="w-100">
+            <MudItem xs="12" md="6">
+                <MudSelect T="string"
+                           Label="Icon"
+                           Dense="true"
+                           @bind-Value="_icon">
+                    <MudSelectItem Value="@Icons.Material.Outlined.FavoriteBorder">Favorite Border</MudSelectItem>
+                    <MudSelectItem Value="@Icons.Material.Outlined.VisibilityOff">Visibility Off</MudSelectItem>
+                    <MudSelectItem Value="@Icons.Material.Outlined.BookmarkBorder">Bookmark Border</MudSelectItem>
+                    <MudSelectItem Value="@Icons.Material.Outlined.StarBorder">Star Border</MudSelectItem>
                 </MudSelect>
+            </MudItem>
 
-                <MudSelect  T="Size"  Label="Size"        @bind-Value="_size"  Dense="true" Style="min-width:160px;">
-                    @foreach (var s in Enum.GetValues(typeof(Size)).Cast<Size>())
-                    {
-                        <MudSelectItem Value="@s">@s</MudSelectItem>
-                    }
+            <MudItem xs="12" md="6">
+                <MudSelect T="Variant"
+                           Label="Variant"
+                           Dense="true"
+                           @bind-Value="_variant">
+                    <MudSelectItem Value="Variant.Text">Text</MudSelectItem>
+                    <MudSelectItem Value="Variant.Outlined">Outlined</MudSelectItem>
+                    <MudSelectItem Value="Variant.Filled">Filled</MudSelectItem>
                 </MudSelect>
+            </MudItem>
 
-                <MudSelect  T="Edge"  Label="Edge"        @bind-Value="_edge"  Dense="true" Style="min-width:160px;">
-                    @foreach (var e in Enum.GetValues(typeof(Edge)).Cast<Edge>())
-                    {
-                        <MudSelectItem Value="@e">@e</MudSelectItem>
-                    }
+            <MudItem xs="12" md="6">
+                <MudSelect T="Color"
+                           Label="Color"
+                           Dense="true"
+                           @bind-Value="_color">
+                    <MudSelectItem Value="Color.Default">Default</MudSelectItem>
+                    <MudSelectItem Value="Color.Primary">Primary</MudSelectItem>
+                    <MudSelectItem Value="Color.Secondary">Secondary</MudSelectItem>
+                    <MudSelectItem Value="Color.Tertiary">Tertiary</MudSelectItem>
+                    <MudSelectItem Value="Color.Info">Info</MudSelectItem>
+                    <MudSelectItem Value="Color.Success">Success</MudSelectItem>
+                    <MudSelectItem Value="Color.Warning">Warning</MudSelectItem>
+                    <MudSelectItem Value="Color.Error">Error</MudSelectItem>
+                    <MudSelectItem Value="Color.Dark">Dark</MudSelectItem>
                 </MudSelect>
-            </MudStack>
-        </MudPaper>
-    </MudItem>
+            </MudItem>
 
-</MudGrid>
+            <MudItem xs="12" md="6">
+                <MudSelect T="Size"
+                           Label="Size"
+                           Dense="true"
+                           @bind-Value="_size">
+                    <MudSelectItem Value="Size.Small">Small</MudSelectItem>
+                    <MudSelectItem Value="Size.Medium">Medium</MudSelectItem>
+                    <MudSelectItem Value="Size.Large">Large</MudSelectItem>
+                </MudSelect>
+            </MudItem>
 
-<style>
-  /* make rows wrap nicely on small screens */
-  .wrap-row { flex-wrap: wrap; }
-  .controls-stack { display:flex; flex-wrap: wrap; }
-  .controls-stack .control-item { min-width: 160px; }
-</style>
+            <MudItem xs="12" md="6">
+                <MudSelect T="string"
+                           Label="Toggled Icon"
+                           Dense="true"
+                           @bind-Value="_toggledIcon">
+                    <MudSelectItem Value="@Icons.Material.Filled.Favorite">Favorite</MudSelectItem>
+                    <MudSelectItem Value="@Icons.Material.Filled.Visibility">Visibility</MudSelectItem>
+                    <MudSelectItem Value="@Icons.Material.Filled.Bookmark">Bookmark</MudSelectItem>
+                    <MudSelectItem Value="@Icons.Material.Filled.Star">Star</MudSelectItem>
+                </MudSelect>
+            </MudItem>
+
+            <MudItem xs="12" md="6">
+                <MudSelect T="Variant?"
+                           Label="Toggled Variant"
+                           Dense="true"
+                           @bind-Value="_toggledVariant">
+                    <MudSelectItem Value="@((Variant?)null)">Same as Variant</MudSelectItem>
+                    <MudSelectItem Value="@((Variant?)Variant.Text)">Text</MudSelectItem>
+                    <MudSelectItem Value="@((Variant?)Variant.Outlined)">Outlined</MudSelectItem>
+                    <MudSelectItem Value="@((Variant?)Variant.Filled)">Filled</MudSelectItem>
+                </MudSelect>
+            </MudItem>
+
+            <MudItem xs="12" md="6">
+                <MudSelect T="Color?"
+                           Label="Toggled Color"
+                           Dense="true"
+                           @bind-Value="_toggledColor">
+                    <MudSelectItem Value="@((Color?)null)">Same as Color</MudSelectItem>
+                    <MudSelectItem Value="@((Color?)Color.Default)">Default</MudSelectItem>
+                    <MudSelectItem Value="@((Color?)Color.Primary)">Primary</MudSelectItem>
+                    <MudSelectItem Value="@((Color?)Color.Secondary)">Secondary</MudSelectItem>
+                    <MudSelectItem Value="@((Color?)Color.Tertiary)">Tertiary</MudSelectItem>
+                    <MudSelectItem Value="@((Color?)Color.Info)">Info</MudSelectItem>
+                    <MudSelectItem Value="@((Color?)Color.Success)">Success</MudSelectItem>
+                    <MudSelectItem Value="@((Color?)Color.Warning)">Warning</MudSelectItem>
+                    <MudSelectItem Value="@((Color?)Color.Error)">Error</MudSelectItem>
+                    <MudSelectItem Value="@((Color?)Color.Dark)">Dark</MudSelectItem>
+                </MudSelect>
+            </MudItem>
+
+            <MudItem xs="12" md="6">
+                <MudSelect T="Edge"
+                           Label="Edge"
+                           Dense="true"
+                           @bind-Value="_edge">
+                    <MudSelectItem Value="Edge.False">None</MudSelectItem>
+                    <MudSelectItem Value="Edge.Start">Start</MudSelectItem>
+                    <MudSelectItem Value="Edge.End">End</MudSelectItem>
+                </MudSelect>
+            </MudItem>
+
+            <MudItem xs="12">
+                <MudTextField Label="Aria Label"
+                              @bind-Value="_ariaLabel" />
+            </MudItem>
+
+            <MudItem xs="12">
+                <div class="d-flex flex-wrap align-center justify-start" style="column-gap: 16px; row-gap: 4px;">
+                    <MudCheckBox @bind-Value="_toggled" Label="Toggled" Color="Color.Primary" />
+                    <MudCheckBox @bind-Value="_disabled" Label="Disabled" Color="Color.Primary" />
+                    <MudCheckBox @bind-Value="_ripple" Label="Ripple" Color="Color.Primary" />
+                    <MudCheckBox @bind-Value="_dropShadow" Label="Drop Shadow" Color="Color.Primary" />
+                </div>
+            </MudItem>
+        </MudGrid>
+    </Options>
+</DemoPageLayout>
 
 @code {
-    // Example states
-    private bool _fav        = true;
-    private bool _visible    = false;
-    private bool _micOn      = false;
-    private bool _notifications = true;
-
-    // Dynamic toggle
-    private bool _dynamicState = false;
-
-    // Icon pairs (Off -> On)
-    private readonly Dictionary<string, (string Off, string On)> _pairs = new()
-    {
-        ["Favorite"]     = (Icons.Material.Outlined.FavoriteBorder,     Icons.Material.Filled.Favorite),
-        ["Visibility"]   = (Icons.Material.Outlined.VisibilityOff,      Icons.Material.Filled.Visibility),
-        ["Mic"]          = (Icons.Material.Outlined.MicOff,             Icons.Material.Filled.Mic),
-        ["Notifications"]= (Icons.Material.Outlined.NotificationsNone,  Icons.Material.Filled.Notifications),
-        ["Bookmark"]     = (Icons.Material.Outlined.BookmarkBorder,     Icons.Material.Filled.Bookmark),
-        ["Star"]         = (Icons.Material.Outlined.StarBorder,         Icons.Material.Filled.Star)
-    };
-
-    private string _selectedPairKey = "Favorite";
-
-    // Controls
-    private Color _color = Color.Primary;
-    private Size  _size  = Size.Medium;
-    private Edge  _edge  = Edge.Start;
-    private bool  _disabled = false;
-    private bool  _disableRipple = false;
+    private string _icon = Icons.Material.Outlined.FavoriteBorder;
+    private string _toggledIcon = Icons.Material.Filled.Favorite;
+    private Color _color = Color.Default;
+    private Color? _toggledColor;
+    private Size _size = Size.Medium;
+    private Variant _variant = Variant.Text;
+    private Variant? _toggledVariant;
+    private Edge _edge = Edge.False;
+    private string _ariaLabel = "favorite";
+    private bool _toggled;
+    private bool _disabled;
+    private bool _ripple = true;
+    private bool _dropShadow = true;
 }
