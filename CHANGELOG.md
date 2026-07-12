@@ -398,3 +398,53 @@ Changes made:
 Result:
 
 - The project now has one central changelog file instead of multiple dated files
+
+### Additional Demo Playground Updates
+
+More component demos were converted or refined today to follow the shared interactive playground pattern.
+
+Changes made:
+
+- Added [`Pages/Components/Buttons/MudButtonFabMenu.razor`](./Pages/Components/Buttons/MudButtonFabMenu.razor) as a new configurable Floating Action Button Menu demo
+- Updated [`Layout/NavMenu.razor`](./Layout/NavMenu.razor) to include the new `Button FAB Menu` navigation item
+- Reworked [`Pages/Components/Buttons/MudButtonFabDemo.razor`](./Pages/Components/Buttons/MudButtonFabDemo.razor) into a clearer vertical playground with dedicated controls for the extended FAB text and icons
+- Rebuilt [`Pages/Components/Buttons/MudButtonGroupDemo.razor`](./Pages/Components/Buttons/MudButtonGroupDemo.razor) as a configurable preview with variant, color, size, vertical/full-width, and drop-shadow controls
+- Rebuilt [`Pages/Components/Buttons/MudIconButtonDemo.razor`](./Pages/Components/Buttons/MudIconButtonDemo.razor) into the shared playground layout with a more structured control order
+- Rebuilt [`Pages/Components/Buttons/MudToggleIconButtonDemo.razor`](./Pages/Components/Buttons/MudToggleIconButtonDemo.razor) into the shared playground layout with separate toggled-state controls
+- Refined [`Pages/Components/DataDisplay/MudAvatarDemo.razor`](./Pages/Components/DataDisplay/MudAvatarDemo.razor) to better separate avatar and avatar-group modes, clean up conditional options, and improve control ordering
+- Refined [`Pages/Components/DataDisplay/MudCardDemo.razor`](./Pages/Components/DataDisplay/MudCardDemo.razor) with additional header/avatar options, cleaner text-field ordering, clearable card text inputs, and full-row actions alignment
+- Refined [`Pages/Components/Navigation/MudBreadcrumbsDemo.razor`](./Pages/Components/Navigation/MudBreadcrumbsDemo.razor) with working separator controls and clearer slider labels that show current values
+
+Result:
+
+- The button, card, avatar, and breadcrumbs demos now follow a more consistent playground UX
+- More demos now share the same preview/options structure and conditional control behavior
+
+### Home Page Visual Refresh
+
+The home page presentation was enhanced to feel more intentional and polished.
+
+Changes made:
+
+- Updated [`Pages/Home.razor`](./Pages/Home.razor)
+- Added [`Pages/Home.razor.css`](./Pages/Home.razor.css) for page-specific visual styling
+
+Result:
+
+- The landing view now has a stronger visual identity than the earlier plain content layout
+
+### App Shell and Repo Cleanup
+
+The shared shell and repository settings were adjusted to better match the current project state.
+
+Changes made:
+
+- Updated [`Layout/MainLayout.razor`](./Layout/MainLayout.razor) to use a non-dense app bar
+- Updated [`Layout/MainLayout.razor`](./Layout/MainLayout.razor) to point the GitHub action link to the current repository URL
+- Kept the very-small-screen title-hiding wrapper in [`Layout/MainLayout.razor`](./Layout/MainLayout.razor) and [`Layout/MainLayout.razor.css`](./Layout/MainLayout.razor.css)
+- Updated [`.gitignore`](./.gitignore) to ignore the old uppercase [`GUIDELINES.md`](./GUIDELINES.md) filename while the project uses the lowercase guideline file
+
+Result:
+
+- The app shell header better fits the updated playground layout
+- Repository housekeeping is aligned with the current naming and link structure
