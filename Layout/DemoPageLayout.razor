@@ -65,7 +65,7 @@
     public string? Description { get; set; }
 
     [Parameter]
-    public DemoPageLayoutVariant Variant { get; set; } = DemoPageLayoutVariant.Vertical;
+    public DemoPageLayoutVariant Variant { get; set; } = DemoPageLayoutVariant.Horizontal;
 
     [Parameter]
     public string ContentMaxWidth { get; set; } = "1120px";
@@ -86,7 +86,7 @@
     public RenderFragment? CustomContent { get; set; }
 
     [CascadingParameter(Name = "DemoLayoutVariant")]
-    private DemoPageLayoutVariant GlobalLayoutVariant { get; set; } = DemoPageLayoutVariant.Vertical;
+    private DemoPageLayoutVariant GlobalLayoutVariant { get; set; } = DemoPageLayoutVariant.Horizontal;
 
     private DemoPageLayoutVariant EffectiveVariant => Variant is DemoPageLayoutVariant.Vertical or DemoPageLayoutVariant.Horizontal
         ? GlobalLayoutVariant
