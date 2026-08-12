@@ -18,8 +18,10 @@
                 aria-label="@LayoutToggleTooltip" OnClick="ToggleLayout" />
         </MudTooltip>
 
-        <MudIconButton Icon="@Icons.Custom.Brands.GitHub" Href="https://github.com/m1n3g/mudblazor-component-playground"
-            Color="Color.Inherit" Target="_blank" Rel="noopener noreferrer" />
+        <MudTooltip Text="GitHub">
+            <MudIconButton Icon="@Icons.Custom.Brands.GitHub" Href="https://github.com/m1n3g/mudblazor-component-playground"
+                Color="Color.Inherit" Target="_blank" Rel="noopener noreferrer" aria-label="GitHub" />
+        </MudTooltip>
 
         <MudTooltip Text="@ThemeToggleTooltip">
             <MudIconButton Color="Color.Inherit"
@@ -56,7 +58,7 @@
 
     private string ThemeToggleTooltip => _isDark ? "Switch to light mode" : "Switch to dark mode";
 
-    private DemoPageLayoutVariant _layoutVariant = DemoPageLayoutVariant.Vertical;
+    private DemoPageLayoutVariant _layoutVariant = DemoPageLayoutVariant.Horizontal;
 
     private string LayoutToggleIcon => _layoutVariant == DemoPageLayoutVariant.Vertical
         ? Icons.Material.Filled.ViewColumn
