@@ -1,91 +1,339 @@
 @page "/components/barchart"
 @using MudBlazor
 
-<MudPaper Class="doc-section-component-container">
-    <MudChart T="double" ChartType="ChartType.Bar" LegendPosition="@LegendPosition" ChartSeries="@_series"
-        @bind-SelectedIndex="_index" ChartLabels="@_xAxisLabels" Width="@_width" Height="@_height"
-        MatchBoundsToSize="@_matchBoundsToSize">
-        <CustomGraphics>
-            <style>
-                .heavy {
-                    font: bold 30px Helvetica;
-                }
+<DemoPageLayout Title="Bar Chart"
+                Description="Represents a chart which displays series values as rectangular bars."
+                Variant="DemoPageLayoutVariant.Vertical"
+                PreviewContentMaxWidth="900px">
+    <Preview>
+        <MudStack Spacing="2" AlignItems="AlignItems.Center" Class="w-100">
+            <MudChart T="double"
+                      ChartType="ChartType.Bar"
+                      LegendPosition="@_legendPosition"
+                      ChartSeries="@_series"
+                      @bind-SelectedIndex="_index"
+                      ChartLabels="@_xAxisLabels"
+                      Width="@_width"
+                      Height="@_height"
+                      MatchBoundsToSize="@_matchBoundsToSize"
+                      ChartOptions="@_options" />
 
-                .Rrrrr {
-                    font: italic 40px Helvetica;
-                    fill: rgb(62, 44, 221);
-                }
-            </style>
-            <text x="80" y="35" class="heavy">I Love</text>
-            <text x="105" y="70" class="Rrrrr">MudBlazor!</text>
-        </CustomGraphics>
-    </MudChart>
-</MudPaper>
+            <MudText Typo="Typo.caption" Class="text-center d-block">
+                Selected: @(_index < 0 ? "None" : _series[_index].Name)
+            </MudText>
+        </MudStack>
+    </Preview>
 
-<MudGrid>
-    <MudItem xs="6">
-        <MudText Typo="Typo.body1" Class="py-3">Selected: @(_index < 0 ? "None" : _series[_index].Name)</MudText>
-    </MudItem>
-    <MudItem md="3" xs="6">
-        <MudCheckBox @bind-Value="_matchBoundsToSize" Color="Color.Primary" Label="MatchBoundsToSize">
-        </MudCheckBox>
-    </MudItem>
-    <MudItem md="6" xs="6">
-        <MudTextField @bind-Value="_width" Label="Chart Width"></MudTextField>
-        <MudTextField Class="mt-3" @bind-Value="_height" Label="Chart Height"></MudTextField>
-    </MudItem>
+    <Options>
+        <MudGrid Spacing="4" Justify="Justify.Center" Class="w-100">
+            <MudItem xs="12">
+                <div class="d-flex justify-space-between align-center flex-wrap" style="column-gap: 16px; row-gap: 8px;">
+                    @if (_optionsMode == BarChartOptionsMode.Basic)
+                    {
+                        <MudText Typo="Typo.caption">
+                            Advanced values remain active until reset.
+                        </MudText>
+                    }
 
-    <MudItem md="3" xs="6">
-        <MudSelect Label="Legend Position" Variant="Variant.Outlined" Dense="true" T="@Position"
-            ValueChanged="OnSelectedValue" Class="mt-4">
-            <MudSelectItem T="Position" Value="Position.Top">Top</MudSelectItem>
-            <MudSelectItem T="Position" Value="Position.Left">Left</MudSelectItem>
-            <MudSelectItem T="Position" Value="Position.Right">Right</MudSelectItem>
-            <MudSelectItem T="Position" Value="Position.Bottom">Bottom</MudSelectItem>
-            <MudSelectItem T="Position" Value="Position.Start">Start</MudSelectItem>
-            <MudSelectItem T="Position" Value="Position.End">End</MudSelectItem>
-        </MudSelect>
-    </MudItem>
-</MudGrid>
+                    <MudButtonGroup Variant="Variant.Outlined" Color="Color.Primary" DropShadow="false">
+                        <MudButton OnClick="@(() => _optionsMode = BarChartOptionsMode.Basic)"
+                                   Variant="@(_optionsMode == BarChartOptionsMode.Basic ? Variant.Filled : Variant.Outlined)">
+                            Basic
+                        </MudButton>
+                        <MudButton OnClick="@(() => _optionsMode = BarChartOptionsMode.Advanced)"
+                                   Variant="@(_optionsMode == BarChartOptionsMode.Advanced ? Variant.Filled : Variant.Outlined)">
+                            Advanced
+                        </MudButton>
+                    </MudButtonGroup>
+                </div>
+            </MudItem>
+
+            <MudItem xs="12" md="6">
+                <MudTextField @bind-Value="_width" Label="Chart Width" />
+            </MudItem>
+
+            <MudItem xs="12" md="6">
+                <MudTextField @bind-Value="_height" Label="Chart Height" />
+            </MudItem>
+
+            <MudItem xs="12" md="6">
+                <MudSlider @bind-Value="_options.YAxisTicks" Min="5" Max="25" Step="1" Color="Color.Info">
+                    @($"Y-Axis Ticks: {_options.YAxisTicks}")
+                </MudSlider>
+            </MudItem>
+
+            <MudItem xs="12" md="6">
+                <MudSelect T="Position"
+                           Label="Legend Position"
+                           Dense="true"
+                           @bind-Value="_legendPosition">
+                    <MudSelectItem Value="Position.Top">Top</MudSelectItem>
+                    <MudSelectItem Value="Position.Left">Left</MudSelectItem>
+                    <MudSelectItem Value="Position.Right">Right</MudSelectItem>
+                    <MudSelectItem Value="Position.Bottom">Bottom</MudSelectItem>
+                    <MudSelectItem Value="Position.Start">Start</MudSelectItem>
+                    <MudSelectItem Value="Position.End">End</MudSelectItem>
+                </MudSelect>
+            </MudItem>
+
+            <MudItem xs="12" md="6">
+                <MudSlider @bind-Value="_options.BarSpacingRatio" Min="0" Max="1" Step="0.1" Color="Color.Secondary">
+                    @($"Bar Spacing Ratio: {_options.BarSpacingRatio:F1}")
+                </MudSlider>
+            </MudItem>
+
+            <MudItem xs="12" md="6">
+                <div class="d-flex flex-wrap align-center justify-start" style="column-gap: 16px; row-gap: 4px;">
+                    <MudCheckBox @bind-Value="_options.ShowLegend"
+                                 Color="Color.Primary"
+                                 Label="Show Legend" />
+                    <MudCheckBox @bind-Value="_matchBoundsToSize"
+                                 Color="Color.Primary"
+                                 Label="Match Bounds To Size" />
+                </div>
+            </MudItem>
+
+            @if (_optionsMode == BarChartOptionsMode.Advanced)
+            {
+                <MudItem xs="12">
+                    <MudDivider Class="mb-2" />
+                    <MudText Typo="Typo.subtitle2">Axes</MudText>
+                </MudItem>
+
+                <MudItem xs="12" md="6">
+                    <MudTextField @bind-Value="_options.XAxisTitle"
+                                  Label="X-Axis Title" />
+                </MudItem>
+
+                <MudItem xs="12" md="6">
+                    <MudTextField @bind-Value="_options.YAxisTitle"
+                                  Label="Y-Axis Title" />
+                </MudItem>
+
+                <MudItem xs="12" md="6">
+                    <MudTextField @bind-Value="_options.YAxisFormat"
+                                  Label="Y-Axis Format"
+                                  HelperText="Uses a standard .NET format string for Y-axis values." />
+                </MudItem>
+
+                <MudItem xs="12" md="6">
+                    <MudSlider @bind-Value="_options.MaxNumYAxisTicks" Min="2" Max="20" Step="1" Color="Color.Info">
+                        @($"Max Y-Axis Ticks: {_options.MaxNumYAxisTicks}")
+                    </MudSlider>
+                    <MudText Typo="Typo.caption">
+                        Caps how many Y-axis ticks can render before MudBlazor starts thinning them out.
+                    </MudText>
+                </MudItem>
+
+                <MudItem xs="12" md="6">
+                    <MudSlider @bind-Value="_options.XAxisLabelRotation" Min="0" Max="90" Step="5" Color="Color.Secondary">
+                        @($"X-Axis Label Rotation: {_options.XAxisLabelRotation}")
+                    </MudSlider>
+                    <MudText Typo="Typo.caption">
+                        Rotates the X-axis labels in degrees.
+                    </MudText>
+                </MudItem>
+
+                <MudItem xs="12" md="6">
+                    <MudSlider @bind-Value="YAxisSuggestedMax" Min="50" Max="200" Step="10" Color="Color.Primary">
+                        @($"Y-Axis Suggested Max: {YAxisSuggestedMax}")
+                    </MudSlider>
+                    <MudText Typo="Typo.caption">
+                        Suggests a maximum Y-axis value. Leave near automatic behavior unless you need a fixed ceiling.
+                    </MudText>
+                </MudItem>
+
+                <MudItem xs="12">
+                    <div class="d-flex flex-wrap align-center justify-start" style="column-gap: 16px; row-gap: 4px;">
+                        <MudCheckBox @bind-Value="_options.XAxisLines"
+                                     Color="Color.Primary"
+                                     Label="Show X-Axis Lines" />
+                        <MudCheckBox @bind-Value="_options.YAxisLines"
+                                     Color="Color.Primary"
+                                     Label="Show Y-Axis Lines" />
+                    </div>
+                    <MudText Typo="Typo.caption">
+                        Toggle chart grid lines. API defaults: X-axis lines `false`, Y-axis lines `true`.
+                    </MudText>
+                </MudItem>
+
+                <MudItem xs="12">
+                    <MudDivider Class="mb-2" />
+                    <MudText Typo="Typo.subtitle2">Bars & Layout</MudText>
+                </MudItem>
+
+                <MudItem xs="12" md="6">
+                    <MudSelect T="Justify"
+                               Label="Justify"
+                               Dense="true"
+                               HelperText="Controls how bar groups are aligned within the chart area."
+                               @bind-Value="_options.Justify">
+                        <MudSelectItem Value="Justify.FlexStart">Flex Start</MudSelectItem>
+                        <MudSelectItem Value="Justify.Center">Center</MudSelectItem>
+                        <MudSelectItem Value="Justify.FlexEnd">Flex End</MudSelectItem>
+                        <MudSelectItem Value="Justify.SpaceBetween">Space Between</MudSelectItem>
+                        <MudSelectItem Value="Justify.SpaceAround">Space Around</MudSelectItem>
+                        <MudSelectItem Value="Justify.SpaceEvenly">Space Evenly</MudSelectItem>
+                    </MudSelect>
+                </MudItem>
+
+                <MudItem xs="12" md="6">
+                    <MudSlider @bind-Value="_options.SeriesSpacingRatio" Min="0.1" Max="1" Step="0.1" Color="Color.Secondary">
+                        @($"Series Spacing Ratio: {_options.SeriesSpacingRatio:F1}")
+                    </MudSlider>
+                    <MudText Typo="Typo.caption">
+                        Controls the amount of spacing between data sets. API default: `1.0`.
+                    </MudText>
+                </MudItem>
+
+                <MudItem xs="12" md="6">
+                    <MudSlider @bind-Value="_options.BarWidthRatio" Min="0.1" Max="1" Step="0.1" Color="Color.Info">
+                        @($"Bar Width Ratio: {_options.BarWidthRatio:F1}")
+                    </MudSlider>
+                    <MudText Typo="Typo.caption">
+                        Sets how much of each tick width is occupied by the bar group. API default: `0.4`.
+                    </MudText>
+                </MudItem>
+
+                <MudItem xs="12" md="6">
+                    <MudSlider @bind-Value="FixedBarWidth" Min="0" Max="60" Step="2" Color="Color.Secondary">
+                        @($"Fixed Bar Width: {FixedBarWidth}")
+                    </MudSlider>
+                    <MudText Typo="Typo.caption">
+                        Applies a fixed bar width and overrides the bar width ratio.
+                    </MudText>
+                </MudItem>
+
+                <MudItem xs="12">
+                    <MudDivider Class="mb-2" />
+                    <MudText Typo="Typo.subtitle2">Tooltips</MudText>
+                </MudItem>
+
+                <MudItem xs="12" md="6">
+                    <MudTextField @bind-Value="_options.TooltipTitleFormat"
+                                  Label="Tooltip Title Format"
+                                  HelperText="Formats the tooltip title. API default: `{{Y_VALUE}}`." />
+                </MudItem>
+
+                <MudItem xs="12" md="6">
+                    <MudTextField @bind-Value="_options.TooltipSubtitleFormat"
+                                  Label="Tooltip Subtitle Format"
+                                  HelperText="Formats the tooltip subtitle shown below the title." />
+                </MudItem>
+
+                <MudItem xs="12">
+                    <div class="d-flex flex-wrap align-center justify-start" style="column-gap: 16px; row-gap: 4px;">
+                        <MudCheckBox @bind-Value="_options.ShowToolTips"
+                                     Color="Color.Primary"
+                                     Label="Show Tooltips" />
+                    </div>
+                    <MudText Typo="Typo.caption">
+                        Toggles hover tooltips. API default: `true`.
+                    </MudText>
+                </MudItem>
+
+                <MudItem xs="12">
+                    <div class="d-flex justify-end">
+                        <MudButton Variant="Variant.Outlined"
+                                   Color="Color.Secondary"
+                                   OnClick="ResetAdvancedOptions">
+                            Reset Advanced To Defaults
+                        </MudButton>
+                    </div>
+                </MudItem>
+            }
+        </MudGrid>
+    </Options>
+</DemoPageLayout>
 
 @code {
-    private int _index = -1; //default value cannot be 0 -> first selectedindex is 0.
-    private string _width = "650px";
+    private enum BarChartOptionsMode
+    {
+        Basic,
+        Advanced
+    }
+
+    private int _index = -1;
+    private string _width = "100%";
     private string _height = "350px";
     private bool _matchBoundsToSize;
-
-    private List<ChartSeries<double>> _series = new List<ChartSeries<double>>()
-{
-new ChartSeries<double>() { Name = "United States", Data = new double[] { 40, 20, 25, 27, 46, 60, 48, 80, 15 } },
-new ChartSeries<double>() { Name = "Germany", Data = new double[] { 19, 24, 35, 13, 28, 15, 13, 16, 31 } },
-new ChartSeries<double>() { Name = "Sweden", Data = new double[] { 8, 6, 11, 13, 4, 16, 10, 16, 18 } },
-};
-    private string[] _xAxisLabels = { "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep" };
-
-    public Position LegendPosition { get; set; } = Position.Bottom;
-
-    private void OnSelectedValue(Position value)
+    private double _yAxisSuggestedMax = 100;
+    private int _fixedBarWidth;
+    private Position _legendPosition = Position.Bottom;
+    private BarChartOptionsMode _optionsMode = BarChartOptionsMode.Basic;
+    private BarChartOptions _options = new()
     {
-        switch (value)
+        ShowLegend = true,
+        ShowToolTips = true,
+        YAxisTicks = 20,
+        MaxNumYAxisTicks = 10,
+        YAxisSuggestedMax = 100,
+        YAxisFormat = "",
+        Justify = Justify.SpaceBetween,
+        SeriesSpacingRatio = 0.5,
+        YAxisLines = true,
+        XAxisLines = false,
+        XAxisLabelRotation = 0,
+        BarSpacingRatio = 0,
+        BarWidthRatio = 0.4,
+        FixedBarWidth = 8,
+        TooltipTitleFormat = "{{Y_VALUE}}",
+        TooltipSubtitleFormat = "",
+        XAxisTitle = "Months",
+        YAxisTitle = "Sales"
+    };
+
+    private readonly List<ChartSeries<double>> _series = new()
+    {
+        new() { Name = "United States", Data = new double[] { 40, 20, 25, 27, 46, 60, 48, 80, 15 } },
+        new() { Name = "Germany", Data = new double[] { 19, 24, 35, 13, 28, 15, 13, 16, 31 } },
+        new() { Name = "Sweden", Data = new double[] { 8, 6, 11, 13, 4, 16, 10, 16, 18 } },
+    };
+
+    private readonly string[] _xAxisLabels = { "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep" };
+
+    protected override void OnInitialized()
+    {
+        _options.YAxisSuggestedMax = _yAxisSuggestedMax;
+        _options.FixedBarWidth = _fixedBarWidth;
+    }
+
+    private double YAxisSuggestedMax
+    {
+        get => _yAxisSuggestedMax;
+        set
         {
-            case Position.Top:
-                LegendPosition = Position.Top;
-                break;
-            case Position.Left:
-                LegendPosition = Position.Left;
-                break;
-            case Position.Right:
-                LegendPosition = Position.Right;
-                break;
-            case Position.Bottom:
-                LegendPosition = Position.Bottom;
-                break;
-            case Position.Start:
-                LegendPosition = Position.Start;
-                break;
-            case Position.End:
-                LegendPosition = Position.End;
-                break;
+            _yAxisSuggestedMax = value;
+            _options.YAxisSuggestedMax = value;
         }
+    }
+
+    private int FixedBarWidth
+    {
+        get => _fixedBarWidth;
+        set
+        {
+            _fixedBarWidth = value;
+            _options.FixedBarWidth = value;
+        }
+    }
+
+    private void ResetAdvancedOptions()
+    {
+        _options.XAxisTitle = "Months";
+        _options.YAxisTitle = "Sales";
+        _options.YAxisFormat = "";
+        _options.MaxNumYAxisTicks = 10;
+        _options.XAxisLabelRotation = 0;
+        YAxisSuggestedMax = 100;
+        _options.XAxisLines = false;
+        _options.YAxisLines = true;
+        _options.Justify = Justify.SpaceBetween;
+        _options.SeriesSpacingRatio = 0.5;
+        _options.BarWidthRatio = 0.4;
+        FixedBarWidth = 8;
+        _options.TooltipTitleFormat = "{{Y_VALUE}}";
+        _options.TooltipSubtitleFormat = "";
+        _options.ShowToolTips = true;
     }
 }
