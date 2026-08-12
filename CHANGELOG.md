@@ -448,3 +448,83 @@ Result:
 
 - The app shell header better fits the updated playground layout
 - Repository housekeeping is aligned with the current naming and link structure
+
+## 2026-07-17
+
+### MudCarousel Demo Playground
+
+The Carousel demo was rebuilt into the shared configurable playground pattern with dynamic slide and transition controls.
+
+Changes made in [`Pages/Components/DataDisplay/MudCarouselDemo.razor`](./Pages/Components/DataDisplay/MudCarouselDemo.razor):
+
+- Moved the page onto the reusable vertical `DemoPageLayout`
+- Added a centered live carousel preview with selected-index feedback under the same preview container
+- Set the default slides to match the requested mix of color and image slides
+- Added controls for transition, height, auto-cycle time, arrows, bullets, swipe gesture, and auto-cycle
+- Added custom transition support with animate.css-based class options for enter and exit animations
+- Updated slide insertion to randomize between themed color slides and image slides using `castle`, `iceland`, and `mony`
+- Limited the demo to a maximum of `8` slides and disabled the add action at the cap
+
+Result:
+
+- The Carousel page now follows the standard playground structure
+- Transition behavior and timed cycling can be tested from one configurable preview
+
+## 2026-08-12
+
+### Global Demo Layout Switcher
+
+The shared demo layout now supports a global vertical or horizontal viewing preference.
+
+Changes made in [`Layout/MainLayout.razor`](./Layout/MainLayout.razor), [`Layout/DemoPageLayout.razor`](./Layout/DemoPageLayout.razor), and [`Layout/DemoPageLayout.razor.css`](./Layout/DemoPageLayout.razor.css):
+
+- Added an app-bar toggle for switching between vertical and horizontal demo layouts
+- Added dynamic layout icons, tooltips, and accessible labels
+- Set horizontal layout as the default on large screens
+- Preserved `PreviewOnly` and `Custom` layout variants
+- Kept tablet and mobile layouts vertical through the existing breakpoint rules
+- Added a sticky preview panel for horizontal layouts on large screens
+- Added a dynamic tooltip to the theme toggle for switching between light and dark mode
+
+Result:
+
+- Demo pages can switch layout instantly without navigation or page refresh
+- Long option panels remain easier to use while the large-screen preview stays visible
+
+### MudChipSet Demo Playground
+
+The Chip Set demo was refined with shared controls and interactive chip management.
+
+Changes made in [`Pages/Components/DataDisplay/MudChipSetDemo.razor`](./Pages/Components/DataDisplay/MudChipSetDemo.razor):
+
+- Kept variant and size synchronized across both chip-set previews
+- Added shared selection color, disabled, read-only, check mark, checked-icon, close-icon, ripple, and closable-chip controls
+- Added responsive wrapping for the checkbox controls
+- Added an `Add chip` action with a maximum of 20 multi-selection chips
+- Replaced the duplicate checked-icon option with a distinct `Favorite` icon
+- Fixed add/remove state handling by using unique keys for dynamically added chips
+
+Result:
+
+- Chip Set option changes now affect both preview groups consistently
+- Chips can be added and removed without duplicate-key runtime errors
+
+## 2026-08-13
+
+### MudChips Demo Playground
+
+The Chips demo was moved to the shared playground layout and refined around static chip examples.
+
+Changes made in [`Pages/Components/DataDisplay/MudChipsDemo.razor`](./Pages/Components/DataDisplay/MudChipsDemo.razor):
+
+- Added Default, Primary, Secondary, Info, Success, Warning, Error, and Dark chip examples
+- Preserved icon and avatar examples, and added warning and GitHub icons
+- Made the Dark chip link to the project GitHub repository
+- Added clickable, disabled, closable, and ripple controls
+- Added configurable close icons with the Close Icon option on its own row
+- Added explicit chip selection state so selected chips display their selected styling consistently
+- Removed the dynamic chip list and Checked Icon option from the demo
+
+Result:
+
+- The Chips page now presents a focused, responsive preview with controls matching its supported behavior
