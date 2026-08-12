@@ -13,12 +13,19 @@
         </div>
         <MudSpacer />
 
+        <MudTooltip Text="@LayoutToggleTooltip">
+            <MudIconButton Icon="@LayoutToggleIcon" Color="Color.Inherit"
+                aria-label="@LayoutToggleTooltip" OnClick="ToggleLayout" />
+        </MudTooltip>
+
         <MudIconButton Icon="@Icons.Custom.Brands.GitHub" Href="https://github.com/m1n3g/mudblazor-component-playground"
             Color="Color.Inherit" Target="_blank" Rel="noopener noreferrer" />
 
-        <MudIconButton Color="Color.Inherit"
-            Icon="@(_isDark ? Icons.Material.Filled.LightMode : Icons.Material.Filled.DarkMode)"
-            aria-label="Toggle theme" OnClick="ToggleTheme" />
+        <MudTooltip Text="@ThemeToggleTooltip">
+            <MudIconButton Color="Color.Inherit"
+                Icon="@(_isDark ? Icons.Material.Filled.LightMode : Icons.Material.Filled.DarkMode)"
+                aria-label="@ThemeToggleTooltip" OnClick="ToggleTheme" />
+        </MudTooltip>
     </MudAppBar>
 
     <MudDrawer @bind-Open="_drawerOpen" Variant="DrawerVariant.Responsive" Elevation="0" Width="260px"
@@ -30,9 +37,11 @@
     </MudDrawer>
 
     <MudMainContent Class="app-shell-main">
-        <div class="app-shell-body">
-            @Body
-        </div>
+        <CascadingValue Name="DemoLayoutVariant" Value="_layoutVariant">
+            <div class="app-shell-body">
+                @Body
+            </div>
+        </CascadingValue>
     </MudMainContent>
 
 </MudLayout>
@@ -44,4 +53,23 @@
     private bool _isDark;
 
     private void ToggleTheme() => _isDark = !_isDark;
+
+    private string ThemeToggleTooltip => _isDark ? "Switch to light mode" : "Switch to dark mode";
+
+    private DemoPageLayoutVariant _layoutVariant = DemoPageLayoutVariant.Vertical;
+
+    private string LayoutToggleIcon => _layoutVariant == DemoPageLayoutVariant.Vertical
+        ? Icons.Material.Filled.ViewColumn
+        : Icons.Material.Filled.ViewStream;
+
+    private string LayoutToggleTooltip => _layoutVariant == DemoPageLayoutVariant.Vertical
+        ? "Switch to horizontal layout"
+        : "Switch to vertical layout";
+
+    private void ToggleLayout()
+    {
+        _layoutVariant = _layoutVariant == DemoPageLayoutVariant.Vertical
+            ? DemoPageLayoutVariant.Horizontal
+            : DemoPageLayoutVariant.Vertical;
+    }
 }

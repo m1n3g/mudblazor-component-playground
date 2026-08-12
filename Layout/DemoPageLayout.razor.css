@@ -19,6 +19,12 @@
         align-items: start;
     }
 
+    ::deep .demo-page-horizontal .demo-page-preview {
+        position: sticky;
+        top: 80px;
+        align-self: start;
+    }
+
     ::deep .demo-page-options-horizontal {
         padding-top: 24px;
         padding-bottom: 24px;
