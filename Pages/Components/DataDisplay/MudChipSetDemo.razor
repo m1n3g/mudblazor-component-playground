@@ -9,7 +9,7 @@
 
         <MudChipSet T="Color" @bind-SelectedValue="SelectedColor" SelectionMode="@SelectionMode"
                     CheckMark="_checkMark" Variant="_variant" Size="_size" SelectedColor="_selectionColor"
-                    Disabled="_disabled" ReadOnly="_readOnly" Ripple="_ripple" CheckedIcon="_checkedIcon"
+                    Label="_label" Disabled="_disabled" ReadOnly="_readOnly" Ripple="_ripple" CheckedIcon="_checkedIcon"
                     CloseIcon="_closeIcon" AllClosable="_allClosable"
                     OnClose="CloseSingleChip">
             @foreach (var chip in _singleChipValues)
@@ -36,7 +36,7 @@
         <MudText Class="mt-12 mb-4" Typo="Typo.h6" Style="font-weight:700">Multi Selection</MudText>
 
         <MudChipSet T="string" @bind-SelectedValues="_selected" SelectionMode="SelectionMode.MultiSelection"
-                    CheckMark="_checkMark" Variant="_variant" Size="_size" Color="Color.Info"
+                    CheckMark="_checkMark" Variant="_variant" Size="_size" Label="_label" Color="Color.Info"
                     SelectedColor="_selectionColor" Disabled="_disabled" ReadOnly="_readOnly" Ripple="_ripple"
                     CheckedIcon="_checkedIcon" CloseIcon="_closeIcon" AllClosable="_allClosable"
                     OnClose="CloseChip">
@@ -123,6 +123,7 @@
         </MudButton>
 
         <div class="d-flex flex-wrap align-center mt-2" style="column-gap: 12px; row-gap: 0;">
+            <MudCheckBox @bind-Value="_label">Label (pill style)</MudCheckBox>
             <MudCheckBox @bind-Value="_disabled">Disabled</MudCheckBox>
             <MudCheckBox @bind-Value="_readOnly">Read only</MudCheckBox>
             <MudCheckBox @bind-Value="_checkMark">Check marks</MudCheckBox>
@@ -134,6 +135,7 @@
 
 @code {
     private bool _checkMark = true;
+    private bool _label;
     private IReadOnlyCollection<string>? _selected;
     private readonly List<(Color Color, string Text)> _singleChipValues =
     [

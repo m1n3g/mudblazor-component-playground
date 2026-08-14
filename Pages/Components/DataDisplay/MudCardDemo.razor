@@ -113,7 +113,7 @@
 
             @if (_showHeader)
             {
-                <MudItem xs="12" md="6">
+                <MudItem xs="12">
                     <MudSelect T="Color"
                                Label="Avatar Color"
                                Dense="true"
@@ -133,7 +133,7 @@
 
             @if (_showMedia)
             {
-                <MudItem xs="12" md="6">
+                <MudItem xs="12">
                     <MudSlider Min="160" Max="320" Step="10" @bind-Value="_mediaHeight" Color="Color.Primary">
                         @($"Media Height: {_mediaHeight}px")
                     </MudSlider>
