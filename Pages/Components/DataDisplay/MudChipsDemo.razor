@@ -2,7 +2,7 @@
 @using MudBlazor
 
 <DemoPageLayout Title="Chips"
-                Description="Displays compact elements that represent an input, attribute, or action."
+                Description="Compact elements used to enter information, select a choice, filter content, or trigger an action."
                 Variant="DemoPageLayoutVariant.Horizontal">
     <Preview>
         <MudStack Row Spacing="1" Class="mb-4 align-center flex-wrap">
@@ -143,8 +143,8 @@
     private Variant _variant = Variant.Filled;
     private Size _size = Size.Medium;
     private bool _label = false;
-    private bool _closable = true;
-    private bool _clickable = true;
+    private bool _closable = false;
+    private bool _clickable = false;
     private bool _disabled;
     private bool _ripple = true;
 
