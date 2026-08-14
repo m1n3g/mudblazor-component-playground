@@ -13,20 +13,28 @@
     padding-bottom: 12px;
 }
 
-@media (min-width: 1280px) {
+@media (min-width: 960px) {
     .demo-page-panels {
         grid-template-columns: minmax(0, 45fr) minmax(0, 55fr);
         align-items: start;
     }
 
-    ::deep .demo-page-horizontal .demo-page-preview {
-        position: sticky;
-        top: 80px;
-        align-self: start;
+    .demo-page-horizontal ::deep .demo-page-preview {
+        position: sticky !important;
+        top: calc(var(--mud-appbar-height, 64px) + 16px);
+        align-self: start !important;
+        height: fit-content;
+        z-index: 1;
     }
 
     ::deep .demo-page-options-horizontal {
         padding-top: 24px;
         padding-bottom: 24px;
+    }
+}
+
+@media (max-width: 959.98px) {
+    .demo-page-panels {
+        grid-template-columns: 1fr;
     }
 }
