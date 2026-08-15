@@ -1,20 +1,109 @@
 @page "/components/link"
 @using MudBlazor
 
-<div Class="my-4"><MudLink Href="#" Color="Color.Primary">Default</MudLink></div>
-<div Class="my-4"><MudLink Href="#" Color="Color.Primary" Disabled="true">Default Disabled link</MudLink></div>
-<div Class="my-4"><MudLink Href="#" Color="Color.Primary" Underline="Underline.Always">Default Underline Always</MudLink></div>
-<div Class="my-4"><MudLink Href="#" Color="Color.Primary" Disabled="true" Underline="Underline.Always">Disabled Default Underline Always</MudLink></div>
-<div Class="my-4"><MudLink Href="#" Color="Color.Primary" Underline="Underline.Hover">Default Underline Hover</MudLink></div>
-<div Class="my-4"><MudLink Href="#" Color="Color.Primary" Disabled="true" Underline="Underline.Hover">Disabled Default Underline Hover</MudLink></div>
-<div Class="my-4"><MudLink Href="#" Color="Color.Primary" Underline="Underline.None">Default Underline None</MudLink></div>
-<div Class="my-4"><MudLink Href="#" Color="Color.Primary" Disabled="true" Underline="Underline.None">Disabled Default Underline None</MudLink></div>
-<MudDivider class="my-8"/>
-<div Class="my-4"><MudLink Href="#" Color="Color.Primary" Typo="Typo.body2">Body 2</MudLink></div>
-<div Class="my-4"><MudLink Href="#" Color="Color.Primary" Typo="Typo.body2"Disabled="true">Body 2 Disabled link</MudLink></div>
-<div Class="my-4"><MudLink Href="#" Color="Color.Primary" Typo="Typo.body2" Underline="Underline.Always">Body 2 Underline Always</MudLink></div>
-<div Class="my-4"><MudLink Href="#" Color="Color.Primary" Typo="Typo.body2" Disabled="true" Underline="Underline.Always">Disabled Body 2 Underline Always</MudLink></div>
-<div Class="my-4"><MudLink Href="#" Color="Color.Primary" ypo="Typo.body2" Underline="Underline.Hover">Body 2 Underline Hover</MudLink></div>
-<div Class="my-4"><MudLink Href="#" Color="Color.Primary" Typo="Typo.body2" Disabled="true" Underline="Underline.Hover">Disabled Body 2 Underline Hover</MudLink></div>
-<div Class="my-4"><MudLink Href="#" Color="Color.Primary" Typo="Typo.body2" Underline="Underline.None">Body 2 Underline None</MudLink></div>
-<div Class="my-4"><MudLink Href="#" Color="Color.Primary" Typo="Typo.body2" Disabled="true" Underline="Underline.None">Disabled Body 2 Underline None</MudLink></div>
+<DemoPageLayout Title="Link"
+                Description="A clickable link which can navigate to a URL."
+                Variant="DemoPageLayoutVariant.Horizontal">
+    <Preview>
+        <MudStack AlignItems="AlignItems.Center" Justify="Justify.Center" Spacing="3" Class="w-100">
+            <MudLink Href="@_href"
+                     Target="@SelectedTarget"
+                     Color="@_color"
+                     Typo="@_typo"
+                     Underline="@_underline"
+                     StartIcon="@_startIcon"
+                     EndIcon="@_endIcon"
+                     Disabled="@_disabled">
+                @_linkText
+            </MudLink>
+        </MudStack>
+    </Preview>
+
+    <Options>
+        <MudGrid Spacing="4" Class="w-100">
+            <MudItem xs="12" md="6">
+                <MudTextField @bind-Value="_linkText" Label="Link Text" Clearable="true" Immediate="true" />
+            </MudItem>
+            <MudItem xs="12" md="6">
+                <MudTextField @bind-Value="_href" Label="Href" Clearable="true" Immediate="true" />
+            </MudItem>
+
+            <MudItem xs="12" md="6">
+                <MudSelect T="Color" @bind-Value="_color" Label="Color">
+                    <MudSelectItem Value="Color.Default">Default</MudSelectItem>
+                    <MudSelectItem Value="Color.Primary">Primary</MudSelectItem>
+                    <MudSelectItem Value="Color.Secondary">Secondary</MudSelectItem>
+                    <MudSelectItem Value="Color.Tertiary">Tertiary</MudSelectItem>
+                    <MudSelectItem Value="Color.Info">Info</MudSelectItem>
+                    <MudSelectItem Value="Color.Success">Success</MudSelectItem>
+                    <MudSelectItem Value="Color.Warning">Warning</MudSelectItem>
+                    <MudSelectItem Value="Color.Error">Error</MudSelectItem>
+                    <MudSelectItem Value="Color.Dark">Dark</MudSelectItem>
+                    <MudSelectItem Value="Color.Default">Default</MudSelectItem>
+                </MudSelect>
+            </MudItem>
+            <MudItem xs="12" md="6">
+                <MudSelect T="Typo" @bind-Value="_typo" Label="Typography">
+                    <MudSelectItem Value="Typo.inherit">Inherit</MudSelectItem>
+                    <MudSelectItem Value="Typo.body1">Body 1</MudSelectItem>
+                    <MudSelectItem Value="Typo.body2">Body 2</MudSelectItem>
+                    <MudSelectItem Value="Typo.subtitle1">Subtitle 1</MudSelectItem>
+                    <MudSelectItem Value="Typo.subtitle2">Subtitle 2</MudSelectItem>
+                    <MudSelectItem Value="Typo.h6">Heading 6</MudSelectItem>
+                </MudSelect>
+            </MudItem>
+
+            <MudItem xs="12" md="6">
+                <MudSelect T="Underline" @bind-Value="_underline" Label="Underline">
+                    <MudSelectItem Value="Underline.Hover">Hover</MudSelectItem>
+                    <MudSelectItem Value="Underline.Always">Always</MudSelectItem>
+                    <MudSelectItem Value="Underline.None">None</MudSelectItem>
+                </MudSelect>
+            </MudItem>
+            <MudItem xs="12" md="6">
+                <MudSelect T="string" @bind-Value="_target" Label="Target">
+                    <MudSelectItem Value="@string.Empty">Default</MudSelectItem>
+                    <MudSelectItem Value="@("_blank")">New tab (_blank)</MudSelectItem>
+                    <MudSelectItem Value="@("_self")">Same tab (_self)</MudSelectItem>
+                </MudSelect>
+            </MudItem>
+
+            <MudItem xs="12" md="6">
+                <MudSelect T="string" @bind-Value="_startIcon" Label="Start Icon">
+                    <MudSelectItem Value="@string.Empty">None</MudSelectItem>
+                    <MudSelectItem Value="@Icons.Material.Filled.Home">Home</MudSelectItem>
+                    <MudSelectItem Value="@Icons.Material.Filled.Link">Link</MudSelectItem>
+                    <MudSelectItem Value="@Icons.Custom.Brands.GitHub">GitHub</MudSelectItem>
+                </MudSelect>
+            </MudItem>
+            <MudItem xs="12" md="6">
+                <MudSelect T="string" @bind-Value="_endIcon" Label="End Icon">
+                    <MudSelectItem Value="@string.Empty">None</MudSelectItem>
+                    <MudSelectItem Value="@Icons.Material.Filled.OpenInNew">Open in new</MudSelectItem>
+                    <MudSelectItem Value="@Icons.Material.Filled.ArrowForward">Arrow forward</MudSelectItem>
+                    <MudSelectItem Value="@Icons.Custom.Brands.GitHub">GitHub</MudSelectItem>
+                </MudSelect>
+            </MudItem>
+
+            <MudItem xs="12">
+                <div class="d-flex flex-wrap align-center justify-start" style="column-gap: 12px; row-gap: 0;">
+                    <MudCheckBox @bind-Value="_disabled" Label="Disabled" Color="Color.Primary" />
+                </div>
+            </MudItem>
+        </MudGrid>
+    </Options>
+</DemoPageLayout>
+
+@code {
+    private string _linkText = "MudBlazor Link";
+    private string _href = "/components/alert";
+    private string _target = string.Empty;
+    private string _startIcon = Icons.Material.Filled.Link;
+    private string _endIcon = string.Empty;
+    private Color _color = Color.Primary;
+    private Typo _typo = Typo.inherit;
+    private Underline _underline = Underline.Hover;
+    private bool _disabled;
+
+    private string? SelectedTarget => string.IsNullOrWhiteSpace(_target) ? null : _target;
+}
