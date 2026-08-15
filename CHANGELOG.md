@@ -528,3 +528,61 @@ Changes made in [`Pages/Components/DataDisplay/MudChipsDemo.razor`](./Pages/Comp
 Result:
 
 - The Chips page now presents a focused, responsive preview with controls matching its supported behavior
+
+## 2026-08-15
+
+### Sticky Preview Selector Fix
+
+Updated [`Layout/DemoPageLayout.razor.css`](./Layout/DemoPageLayout.razor.css) to correct sticky preview behavior in horizontal layouts.
+
+Changes made:
+
+- Corrected the CSS isolation selector so the horizontal preview MudPaper receives the sticky rule
+- Applied the horizontal two-column and sticky-preview behavior from the `lg` breakpoint upward
+- Kept smaller breakpoints in a single vertical column
+
+### MudDivider Vertical Preview Fix
+
+Updated [`Pages/Components/Layout/MudDividerDemo.razor`](./Pages/Components/Layout/MudDividerDemo.razor) to keep the vertical divider visible inside the flex toolbar.
+
+Changes made:
+
+- Removed the custom `min-height: 0` rule that collapsed the divider to zero height
+- Restored flex-item stretching with `align-self: stretch` and `height: auto`
+- Kept the scoped border override required for Bootstrap's global `hr` styles
+
+Result:
+
+- The Vertical divider example now renders at the height of its flex container
+
+## 2026-08-16
+
+### Drawer and Navigation Updates
+
+Updated [`Pages/Components/Layout/MudDrawerDemo.razor`](./Pages/Components/Layout/MudDrawerDemo.razor), [`Layout/NavMenu.razor`](./Layout/NavMenu.razor), and [`Layout/MainLayout.razor.css`](./Layout/MainLayout.razor.css):
+
+- Reworked the Drawer demo into the shared horizontal layout with a configurable preview and options panel
+- Added drawer variant, anchor, breakpoint, color, elevation, sizing, overlay, mini-drawer, and close-drawer controls
+- Added the Exit Prompt page to the navigation menu
+- Hid the app-bar title below `380px` so the compact header remains usable on narrow screens
+
+### Drawer Clip Mode Cleanup
+
+Updated [`Pages/Components/Layout/MudDrawerDemo.razor`](./Pages/Components/Layout/MudDrawerDemo.razor):
+
+- Removed the experimental Clip Mode option from the drawer demo controls
+- Reverted the temporary integration that applied the demo's clip mode to the global application drawer
+- Preserved the existing drawer preview and remaining options
+
+Result:
+
+- Drawer clip behavior is no longer changed outside the drawer demo page
+
+### Link and Exit Prompt Demos
+
+Updated [`Pages/Components/Navigation/MudLinkDemo.razor`](./Pages/Components/Navigation/MudLinkDemo.razor) and added [`Pages/Components/Navigation/MudExitPromptDemo.razor`](./Pages/Components/Navigation/MudExitPromptDemo.razor):
+
+- Migrated the MudLink demo to the shared demo layout
+- Removed the unnecessary click-handler option from the link controls
+- Added the MudExitPrompt demo with its supported configuration options
+- Added Exit Prompt to the navigation menu under Drawer
