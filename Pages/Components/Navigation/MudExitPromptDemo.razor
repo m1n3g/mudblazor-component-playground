@@ -1,0 +1,67 @@
+@page "/components/exitprompt"
+@using MudBlazor
+
+<DemoPageLayout Title="Exit Prompt"
+                Description="Shows a confirmation dialog when the user tries to navigate away."
+                Variant="DemoPageLayoutVariant.Horizontal">
+    <Preview>
+        <MudExitPrompt Disabled="@_disabled"
+                       UseNativePrompt="@_useNativePrompt"
+                       Title="@_title"
+                       Text="@_text" />
+
+        <MudStack AlignItems="AlignItems.Center" Justify="Justify.Center" Spacing="3" Class="w-100">
+            <MudIcon Icon="@Icons.Material.Filled.ExitToApp"
+                     Color="Color.Primary"
+                     Size="Size.Large" />
+            <MudText Typo="Typo.h6">Navigation protection is @(_disabled ? "disabled" : "enabled")</MudText>
+            <MudText Typo="Typo.body2" Align="Align.Center">
+                Use the button below to test the configured exit prompt.
+            </MudText>
+            <MudButton Href="/components/exitprompt"
+                       Variant="Variant.Filled"
+                       Color="Color.Primary"
+                       StartIcon="@Icons.Material.Filled.OpenInNew">
+                Test navigation
+            </MudButton>
+        </MudStack>
+    </Preview>
+
+    <Options>
+        <MudGrid Spacing="4" Class="w-100">
+            <MudItem xs="12" md="12">
+                <MudTextField @bind-Value="_title"
+                              Label="Title"
+                              Clearable="true"
+                              HelperText="Used by the MudBlazor confirmation dialog."
+                              Immediate="true" />
+            </MudItem>
+
+            <MudItem xs="12" md="12">
+                <MudTextField @bind-Value="_text"
+                              Label="Text"
+                              Clearable="true"
+                              HelperText="The confirmation message shown before navigation."
+                              Immediate="true" />
+            </MudItem>
+
+            <MudItem xs="12">
+                <div class="d-flex flex-wrap align-center justify-start" style="column-gap: 12px;">
+                    <MudCheckBox @bind-Value="_disabled"
+                                 Label="Disabled"
+                                 Color="Color.Primary" />
+                    <MudCheckBox @bind-Value="_useNativePrompt"
+                                 Label="Use native prompt"
+                                 Color="Color.Primary" />
+                </div>
+            </MudItem>
+        </MudGrid>
+    </Options>
+</DemoPageLayout>
+
+@code {
+    private bool _disabled;
+    private bool _useNativePrompt;
+    private string _title = "Confirm navigation";
+    private string _text = "Leave site? Changes you made may not be saved.";
+}
