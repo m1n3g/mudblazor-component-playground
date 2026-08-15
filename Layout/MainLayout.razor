@@ -59,7 +59,6 @@
     private string ThemeToggleTooltip => _isDark ? "Switch to light mode" : "Switch to dark mode";
 
     private DemoPageLayoutVariant _layoutVariant = DemoPageLayoutVariant.Horizontal;
-
     private string LayoutToggleIcon => _layoutVariant == DemoPageLayoutVariant.Vertical
         ? Icons.Material.Filled.ViewColumn
         : Icons.Material.Filled.ViewStream;
@@ -74,4 +73,5 @@
             ? DemoPageLayoutVariant.Horizontal
             : DemoPageLayoutVariant.Vertical;
     }
+
 }
