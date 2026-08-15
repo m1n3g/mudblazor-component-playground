@@ -101,7 +101,7 @@
             </MudItem>
 
             <MudItem xs="12">
-                <div class="d-flex flex-wrap align-center justify-start" style="column-gap: 16px; row-gap: 4px;">
+                <div class="d-flex flex-wrap align-center justify-start" style="column-gap: 12px;">
                     <MudCheckBox @bind-Value="_showHeader" Label="Show Header" Color="Color.Primary" />
                     <MudCheckBox @bind-Value="_outlined" Label="Outlined" Color="Color.Primary" />
                     <MudCheckBox @bind-Value="_showMedia" Label="Show Media" Color="Color.Primary" />
@@ -113,7 +113,7 @@
 
             @if (_showHeader)
             {
-                <MudItem xs="12" md="6">
+                <MudItem xs="12">
                     <MudSelect T="Color"
                                Label="Avatar Color"
                                Dense="true"
@@ -133,7 +133,7 @@
 
             @if (_showMedia)
             {
-                <MudItem xs="12" md="6">
+                <MudItem xs="12">
                     <MudSlider Min="160" Max="320" Step="10" @bind-Value="_mediaHeight" Color="Color.Primary">
                         @($"Media Height: {_mediaHeight}px")
                     </MudSlider>

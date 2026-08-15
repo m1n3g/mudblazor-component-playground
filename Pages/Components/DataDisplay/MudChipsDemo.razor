@@ -1,71 +1,42 @@
 @page "/components/chips"
 @using MudBlazor
 
-<!-- Controls Row: Variant & Size -->
-<MudGrid Class="mb-2">
-    <MudItem xs="12" sm="6">
-        <MudSelect T="Variant" Label="Variant" @bind-Value="_variant" Dense="true">
-            <MudSelectItem Value="@Variant.Filled">Filled</MudSelectItem>
-            <MudSelectItem Value="@Variant.Outlined">Outlined</MudSelectItem>
-            <MudSelectItem Value="@Variant.Text">Text</MudSelectItem>
-        </MudSelect>
-    </MudItem>
-    <MudItem xs="12" sm="6">
-        <MudSelect T="Size" Label="Size" @bind-Value="_size" Dense="true">
-            <MudSelectItem Value="@Size.Small">Small</MudSelectItem>
-            <MudSelectItem Value="@Size.Medium">Medium</MudSelectItem>
-            <MudSelectItem Value="@Size.Large">Large</MudSelectItem>
-        </MudSelect>
-    </MudItem>
-</MudGrid>
+<DemoPageLayout Title="Chips"
+                Description="Compact elements used to enter information, select a choice, filter content, or trigger an action."
+                Variant="DemoPageLayoutVariant.Horizontal">
+    <Preview>
+        <MudStack Row Spacing="1" Class="mb-4 align-center flex-wrap">
 
-<!-- Toggles Row -->
-<MudStack Row Spacing="2" Class="mb-3 align-center">
-    <MudCheckBox @bind-Value="_label" Label="Label (pill style)" />
-    <MudCheckBox @bind-Value="_closable" Label="Closable" />
-</MudStack>
+    <!-- Default chip -->
+    <MudChip T="string" Value="@("Default")" Variant="_variant" Size="_size" Label="_label" Color="Color.Default"
+        Disabled="_disabled" Ripple="_ripple" CloseIcon="@(_closable ? _closeIcon : null)"
+        Selected="@IsChipSelected("Default")" SelectedChanged="@(value => SetChipSelected("Default", value))"
+        OnClick="@GetClickCallback("Default")" OnClose="CloseChip">
+        Default
+    </MudChip>
 
-<!-- Icon & Avatar selection -->
-<MudGrid Class="mb-3">
-    <MudItem xs="12" sm="6">
-        <MudSelect T="string" Label="Icon (for Icon chip)" @bind-Value="_icon" Dense="true">
-            <MudSelectItem Value="@Icons.Material.Filled.Star">Star</MudSelectItem>
-            <MudSelectItem Value="@Icons.Material.Filled.Favorite">Favorite</MudSelectItem>
-            <MudSelectItem Value="@Icons.Material.Filled.CheckCircle">CheckCircle</MudSelectItem>
-            <MudSelectItem Value="@Icons.Material.Filled.Bolt">Bolt</MudSelectItem>
-            <MudSelectItem Value="@Icons.Material.Filled.Pets">Pets</MudSelectItem>
-        </MudSelect>
-    </MudItem>
-    <MudItem xs="12" sm="6">
-        <MudSelect T="string" Label="Avatar mode" @bind-Value="_avatarMode" Dense="true">
-            <MudSelectItem Value="@("Initials")">Initials</MudSelectItem>
-            <MudSelectItem Value="@("Image")">Image</MudSelectItem>
-            <MudSelectItem Value="@("None")">None</MudSelectItem>
-        </MudSelect>
-    </MudItem>
-</MudGrid>
-
-<MudDivider Class="mb-3" />
-
-<!-- Preview: a few chips showing the features -->
-<MudStack Row Spacing="1" Class="mb-4 align-center">
-
-    <!-- Plain chip -->
+    <!-- Primary chip -->
     <MudChip T="string" Value="@("Primary")" Variant="_variant" Size="_size" Label="_label" Color="Color.Primary"
-        OnClose="@CreateCloseCallback("Primary")">
+        Disabled="_disabled" Ripple="_ripple" CloseIcon="@(_closable ? _closeIcon : null)"
+        Selected="@IsChipSelected("Primary")" SelectedChanged="@(value => SetChipSelected("Primary", value))"
+        OnClick="@GetClickCallback("Primary")" OnClose="CloseChip">
         Primary
     </MudChip>
 
     <!-- Icon chip -->
     <MudChip T="string" Value="@("Icon")" Variant="_variant" Size="_size" Label="_label" Color="Color.Secondary"
-        OnClose="@CreateCloseCallback("Icon")">
+        Disabled="_disabled" Ripple="_ripple" CloseIcon="@(_closable ? _closeIcon : null)"
+        Selected="@IsChipSelected("Icon")" SelectedChanged="@(value => SetChipSelected("Icon", value))"
+        OnClick="@GetClickCallback("Icon")" OnClose="CloseChip">
         <MudIcon Icon="@_icon" Class="mr-1" />
         Icon
     </MudChip>
 
     <!-- Avatar chip -->
     <MudChip T="string" Value="@("Avatar")" Variant="_variant" Size="_size" Label="_label" Color="Color.Info"
-        OnClose="@CreateCloseCallback("Avatar")">
+        Disabled="_disabled" Ripple="_ripple" CloseIcon="@(_closable ? _closeIcon : null)"
+        Selected="@IsChipSelected("Avatar")" SelectedChanged="@(value => SetChipSelected("Avatar", value))"
+        OnClick="@GetClickCallback("Avatar")" OnClose="CloseChip">
         @if (_avatarMode == "Initials")
         {
             <MudAvatar Class="mr-1" Size="@(_size == Size.Small ? Size.Small : Size.Medium)">AS</MudAvatar>
@@ -81,70 +52,127 @@
 
     <!-- Success chip -->
     <MudChip T="string" Value="@("Success")" Variant="_variant" Size="_size" Label="_label" Color="Color.Success"
-        OnClose="@CreateCloseCallback("Success")">
+        Disabled="_disabled" Ripple="_ripple" CloseIcon="@(_closable ? _closeIcon : null)"
+        Selected="@IsChipSelected("Success")" SelectedChanged="@(value => SetChipSelected("Success", value))"
+        OnClick="@GetClickCallback("Success")" OnClose="CloseChip">
         <MudIcon Icon="@Icons.Material.Filled.Check" Class="mr-1" />
         Success
     </MudChip>
 
     <!-- Danger chip -->
     <MudChip T="string" Value="@("Danger")" Variant="_variant" Size="_size" Label="_label" Color="Color.Error"
-        OnClose="@CreateCloseCallback("Danger")">
+        Disabled="_disabled" Ripple="_ripple" CloseIcon="@(_closable ? _closeIcon : null)"
+        Selected="@IsChipSelected("Danger")" SelectedChanged="@(value => SetChipSelected("Danger", value))"
+        OnClick="@GetClickCallback("Danger")" OnClose="CloseChip">
         <MudIcon Icon="@Icons.Material.Filled.Warning" Class="mr-1" />
         Danger
     </MudChip>
-</MudStack>
 
-<!-- Dynamic list of closable chips -->
-<MudText Typo="Typo.subtitle2" Class="mb-1">Dynamic chips</MudText>
-<MudStack Row Spacing="1" Class="align-center">
-    @foreach (var chip in _chips)
-    {
-        <MudChip T="string" Value="@chip" Variant="_variant" Size="_size" Label="_label" Color="Color.Primary"
-            OnClose="@CreateDynamicCloseCallback(chip)">
-            @chip
-        </MudChip>
-    }
-</MudStack>
+    <!-- Warning chip -->
+    <MudChip T="string" Value="@("Warning")" Variant="_variant" Size="_size" Label="_label" Color="Color.Warning"
+        Disabled="_disabled" Ripple="_ripple" CloseIcon="@(_closable ? _closeIcon : null)"
+        Selected="@IsChipSelected("Warning")" SelectedChanged="@(value => SetChipSelected("Warning", value))"
+        OnClick="@GetClickCallback("Warning")" OnClose="CloseChip">
+        <MudIcon Icon="@Icons.Material.Filled.Warning" Class="mr-1" />
+        Warning
+    </MudChip>
 
-<!-- Add chip to dynamic list -->
-<MudStack Row Spacing="2" Class="mt-6 align-center">
-    <MudTextField @bind-Value="_newChip" Placeholder="Add a chip..." Margin="Margin.Dense" />
-    <MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="AddToList"
-        StartIcon="@Icons.Material.Filled.Add">Add</MudButton>
-</MudStack>
+    <!-- Dark chip -->
+    <MudChip T="string" Value="@("Dark")" Variant="_variant" Size="_size" Label="_label" Color="Color.Dark"
+        Disabled="_disabled" Ripple="_ripple" Href="https://github.com/m1n3g/mudblazor-component-playground"
+        Target="_blank" Rel="noopener noreferrer">
+        <MudIcon Icon="@Icons.Custom.Brands.GitHub" Class="mr-1" />
+        Dark
+    </MudChip>
+        </MudStack>
+    </Preview>
+
+    <Options>
+        <MudGrid>
+            <MudItem xs="12" sm="6">
+                <MudSelect T="Variant" Label="Variant" @bind-Value="_variant" Dense="true">
+                    <MudSelectItem Value="@Variant.Filled">Filled</MudSelectItem>
+                    <MudSelectItem Value="@Variant.Outlined">Outlined</MudSelectItem>
+                    <MudSelectItem Value="@Variant.Text">Text</MudSelectItem>
+                </MudSelect>
+            </MudItem>
+            <MudItem xs="12" sm="6">
+                <MudSelect T="Size" Label="Size" @bind-Value="_size" Dense="true">
+                    <MudSelectItem Value="@Size.Small">Small</MudSelectItem>
+                    <MudSelectItem Value="@Size.Medium">Medium</MudSelectItem>
+                    <MudSelectItem Value="@Size.Large">Large</MudSelectItem>
+                </MudSelect>
+            </MudItem>
+            <MudItem xs="12" sm="6">
+                <MudSelect T="string" Label="Icon (for Icon chip)" @bind-Value="_icon" Dense="true">
+                    <MudSelectItem Value="@Icons.Material.Filled.Star">Star</MudSelectItem>
+                    <MudSelectItem Value="@Icons.Material.Filled.Favorite">Favorite</MudSelectItem>
+                    <MudSelectItem Value="@Icons.Material.Filled.CheckCircle">CheckCircle</MudSelectItem>
+                    <MudSelectItem Value="@Icons.Material.Filled.Bolt">Bolt</MudSelectItem>
+                    <MudSelectItem Value="@Icons.Material.Filled.Pets">Pets</MudSelectItem>
+                </MudSelect>
+            </MudItem>
+            <MudItem xs="12" sm="6">
+                <MudSelect T="string" Label="Avatar mode" @bind-Value="_avatarMode" Dense="true">
+                    <MudSelectItem Value="@("Initials")">Initials</MudSelectItem>
+                    <MudSelectItem Value="@("Image")">Image</MudSelectItem>
+                    <MudSelectItem Value="@("None")">None</MudSelectItem>
+                </MudSelect>
+            </MudItem>
+            <MudItem xs="12">
+                <MudSelect T="string" Label="Close Icon" @bind-Value="_closeIcon" Dense="true">
+                    <MudSelectItem Value="@Icons.Material.Filled.Close">Default</MudSelectItem>
+                    <MudSelectItem Value="@Icons.Material.Filled.Close">Close</MudSelectItem>
+                    <MudSelectItem Value="@Icons.Material.Filled.Cancel">Cancel</MudSelectItem>
+                    <MudSelectItem Value="@Icons.Material.Filled.Delete">Delete</MudSelectItem>
+                </MudSelect>
+            </MudItem>
+        </MudGrid>
+
+        <div class="d-flex flex-wrap align-center mt-2" style="column-gap: 12px;">
+            <MudCheckBox @bind-Value="_label" Label="Label (pill style)" />
+            <MudCheckBox @bind-Value="_disabled" Label="Disabled" />
+            <MudCheckBox @bind-Value="_closable" Label="Closable" />
+            <MudCheckBox @bind-Value="_clickable" Label="Clickable" />
+            <MudCheckBox @bind-Value="_ripple" Label="Ripple" />
+        </div>
+    </Options>
+</DemoPageLayout>
 
 @code {
     private Variant _variant = Variant.Filled;
     private Size _size = Size.Medium;
     private bool _label = false;
-    private bool _closable = true;
+    private bool _closable = false;
+    private bool _clickable = false;
+    private bool _disabled;
+    private bool _ripple = true;
 
     private string _icon = Icons.Material.Filled.Star;
     private string _avatarMode = "Initials"; // "Initials" | "Image" | "None"
+    private readonly HashSet<string> _selectedChips = [];
 
-    private List<string> _chips = new() { "Alpha", "Beta", "Gamma" };
-    private string? _newChip;
+    private void CloseChip(MudChip<string> _chip) { }
 
-    private void RemoveChip(string _which) { /* demo: static chips not removed */ }
-
-    private EventCallback<MudChip<string>> CreateCloseCallback(string which)
-        => _closable
-            ? EventCallback.Factory.Create<MudChip<string>>(this, _ => RemoveChip(which))
-            : default;
-
-    private EventCallback<MudChip<string>> CreateDynamicCloseCallback(string chip)
-        => _closable
-            ? EventCallback.Factory.Create<MudChip<string>>(this, _ => RemoveFromList(chip))
-            : default;
-
-    private void AddToList()
+    private void SetChipSelected(string chip, bool selected)
     {
-        var text = _newChip?.Trim();
-        if (string.IsNullOrWhiteSpace(text)) return;
-        if (!_chips.Contains(text))
-            _chips.Add(text);
-        _newChip = string.Empty;
+        if (selected)
+        {
+            _selectedChips.Add(chip);
+        }
+        else
+        {
+            _selectedChips.Remove(chip);
+        }
     }
 
-    private void RemoveFromList(string chip) => _chips.Remove(chip);
+    private bool IsChipSelected(string chip) => _selectedChips.Contains(chip);
+
+    private EventCallback GetClickCallback(string chip)
+        => _clickable
+            ? EventCallback.Factory.Create(this, () => SetChipSelected(chip, !IsChipSelected(chip)))
+            : default;
+
+    private string _closeIcon = Icons.Material.Filled.Close;
+
 }

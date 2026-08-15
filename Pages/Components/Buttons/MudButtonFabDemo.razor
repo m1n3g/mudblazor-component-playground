@@ -2,7 +2,7 @@
 @using MudBlazor
 
 <DemoPageLayout Title="Floating Action Button"
-                Description="Represents a floating action button."
+                Description="Floating action buttons (FABs) trigger the primary action on a page and float above content in a circular or extended shape."
                 Variant="DemoPageLayoutVariant.Vertical">
     <Preview>
         <div class="d-flex flex-wrap justify-center align-center w-100" style="gap: 16px;">
@@ -97,7 +97,7 @@
             </MudItem>
 
             <MudItem xs="12">
-                <div class="d-flex flex-wrap align-center justify-start" style="column-gap: 16px; row-gap: 4px;">
+                <div class="d-flex flex-wrap align-center justify-start" style="column-gap: 12px;">
                     <MudCheckBox @bind-Value="_dropShadow" Label="Drop Shadow" Color="Color.Primary" />
                     <MudCheckBox @bind-Value="_disabled" Label="Disable Save FAB" Color="Color.Primary" />
                 </div>

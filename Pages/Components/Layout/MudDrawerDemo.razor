@@ -1,101 +1,198 @@
 @page "/components/drawer"
 @using MudBlazor
 
-<MudText Typo="Typo.h6" Class="mb-2" Style="font-weight:700">Temporary Drawer</MudText>
-<MudStack Row="true">
-    <MudButton Variant="Variant.Text" OnClick="@(() => OpenDrawer(Anchor.Start))">Start</MudButton>
-    <MudButton Variant="Variant.Text" OnClick="@(() => OpenDrawer(Anchor.End))">End</MudButton>
-    <MudButton Variant="Variant.Text" OnClick="@(() => OpenDrawer(Anchor.Top))">Top</MudButton>
-    <MudButton Variant="Variant.Text" OnClick="@(() => OpenDrawer(Anchor.Bottom))">Bottom</MudButton>
-    <MudSwitch @bind-Value="_overlayAutoClose" Label="Overlay Autoclose" Color="Color.Secondary" />
-</MudStack>
-
-<MudDrawer @bind-Open="@_open" Anchor="@_anchor" Elevation="1" Variant="@DrawerVariant.Temporary"
-    OverlayAutoClose="@_overlayAutoClose">
-    <MudDrawerHeader>
-        <MudText Typo="Typo.h6">My App</MudText>
-    </MudDrawerHeader>
-    <MudNavMenu>
-        <MudNavLink Match="NavLinkMatch.All">Store</MudNavLink>
-        <MudNavLink Match="NavLinkMatch.All">Library</MudNavLink>
-        <MudNavLink Match="NavLinkMatch.All">Community</MudNavLink>
-        <MudNavLink OnClick="_ => _open = false">Close Drawer</MudNavLink>
-    </MudNavMenu>
-</MudDrawer>
-
-<MudText Typo="Typo.h6" Class="mt-10 mb-4" Style="font-weight:700">Mini Variant</MudText>
-
-<!-- Mini variant customization block -->
-<MudPaper Height="320px" Style="overflow:hidden; position:relative;">
-    <MudDrawerContainer Class="mud-height-full">
-
-        <!-- Mini drawer -->
-        <MudDrawer @bind-Open="_openMini" Variant="DrawerVariant.Mini" Elevation="1" Fixed="false"
-            OpenMiniOnHover="true" ClipMode="_clipMode" Breakpoint="_breakpoint">
-
-            <MudNavMenu>
-                <MudNavLink Match="NavLinkMatch.All" Icon="@Icons.Material.Filled.Store">Store</MudNavLink>
-                <MudNavLink Match="NavLinkMatch.All" Icon="@Icons.Material.Filled.LibraryBooks">Library</MudNavLink>
-                <MudNavLink Match="NavLinkMatch.All" Icon="@Icons.Material.Filled.Group">Community</MudNavLink>
-            </MudNavMenu>
-        </MudDrawer>
-
-        <!-- Content + AppBar + controls -->
-        <MudMainContent>
-            <MudAppBar Dense="_denseAppBar" Color="Color.Primary">
-                <MudIconButton Icon="@Icons.Material.Filled.Menu" Color="Color.Inherit" Edge="Edge.Start"
-                    OnClick="ToggleMini" />
-                <MudSpacer />
-                <MudIconButton Icon="@Icons.Custom.Brands.GitHub" Color="Color.Inherit" />
-            </MudAppBar>
-
-            <MudContainer Class="pa-4">
-                <MudStack Spacing="2" Style="max-width:520px;">
-                    <MudSelect T="DrawerClipMode" Label="Select clip mode" @bind-Value="_clipMode" Dense="true">
-                        <MudSelectItem Value="@DrawerClipMode.Never">
-                            Not clipped (DrawerClipMode.Never)
-                        </MudSelectItem>
-                        <MudSelectItem Value="@DrawerClipMode.Docked">
-                            Clip when open (DrawerClipMode.Docked)
-                        </MudSelectItem>
-                        <MudSelectItem Value="@DrawerClipMode.Always">
-                            Always clipped (DrawerClipMode.Always)
-                        </MudSelectItem>
-                    </MudSelect>
-
-
-                    <MudSelect T="Breakpoint" Label="Select breakpoint" @bind-Value="_breakpoint" Dense="true">
-                        @foreach (Breakpoint bp in Enum.GetValues(typeof(Breakpoint)))
-                        {
-                            <MudSelectItem Value="@bp">@bp</MudSelectItem>
-                        }
-                    </MudSelect>
-
-                    <MudSwitch @bind-Value="_denseAppBar" Label="Dense appbar" />
-                </MudStack>
-            </MudContainer>
-        </MudMainContent>
-
-    </MudDrawerContainer>
-</MudPaper>
-
-@code {
-    // Temporary drawer state
-    private bool _open;
-    private Anchor _anchor;
-    private bool _overlayAutoClose = true;
-
-    private void OpenDrawer(Anchor anchor)
-    {
-        _open = true;
-        _anchor = anchor;
+<style>
+    .drawer-preview-content {
+        position: absolute;
+        inset: 0;
+        z-index: 0;
     }
 
-    // Mini drawer state + options
-    private bool _openMini = false;
-    private DrawerClipMode _clipMode = DrawerClipMode.Always;
-    private Breakpoint _breakpoint = Breakpoint.Lg;
-    private bool _denseAppBar = false;
+    .drawer-preview-content-docked {
+        position: relative;
+        flex: 1;
+        min-width: 0;
+        min-height: 100%;
+    }
 
-    private void ToggleMini() => _openMini = !_openMini;
+    @@media (min-width: @(ResponsiveBreakpointPixels)px) {
+        .drawer-preview-content-responsive {
+            position: relative;
+            flex: 1;
+            min-width: 0;
+            min-height: 100%;
+        }
+    }
+</style>
+
+<DemoPageLayout Title="Drawer"
+                Description="Navigation drawers, or sidebars, dock to the side of the page to hold navigation links, menus, or other content."
+                Variant="DemoPageLayoutVariant.Horizontal">
+    <Preview>
+        <MudPaper Class="w-100" Height="360px" Style="overflow:hidden; position:relative;" Elevation="1">
+            <MudDrawerContainer Class="mud-height-full">
+                <MudDrawer @bind-Open="_open"
+                           Anchor="@_anchor"
+                           Breakpoint="@_breakpoint"
+                           ClipMode="@_clipMode"
+                           Color="@_color"
+                           Elevation="@_elevation"
+                           Fixed="@_fixed"
+                           Height="@DrawerHeight"
+                           MiniWidth="@MiniWidth"
+                           OpenMiniOnHover="@OpenMiniOnHover"
+                           Overlay="@_overlay"
+                           OverlayAutoClose="@_overlayAutoClose"
+                           Variant="@_variant"
+                           Width="@DrawerWidth">
+                    <MudDrawerHeader>
+                        <MudText Typo="Typo.h6">My App</MudText>
+                    </MudDrawerHeader>
+                    <MudNavMenu>
+                        <MudNavLink Match="NavLinkMatch.All" Icon="@Icons.Material.Filled.Dashboard" IconColor="Color.Inherit" OnClick="CloseDrawer">Dashboard</MudNavLink>
+                        <MudNavLink Match="NavLinkMatch.All" Icon="@Icons.Material.Filled.Folder" IconColor="Color.Inherit" OnClick="CloseDrawer">Projects</MudNavLink>
+                        <MudNavLink Match="NavLinkMatch.All" Icon="@Icons.Material.Filled.Settings" IconColor="Color.Inherit" OnClick="CloseDrawer">Settings</MudNavLink>
+                        <MudNavLink Match="NavLinkMatch.All" Icon="@Icons.Material.Filled.Close" IconColor="Color.Inherit" OnClick="CloseDrawer">Close Drawer</MudNavLink>
+                    </MudNavMenu>
+                </MudDrawer>
+
+                <div class="@PreviewContentClass d-flex justify-center align-center mud-height-full">
+                    <MudStack AlignItems="AlignItems.Center" Justify="Justify.Center" Spacing="2" Class="pa-4">
+                        <MudText Typo="Typo.h6">Drawer preview</MudText>
+                        <MudText Typo="Typo.body2" Align="Align.Center">
+                            Adjust the options, then open the drawer to preview its behavior.
+                        </MudText>
+                        <MudButton Class="mt-2" Variant="Variant.Filled" Color="@_color" OnClick="ToggleDrawer">
+                            @(_open ? "Close drawer" : "Open drawer")
+                        </MudButton>
+                    </MudStack>
+                </div>
+            </MudDrawerContainer>
+        </MudPaper>
+    </Preview>
+
+    <Options>
+        <MudGrid Spacing="4" Class="w-100">
+            <MudItem xs="12" md="6">
+                <MudSelect T="DrawerVariant" @bind-Value="_variant" Label="Variant">
+                    <MudSelectItem Value="@DrawerVariant.Responsive">Responsive</MudSelectItem>
+                    <MudSelectItem Value="@DrawerVariant.Persistent">Persistent</MudSelectItem>
+                    <MudSelectItem Value="@DrawerVariant.Temporary">Temporary</MudSelectItem>
+                    <MudSelectItem Value="@DrawerVariant.Mini">Mini</MudSelectItem>
+                </MudSelect>
+            </MudItem>
+            <MudItem xs="12" md="6">
+                <MudSelect T="Anchor" @bind-Value="_anchor" Label="Anchor">
+                    <MudSelectItem Value="@Anchor.Start">Start</MudSelectItem>
+                    <MudSelectItem Value="@Anchor.End">End</MudSelectItem>
+                    <MudSelectItem Value="@Anchor.Top">Top</MudSelectItem>
+                    <MudSelectItem Value="@Anchor.Bottom">Bottom</MudSelectItem>
+                </MudSelect>
+            </MudItem>
+
+            <MudItem xs="12" md="6">
+                <MudSelect T="Breakpoint" @bind-Value="_breakpoint" Label="Breakpoint">
+                    <MudSelectItem Value="@Breakpoint.Xs">Xs</MudSelectItem>
+                    <MudSelectItem Value="@Breakpoint.Sm">Sm</MudSelectItem>
+                    <MudSelectItem Value="@Breakpoint.Md">Md</MudSelectItem>
+                    <MudSelectItem Value="@Breakpoint.Lg">Lg</MudSelectItem>
+                    <MudSelectItem Value="@Breakpoint.Xl">Xl</MudSelectItem>
+                </MudSelect>
+            </MudItem>
+            <MudItem xs="12" md="6">
+                <MudSelect T="Color" @bind-Value="_color" Label="Color">
+                    <MudSelectItem Value="@Color.Default">Default</MudSelectItem>
+                    <MudSelectItem Value="@Color.Primary">Primary</MudSelectItem>
+                    <MudSelectItem Value="@Color.Secondary">Secondary</MudSelectItem>
+                    <MudSelectItem Value="@Color.Info">Info</MudSelectItem>
+                    <MudSelectItem Value="@Color.Success">Success</MudSelectItem>
+                    <MudSelectItem Value="@Color.Warning">Warning</MudSelectItem>
+                    <MudSelectItem Value="@Color.Error">Error</MudSelectItem>
+                    <MudSelectItem Value="@Color.Dark">Dark</MudSelectItem>
+                </MudSelect>
+            </MudItem>
+
+            <MudItem xs="12">
+                <MudSlider T="int" @bind-Value="_elevation" Min="0" Max="24" Step="1" Color="Color.Primary">
+                    Elevation: @_elevation
+                </MudSlider>
+            </MudItem>
+
+            <MudItem xs="12" md="@(IsVerticalAnchor ? 6 : 12)">
+                <MudTextField @bind-Value="_width" Label="Width" Placeholder="Value in px or %" Clearable="true" Immediate="true" Disabled="IsVerticalAnchor" />
+            </MudItem>
+            @if (IsVerticalAnchor)
+            {
+                <MudItem xs="12" md="6">
+                    <MudTextField @bind-Value="_height" Label="Height" Placeholder="Value in px or %" Clearable="true" Immediate="true" />
+                </MudItem>
+            }
+
+            @if (_variant == DrawerVariant.Mini)
+            {
+                <MudItem xs="12">
+                    <MudTextField @bind-Value="_miniWidth" Label="Mini Width" Placeholder="Value in px or %" Clearable="true" Immediate="true" />
+                </MudItem>
+            }
+
+            <MudItem xs="12">
+                <div class="d-flex flex-wrap align-center justify-start" style="column-gap: 12px; row-gap: 0;">
+                    <MudCheckBox @bind-Value="_open" Label="Open" Color="Color.Primary" />
+                    <MudCheckBox @bind-Value="_fixed" Label="Fixed" Color="Color.Primary" />
+                    <MudCheckBox @bind-Value="_overlay" Label="Overlay" Color="Color.Primary" Disabled="!UsesOverlay" />
+                    <MudCheckBox @bind-Value="_overlayAutoClose" Label="Overlay auto close" Color="Color.Primary" Disabled="!UsesOverlay" />
+                    <MudCheckBox @bind-Value="_openMiniOnHover" Label="Open mini on hover" Color="Color.Primary" Disabled="_variant != DrawerVariant.Mini" />
+                </div>
+            </MudItem>
+
+        </MudGrid>
+    </Options>
+</DemoPageLayout>
+
+@code {
+    private Anchor _anchor = Anchor.Start;
+    private Breakpoint _breakpoint = Breakpoint.Md;
+    private DrawerClipMode _clipMode = DrawerClipMode.Never;
+    private Color _color = Color.Default;
+    private int _elevation = 1;
+    private bool _fixed = true;
+    private string? _height;
+    private string? _miniWidth;
+    private bool _open;
+    private bool _openMiniOnHover;
+    private bool _overlay = true;
+    private bool _overlayAutoClose = true;
+    private DrawerVariant _variant = DrawerVariant.Responsive;
+    private string? _width;
+
+    private bool IsVerticalAnchor => _anchor is Anchor.Top or Anchor.Bottom;
+    private bool UsesOverlay => _variant is DrawerVariant.Responsive or DrawerVariant.Temporary;
+    private bool OpenMiniOnHover => _variant == DrawerVariant.Mini && _openMiniOnHover;
+    private string? DrawerHeight => IsVerticalAnchor ? _height : null;
+    private string? MiniWidth => _variant == DrawerVariant.Mini ? _miniWidth : null;
+    private string? DrawerWidth => IsVerticalAnchor ? null : _width;
+    private string PreviewContentClass => _variant switch
+    {
+        DrawerVariant.Persistent or DrawerVariant.Mini => "drawer-preview-content-docked",
+        DrawerVariant.Responsive => "drawer-preview-content drawer-preview-content-responsive",
+        _ => "drawer-preview-content"
+    };
+
+    private int ResponsiveBreakpointPixels => _breakpoint switch
+    {
+        Breakpoint.Sm => 600,
+        Breakpoint.Md => 960,
+        Breakpoint.Lg => 1280,
+        Breakpoint.Xl => 1920,
+        _ => 0
+    };
+    private void ToggleDrawer()
+    {
+        _open = !_open;
+    }
+
+    private void CloseDrawer()
+    {
+        _open = false;
+    }
 }

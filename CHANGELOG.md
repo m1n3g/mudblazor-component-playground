@@ -448,3 +448,141 @@ Result:
 
 - The app shell header better fits the updated playground layout
 - Repository housekeeping is aligned with the current naming and link structure
+
+## 2026-07-17
+
+### MudCarousel Demo Playground
+
+The Carousel demo was rebuilt into the shared configurable playground pattern with dynamic slide and transition controls.
+
+Changes made in [`Pages/Components/DataDisplay/MudCarouselDemo.razor`](./Pages/Components/DataDisplay/MudCarouselDemo.razor):
+
+- Moved the page onto the reusable vertical `DemoPageLayout`
+- Added a centered live carousel preview with selected-index feedback under the same preview container
+- Set the default slides to match the requested mix of color and image slides
+- Added controls for transition, height, auto-cycle time, arrows, bullets, swipe gesture, and auto-cycle
+- Added custom transition support with animate.css-based class options for enter and exit animations
+- Updated slide insertion to randomize between themed color slides and image slides using `castle`, `iceland`, and `mony`
+- Limited the demo to a maximum of `8` slides and disabled the add action at the cap
+
+Result:
+
+- The Carousel page now follows the standard playground structure
+- Transition behavior and timed cycling can be tested from one configurable preview
+
+## 2026-08-12
+
+### Global Demo Layout Switcher
+
+The shared demo layout now supports a global vertical or horizontal viewing preference.
+
+Changes made in [`Layout/MainLayout.razor`](./Layout/MainLayout.razor), [`Layout/DemoPageLayout.razor`](./Layout/DemoPageLayout.razor), and [`Layout/DemoPageLayout.razor.css`](./Layout/DemoPageLayout.razor.css):
+
+- Added an app-bar toggle for switching between vertical and horizontal demo layouts
+- Added dynamic layout icons, tooltips, and accessible labels
+- Set horizontal layout as the default on large screens
+- Preserved `PreviewOnly` and `Custom` layout variants
+- Kept tablet and mobile layouts vertical through the existing breakpoint rules
+- Added a sticky preview panel for horizontal layouts on large screens
+- Added a dynamic tooltip to the theme toggle for switching between light and dark mode
+
+Result:
+
+- Demo pages can switch layout instantly without navigation or page refresh
+- Long option panels remain easier to use while the large-screen preview stays visible
+
+### MudChipSet Demo Playground
+
+The Chip Set demo was refined with shared controls and interactive chip management.
+
+Changes made in [`Pages/Components/DataDisplay/MudChipSetDemo.razor`](./Pages/Components/DataDisplay/MudChipSetDemo.razor):
+
+- Kept variant and size synchronized across both chip-set previews
+- Added shared selection color, disabled, read-only, check mark, checked-icon, close-icon, ripple, and closable-chip controls
+- Added responsive wrapping for the checkbox controls
+- Added an `Add chip` action with a maximum of 20 multi-selection chips
+- Replaced the duplicate checked-icon option with a distinct `Favorite` icon
+- Fixed add/remove state handling by using unique keys for dynamically added chips
+
+Result:
+
+- Chip Set option changes now affect both preview groups consistently
+- Chips can be added and removed without duplicate-key runtime errors
+
+## 2026-08-13
+
+### MudChips Demo Playground
+
+The Chips demo was moved to the shared playground layout and refined around static chip examples.
+
+Changes made in [`Pages/Components/DataDisplay/MudChipsDemo.razor`](./Pages/Components/DataDisplay/MudChipsDemo.razor):
+
+- Added Default, Primary, Secondary, Info, Success, Warning, Error, and Dark chip examples
+- Preserved icon and avatar examples, and added warning and GitHub icons
+- Made the Dark chip link to the project GitHub repository
+- Added clickable, disabled, closable, and ripple controls
+- Added configurable close icons with the Close Icon option on its own row
+- Added explicit chip selection state so selected chips display their selected styling consistently
+- Removed the dynamic chip list and Checked Icon option from the demo
+
+Result:
+
+- The Chips page now presents a focused, responsive preview with controls matching its supported behavior
+
+## 2026-08-15
+
+### Sticky Preview Selector Fix
+
+Updated [`Layout/DemoPageLayout.razor.css`](./Layout/DemoPageLayout.razor.css) to correct sticky preview behavior in horizontal layouts.
+
+Changes made:
+
+- Corrected the CSS isolation selector so the horizontal preview MudPaper receives the sticky rule
+- Applied the horizontal two-column and sticky-preview behavior from the `lg` breakpoint upward
+- Kept smaller breakpoints in a single vertical column
+
+### MudDivider Vertical Preview Fix
+
+Updated [`Pages/Components/Layout/MudDividerDemo.razor`](./Pages/Components/Layout/MudDividerDemo.razor) to keep the vertical divider visible inside the flex toolbar.
+
+Changes made:
+
+- Removed the custom `min-height: 0` rule that collapsed the divider to zero height
+- Restored flex-item stretching with `align-self: stretch` and `height: auto`
+- Kept the scoped border override required for Bootstrap's global `hr` styles
+
+Result:
+
+- The Vertical divider example now renders at the height of its flex container
+
+## 2026-08-16
+
+### Drawer and Navigation Updates
+
+Updated [`Pages/Components/Layout/MudDrawerDemo.razor`](./Pages/Components/Layout/MudDrawerDemo.razor), [`Layout/NavMenu.razor`](./Layout/NavMenu.razor), and [`Layout/MainLayout.razor.css`](./Layout/MainLayout.razor.css):
+
+- Reworked the Drawer demo into the shared horizontal layout with a configurable preview and options panel
+- Added drawer variant, anchor, breakpoint, color, elevation, sizing, overlay, mini-drawer, and close-drawer controls
+- Added the Exit Prompt page to the navigation menu
+- Hid the app-bar title below `380px` so the compact header remains usable on narrow screens
+
+### Drawer Clip Mode Cleanup
+
+Updated [`Pages/Components/Layout/MudDrawerDemo.razor`](./Pages/Components/Layout/MudDrawerDemo.razor):
+
+- Removed the experimental Clip Mode option from the drawer demo controls
+- Reverted the temporary integration that applied the demo's clip mode to the global application drawer
+- Preserved the existing drawer preview and remaining options
+
+Result:
+
+- Drawer clip behavior is no longer changed outside the drawer demo page
+
+### Link and Exit Prompt Demos
+
+Updated [`Pages/Components/Navigation/MudLinkDemo.razor`](./Pages/Components/Navigation/MudLinkDemo.razor) and added [`Pages/Components/Navigation/MudExitPromptDemo.razor`](./Pages/Components/Navigation/MudExitPromptDemo.razor):
+
+- Migrated the MudLink demo to the shared demo layout
+- Removed the unnecessary click-handler option from the link controls
+- Added the MudExitPrompt demo with its supported configuration options
+- Added Exit Prompt to the navigation menu under Drawer

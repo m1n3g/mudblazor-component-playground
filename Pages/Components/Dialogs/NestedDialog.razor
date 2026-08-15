@@ -1,0 +1,45 @@
+@inject IDialogService DialogService
+@using MudBlazor
+
+<MudDialog>
+    <TitleContent>Nested dialog</TitleContent>
+
+    <DialogContent>
+        <MudText>This dialog can open another dialog on top of it.</MudText>
+    </DialogContent>
+
+    <DialogActions>
+        <MudButton OnClick="OpenChildAsync">Open child dialog</MudButton>
+        <MudButton Color="Color.Error" OnClick="CancelAllAsync">Cancel all</MudButton>
+        <MudButton Color="Color.Primary" OnClick="Cancel">Close</MudButton>
+    </DialogActions>
+</MudDialog>
+
+@code {
+    [CascadingParameter] public IMudDialogInstance MudDialog { get; set; } = default!;
+
+    private async Task OpenChildAsync()
+    {
+        var parameters = new DialogParameters
+        {
+            [nameof(RegisterReference)] = RegisterReference,
+            [nameof(CancelAll)] = CancelAll
+        };
+        var reference = await DialogService.ShowAsync<NestedDialog>("Child dialog", parameters, OptionsFactory?.Invoke());
+        RegisterReference?.Invoke(reference);
+    }
+
+    private async Task CancelAllAsync()
+    {
+        if (CancelAll is not null)
+        {
+            await CancelAll();
+        }
+    }
+
+    private void Cancel() => MudDialog.Cancel();
+
+    [Parameter] public Action<IDialogReference>? RegisterReference { get; set; }
+    [Parameter] public Func<Task>? CancelAll { get; set; }
+    [Parameter] public Func<DialogOptions>? OptionsFactory { get; set; }
+}

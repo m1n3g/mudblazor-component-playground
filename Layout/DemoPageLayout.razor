@@ -13,7 +13,7 @@
     }
 </MudStack>
 
-@switch (Variant)
+@switch (EffectiveVariant)
 {
     case DemoPageLayoutVariant.Horizontal:
         <div class="demo-page-content demo-page-horizontal mx-auto d-flex flex-column gap-4" style="@($"max-width: {ContentMaxWidth};")">
@@ -65,7 +65,7 @@
     public string? Description { get; set; }
 
     [Parameter]
-    public DemoPageLayoutVariant Variant { get; set; } = DemoPageLayoutVariant.Vertical;
+    public DemoPageLayoutVariant Variant { get; set; } = DemoPageLayoutVariant.Horizontal;
 
     [Parameter]
     public string ContentMaxWidth { get; set; } = "1120px";
@@ -84,6 +84,13 @@
 
     [Parameter]
     public RenderFragment? CustomContent { get; set; }
+
+    [CascadingParameter(Name = "DemoLayoutVariant")]
+    private DemoPageLayoutVariant GlobalLayoutVariant { get; set; } = DemoPageLayoutVariant.Horizontal;
+
+    private DemoPageLayoutVariant EffectiveVariant => Variant is DemoPageLayoutVariant.Vertical or DemoPageLayoutVariant.Horizontal
+        ? GlobalLayoutVariant
+        : Variant;
 
     private RenderFragment RenderPreview() => builder =>
     {

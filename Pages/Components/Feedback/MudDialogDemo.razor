@@ -3,69 +3,79 @@
 @inject ISnackbar Snackbar
 @using MudBlazor
 
-<MudStack Spacing="2">
-
-    <MudText Typo="Typo.h6" Style="font-weight: 600;">Dialog demos</MudText>
-    <MudAlert Severity="Severity.Info">Default minimum width: 152px; maximum width: 600px.</MudAlert>
-
-    <!-- Launchers -->
-    <MudPaper Class="pa-3">
-        <MudStack Row Spacing="1" Class="align-center">
-            <MudButton OnClick="OpenScrollableAsync">Scrollable dialog</MudButton>
-
-            <MudDivider Vertical="true" Class="mx-1" />
-
-            <MudButton OnClick="@(() => OpenDialogAsync(_maxWidth))">MaxWidth dialog</MudButton>
-            <MudButton OnClick="@(() => OpenDialogAsync(_closeButton))" Color="Color.Primary">Close Button dialog
-            </MudButton>
-            <MudButton OnClick="@(() => OpenDialogAsync(_fullScreen))" Color="Color.Info">Full Screen dialog</MudButton>
-            <MudButton OnClick="@(() => OpenDialogAsync(_topCenter))" Color="Color.Success">Top Center dialog
-            </MudButton>
-
-            <MudDivider Vertical="true" Class="mx-1" />
-
+<DemoPageLayout Title="Dialog"
+                Description="Displays an overlay that prompts users to confirm an action or provide additional information."
+                Variant="DemoPageLayoutVariant.Horizontal">
+    <Preview>
+        <MudStack Row Spacing="1" Class="align-center flex-wrap justify-start">
+            <MudButton Color="Color.Default" OnClick="OpenScrollableAsync">Scrollable dialog</MudButton>
+            <MudButton Color="Color.Primary" OnClick="OpenBlurryAsync">Blurry dialog</MudButton>
+            <MudButton OnClick="OpenInline" Color="Color.Secondary">Inline dialog</MudButton>
+            <MudButton OnClick="OpenNestedInline" Color="Color.Info">Nested inline dialog</MudButton>
+            <MudButton OnClick="OpenNestedAsync" Color="Color.Info">Nested dialogs</MudButton>
+            <MudButton OnClick="OpenCancelAllAsync" Color="Color.Error">Cancel all</MudButton>
             <MudButton OnClick="@(() => OpenDeleteAsync(_servers[1]))" Color="Color.Error">Passing data (delete)
             </MudButton>
+            <MudButton OnClick="OpenTemplateDeleteAsync" Color="Color.Error">Delete records</MudButton>
+            <MudButton OnClick="OpenTemplateSlowComputerAsync" Color="Color.Warning">Slow computer</MudButton>
         </MudStack>
-    </MudPaper>
 
-    <MudText Typo="Typo.subtitle2" Class="mt-2">Last result: @_lastResult</MudText>
+        @if (_hasResult)
+        {
+            <MudAlert Severity="@LastResultSeverity" Class="mt-4">Last result: @_lastResult</MudAlert>
+        }
+    </Preview>
 
-    <!-- Simple list for the "passing data" example -->
-    <MudPaper Class="pa-3 mt-4">
-        <MudText Typo="Typo.subtitle1">Servers</MudText>
-        <MudTable Items="_servers" Dense="true">
-            <HeaderContent>
-                <MudTh>Id</MudTh>
-                <MudTh>Name</MudTh>
-                <MudTh>Location</MudTh>
-                <MudTh>IP</MudTh>
-                <MudTh></MudTh>
-            </HeaderContent>
-            <RowTemplate>
-                <MudTd DataLabel="Id">@context.Id</MudTd>
-                <MudTd DataLabel="Name">@context.Name</MudTd>
-                <MudTd DataLabel="Location">@context.Location</MudTd>
-                <MudTd DataLabel="IP">@context.Ip</MudTd>
-                <MudTd>
-                    <MudButton Color="Color.Error" Variant="Variant.Text" OnClick="@(() => OpenDeleteAsync(context))">
-                        Delete
-                    </MudButton>
-                </MudTd>
-            </RowTemplate>
-        </MudTable>
-    </MudPaper>
+    <Options>
+        <div class="d-flex flex-wrap align-center mt-2" style="column-gap: 12px;">
+            <MudCheckBox @bind-Value="_useMaxWidth">Max Width</MudCheckBox>
+            <MudCheckBox @bind-Value="_closeButton">Close Button</MudCheckBox>
+            <MudCheckBox @bind-Value="_noHeader">No Header</MudCheckBox>
+            <MudCheckBox @bind-Value="_disableBackdrop">Disable Backdrop</MudCheckBox>
+            <MudCheckBox @bind-Value="_fullScreen">Full Screen</MudCheckBox>
+            <MudCheckBox @bind-Value="_topCenter">Top Center</MudCheckBox>
+            <MudCheckBox @bind-Value="_closeOnEscape">Close On Escape</MudCheckBox>
+        </div>
 
-</MudStack>
+    </Options>
+</DemoPageLayout>
+
+<MudDialog @bind-Visible="_inlineVisible" Options="@BuildDialogOptions()">
+    <TitleContent>Inline dialog</TitleContent>
+    <DialogContent>
+        <MudText>Displays an overlay that prompts users to confirm an action or provide additional information.</MudText>
+        <MudButton Class="mt-4" OnClick="OpenNestedInline">Open nested inline dialog</MudButton>
+    </DialogContent>
+    <DialogActions>
+        <MudButton OnClick="CloseInline">Cancel</MudButton>
+    </DialogActions>
+</MudDialog>
+
+<MudDialog @bind-Visible="_nestedInlineVisible" Options="@BuildDialogOptions()">
+    <TitleContent>Nested inline dialog</TitleContent>
+    <DialogContent>
+        <MudText>This inline dialog is opened from another inline dialog.</MudText>
+    </DialogContent>
+    <DialogActions>
+        <MudButton OnClick="CloseNestedInline">Close</MudButton>
+    </DialogActions>
+</MudDialog>
 
 @code {
-    private string _lastResult = "—";
+    private bool _hasResult;
+    private bool _useMaxWidth = true;
+    private bool _closeButton = true;
+    private bool _noHeader;
+    private bool _disableBackdrop;
+    private bool _fullScreen;
+    private bool _topCenter;
+    private bool _closeOnEscape = true;
+    private bool _inlineVisible;
+    private bool _nestedInlineVisible;
+    private readonly List<IDialogReference> _dialogReferences = [];
 
-    // ---- Options for the four new dialogs ----
-    private readonly DialogOptions _maxWidth = new() { MaxWidth = MaxWidth.Medium, FullWidth = true };
-    private readonly DialogOptions _closeButton = new() { CloseButton = true };
-    private readonly DialogOptions _fullScreen = new() { FullScreen = true, CloseButton = true };
-    private readonly DialogOptions _topCenter = new() { Position = DialogPosition.TopCenter };
+    private Severity LastResultSeverity => _lastResult == "Canceled" ? Severity.Info : Severity.Success;
+    private string _lastResult = "—";
 
     // Sample data for "passing data"
     private readonly List<ServerRow> _servers =
@@ -79,6 +89,7 @@
     private async Task OpenDialogAsync(DialogOptions options)
     {
         var h = await DialogService.ShowAsync<Dialog>("Custom Options Dialog", options);
+        RegisterDialog(h);
         DialogResult? result = await h.Result;
 
         if (result is { Canceled: false })
@@ -91,15 +102,57 @@
             _lastResult = "Canceled";
             Snackbar.Add("Canceled", Severity.Info);
         }
+
+        _hasResult = true;
+    }
+
+    private DialogOptions BuildDialogOptions(string? backgroundClass = null) => new()
+    {
+        MaxWidth = _useMaxWidth ? MaxWidth.Medium : null,
+        FullWidth = _useMaxWidth,
+        CloseButton = _closeButton,
+        NoHeader = _noHeader,
+        BackdropClick = !_disableBackdrop,
+        FullScreen = _fullScreen,
+        Position = _topCenter ? DialogPosition.TopCenter : DialogPosition.Center,
+        CloseOnEscapeKey = _closeOnEscape,
+        BackgroundClass = backgroundClass
+    };
+
+    private Task OpenBlurryAsync() => OpenDialogAsync(BuildDialogOptions("dialog-backdrop-blur"));
+
+    private void OpenInline() => _inlineVisible = true;
+    private void CloseInline() => _inlineVisible = false;
+    private void OpenNestedInline() => _nestedInlineVisible = true;
+    private void CloseNestedInline() => _nestedInlineVisible = false;
+
+    private async Task OpenNestedAsync()
+    {
+        var parameters = new DialogParameters
+        {
+            [nameof(NestedDialog.RegisterReference)] = (Action<IDialogReference>)RegisterDialog,
+            [nameof(NestedDialog.CancelAll)] = (Func<Task>)CancelAllAsync,
+            [nameof(NestedDialog.OptionsFactory)] = (Func<DialogOptions>)(() => BuildDialogOptions())
+        };
+        var reference = await DialogService.ShowAsync<NestedDialog>("Nested dialog", parameters, BuildDialogOptions());
+        RegisterDialog(reference);
+        await reference.Result;
+    }
+
+    private async Task OpenCancelAllAsync()
+    {
+        await OpenNestedAsync();
     }
 
     private async Task OpenScrollableAsync()
     {
         var h = await DialogService.ShowAsync<DialogScrollable>("Scrollable content",
-        new DialogOptions { MaxWidth = MaxWidth.Medium, FullWidth = true, CloseOnEscapeKey = true });
+        BuildDialogOptions());
+        RegisterDialog(h);
 
         DialogResult? result = await h.Result;
         _lastResult = result is { Canceled: false } ? "OK clicked" : "Canceled";
+        _hasResult = true;
     }
 
     private async Task OpenDeleteAsync(ServerRow s)
@@ -112,8 +165,19 @@
 { x => x.IpAddress, s.Ip }
 };
 
-        var opts = new DialogOptions { CloseButton = true, FullWidth = true, MaxWidth = MaxWidth.Small };
+        var opts = new DialogOptions
+        {
+            MaxWidth = MaxWidth.Small,
+            FullWidth = _useMaxWidth,
+            CloseButton = _closeButton,
+            NoHeader = _noHeader,
+            BackdropClick = !_disableBackdrop,
+            FullScreen = _fullScreen,
+            Position = _topCenter ? DialogPosition.TopCenter : DialogPosition.Center,
+            CloseOnEscapeKey = _closeOnEscape,
+        };
         var h = await DialogService.ShowAsync<DeleteServerDialog>("Delete server?", parms, opts);
+        RegisterDialog(h);
         DialogResult? result = await h.Result;
 
         if (result is { Canceled: false })
@@ -127,6 +191,63 @@
             _lastResult = "Canceled";
             Snackbar.Add("Canceled", Severity.Info);
         }
+
+        _hasResult = true;
+    }
+
+    private Task OpenTemplateDeleteAsync() => OpenTemplateAsync(
+        "Delete",
+        "Do you really want to delete these records? This process cannot be undone.",
+        "Delete",
+        Color.Error);
+
+    private Task OpenTemplateSlowComputerAsync() => OpenTemplateAsync(
+        "Slow Computer Detected",
+        "Your computer seems very slow. Click the download button to download free RAM.",
+        "Download",
+        Color.Warning);
+
+    private async Task OpenTemplateAsync(string title, string contentText, string buttonText, Color color)
+    {
+        var parameters = new DialogParameters<DialogTemplate>
+        {
+            { x => x.ContentText, contentText },
+            { x => x.ButtonText, buttonText },
+            { x => x.Color, color }
+        };
+
+        var dialog = await DialogService.ShowAsync<DialogTemplate>(
+            title,
+            parameters,
+            BuildDialogOptions());
+        RegisterDialog(dialog);
+
+        DialogResult? result = await dialog.Result;
+        _lastResult = result is { Canceled: false } ? $"{buttonText} confirmed" : "Canceled";
+        _hasResult = true;
+
+        Snackbar.Add(
+            result is { Canceled: false } ? $"{buttonText} confirmed" : "Canceled",
+            result is { Canceled: false } ? Severity.Success : Severity.Info);
+    }
+
+    private void RegisterDialog(IDialogReference reference)
+    {
+        if (!_dialogReferences.Contains(reference))
+        {
+            _dialogReferences.Add(reference);
+        }
+    }
+
+    private async Task CancelAllAsync()
+    {
+        foreach (var reference in _dialogReferences.AsEnumerable().Reverse().ToArray())
+        {
+            DialogService.Close(reference, DialogResult.Cancel());
+        }
+
+        _dialogReferences.Clear();
+        await Task.CompletedTask;
     }
 
     private record ServerRow(Guid Id, string Name, string Location, string Ip);

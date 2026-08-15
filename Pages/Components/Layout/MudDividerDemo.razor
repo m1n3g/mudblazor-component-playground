@@ -1,58 +1,172 @@
 @page "/components/divider"
 @using MudBlazor
 
-<MudText Typo="Typo.h6" Class="mb-2" Style="font-weight:700">Inset Dividers</MudText>
-<MudSwitch Class="mb-4" @bind-Value="_lightDivider" Color="Color.Primary" Label="Use Light Divider" />
+<style>
+    .divider-example-group .mud-radio-group {
+        column-gap: 12px;
+        row-gap: 0;
+    }
 
-<MudPaper Width="300px" Square="true">
-    <MudList T="string">
-        <MudListItem Icon="@Icons.Material.Filled.TrendingUp">
-            Trending
-        </MudListItem>
-        <MudDivider DividerType="DividerType.Inset" Light="@_lightDivider"/>
-        <MudListItem Icon="@Icons.Material.Filled.StarRate">
-            Most Stars
-        </MudListItem>
-        <MudDivider DividerType="DividerType.Inset" Light="@_lightDivider"/>
-        <MudListItem Icon="@Icons.Material.Filled.History">
-            History
-        </MudListItem>
-    </MudList>
-</MudPaper>
+    .divider-preview .divider-vertical {
+        width: 1px;
+        flex: 0 0 1px;
+        margin: 0;
+        border: 0 !important;
+        border-right: 1px solid var(--mud-palette-divider) !important;
+    }
 
-<MudText Typo="Typo.h6" Class="mt-10 mb-2" Style="font-weight:700">Middle Dividers</MudText>
-<MudCard Style="width: 800px">
-    <MudCardHeader>
-        <CardHeaderContent>
-            <MudText Typo="Typo.h5">Uranium-235</MudText>
-        </CardHeaderContent>
-    </MudCardHeader>
-    <MudCardContent>
-        <MudText>This is the type of uranium used in the RBMK reactors.</MudText>
-        <MudDivider DividerType="DividerType.Middle" Class="my-6" Light="@_lightDivider"/>
-        <MudText GutterBottom="true">Select Reactor Type</MudText>
-        <MudChip T="string" Color="Color.Secondary">RBMK-1000</MudChip>
-        <MudChip T="string">RBMK-1500</MudChip>
-        <MudChip T="string">RBMKP-2400</MudChip>
-    </MudCardContent>
-    <MudCardActions>
-        <MudButton Variant="Variant.Text" Color="Color.Primary">Read more</MudButton>
-    </MudCardActions>
-</MudCard>
+    .divider-preview .divider-vertical.mud-divider-flexitem {
+        align-self: stretch !important;
+        height: auto !important;
+    }
 
-<MudText Typo="Typo.h6" Class="mt-10 mb-2" Style="font-weight:700">Vertical Dividers</MudText>
-<MudPaper Square="true" Class="d-flex justify-space-around" Style="width: 800px">
-    <MudIconButton Icon="@Icons.Material.Filled.FormatAlignRight" Color="Color.Dark" Class="rounded-0" />
-    <MudIconButton Icon="@Icons.Material.Filled.FormatAlignCenter" Color="Color.Dark" Class="rounded-0" />
-    <MudIconButton Icon="@Icons.Material.Filled.FormatAlignLeft" Color="Color.Dark" Class="rounded-0" />
+    .divider-preview .divider-vertical.mud-divider-light {
+        border-right-color: var(--mud-palette-divider-light) !important;
+    }
+</style>
 
-    <MudDivider Vertical="true" FlexItem="true" Light="@_lightDivider"/>
+<DemoPageLayout Title="Divider"
+                Description="A thin line that groups content in lists and layouts. Only use dividers if items can't be grouped with open space. Use dividers to group things, not separate individual items."
+                Variant="DemoPageLayoutVariant.Horizontal">
+    <Preview>
+        <MudPaper Class="divider-preview d-flex flex-column justify-center"
+                  Elevation="1"
+                  Style="width: 100%; position: relative;">
+            @if (!_verticalDivider && _example == DividerExample.List)
+            {
+                <MudList T="string" Class="w-100">
+                    <MudListItem>Inbox</MudListItem>
+                    <MudDivider DividerType="@_dividerType"
+                                Light="@_lightDivider" />
+                    <MudListItem>Sent</MudListItem>
+                    <MudDivider DividerType="@_dividerType"
+                                Light="@_lightDivider" />
+                    <MudListItem>Drafts</MudListItem>
+                    <MudDivider DividerType="@_dividerType"
+                                Light="@_lightDivider" />
+                    <MudListItem>Spam</MudListItem>
+                </MudList>
+            }
+            else if (!_verticalDivider && _example == DividerExample.Inset)
+            {
+                <MudList T="string" Class="w-100">
+                    <MudListItem Icon="@Icons.Material.Filled.TrendingUp">Trending</MudListItem>
+                    <MudDivider DividerType="@_dividerType"
+                                Light="@_lightDivider" />
+                    <MudListItem Icon="@Icons.Material.Filled.StarRate">Most Stars</MudListItem>
+                    <MudDivider DividerType="@_dividerType"
+                                Light="@_lightDivider" />
+                    <MudListItem Icon="@Icons.Material.Filled.History">History</MudListItem>
+                </MudList>
+            }
+            else if (!_verticalDivider && _example == DividerExample.Middle)
+            {
+                <MudCard Style="width: 100%;">
+                    <MudCardContent>
+                        <MudText Typo="Typo.h5">Uranium-235</MudText>
+                        <MudText Class="mt-4">This is the type of uranium used in the RBMK reactors.</MudText>
+                        <MudDivider DividerType="@_dividerType"
+                                    Light="@_lightDivider"
+                                    Class="my-4" />
+                        <MudText Typo="Typo.h6">Select Reactor Type</MudText>
+                        <div class="d-flex flex-wrap gap-2 mt-3">
+                            <MudChip T="string" Color="Color.Primary">RBMK-1000</MudChip>
+                            <MudChip T="string">RBMK-1500</MudChip>
+                            <MudChip T="string">RBMKP-2400</MudChip>
+                        </div>
+                    </MudCardContent>
+                    <MudCardActions>
+                        <MudButton Color="Color.Primary">READ MORE</MudButton>
+                    </MudCardActions>
+                </MudCard>
+            }
+            else
+            {
+                <MudPaper Square="true"
+                          Class="d-flex justify-space-around w-100">
+                    <MudIconButton Icon="@Icons.Material.Filled.FormatAlignRight" Color="Color.Dark" Class="rounded-0" />
+                    <MudIconButton Icon="@Icons.Material.Filled.FormatAlignCenter" Color="Color.Dark" Class="rounded-0" />
+                    <MudIconButton Icon="@Icons.Material.Filled.FormatAlignLeft" Color="Color.Dark" Class="rounded-0" />
+                    <MudDivider Vertical="true"
+                                FlexItem="true"
+                                Light="@_lightDivider"
+                                Class="divider-vertical" />
+                    <MudIconButton Icon="@Icons.Material.Filled.FormatBold" Color="Color.Dark" Class="rounded-0" />
+                    <MudIconButton Icon="@Icons.Material.Filled.FormatItalic" Color="Color.Dark" Class="rounded-0" />
+                    <MudIconButton Icon="@Icons.Material.Filled.FormatUnderlined" Color="Color.Dark" Class="rounded-0" />
+                </MudPaper>
+            }
+        </MudPaper>
+    </Preview>
 
-    <MudIconButton Icon="@Icons.Material.Filled.FormatBold" Color="Color.Dark" Class="rounded-0" />
-    <MudIconButton Icon="@Icons.Material.Filled.FormatItalic" Color="Color.Dark" Class="rounded-0" />
-    <MudIconButton Icon="@Icons.Material.Filled.FormatUnderlined" Color="Color.Dark" Class="rounded-0" />
-</MudPaper>
+    <Options>
+        <MudGrid Spacing="4" Class="w-100">
+            <MudItem xs="12">
+                <MudText Typo="Typo.subtitle2">Example</MudText>
+                <MudRadioGroup T="DividerExample"
+                               Value="@_example"
+                               ValueChanged="ApplyExample"
+                               Class="divider-example-group d-flex flex-wrap">
+                    <MudRadio T="DividerExample" Value="DividerExample.List" Color="Color.Primary">
+                        List
+                    </MudRadio>
+                    <MudRadio T="DividerExample" Value="DividerExample.Inset" Color="Color.Primary">
+                        Inset
+                    </MudRadio>
+                    <MudRadio T="DividerExample" Value="DividerExample.Middle" Color="Color.Primary">
+                        Middle
+                    </MudRadio>
+                    <MudRadio T="DividerExample" Value="DividerExample.Vertical" Color="Color.Primary">
+                        Vertical
+                    </MudRadio>
+                </MudRadioGroup>
+            </MudItem>
+
+            <MudItem xs="12">
+                <MudSelect T="DividerType"
+                           Label="Divider Type"
+                           @bind-Value="_dividerType"
+                           Disabled="@_verticalDivider">
+                    <MudSelectItem Value="DividerType.FullWidth">Full Width</MudSelectItem>
+                    <MudSelectItem Value="DividerType.Inset">Inset</MudSelectItem>
+                    <MudSelectItem Value="DividerType.Middle">Middle</MudSelectItem>
+                </MudSelect>
+            </MudItem>
+
+            <MudItem xs="12">
+                <div class="d-flex flex-wrap align-center justify-start" style="column-gap: 12px;">
+                    <MudCheckBox @bind-Value="_lightDivider" Label="Light" Color="Color.Primary" />
+                </div>
+            </MudItem>
+
+        </MudGrid>
+    </Options>
+</DemoPageLayout>
 
 @code {
-    private bool _lightDivider = false;
+    private DividerExample _example = DividerExample.List;
+    private DividerType _dividerType = DividerType.FullWidth;
+    private bool _lightDivider;
+    private bool _verticalDivider;
+
+    private void ApplyExample(DividerExample example)
+    {
+        _example = example;
+        _verticalDivider = example == DividerExample.Vertical;
+        _dividerType = example switch
+        {
+            DividerExample.Inset => DividerType.Inset,
+            DividerExample.Middle => DividerType.Middle,
+            _ => DividerType.FullWidth
+        };
+    }
+
+    private enum DividerExample
+    {
+        List,
+        Inset,
+        Middle,
+        Vertical
+    }
+
 }

@@ -2,7 +2,7 @@
 @using MudBlazor
 
 <DemoPageLayout Title="Breadcrumbs"
-                Description="Represents a series of links used to show the user's current location."
+                Description="Breadcrumbs show a navigation trail of links marking the user's current location within a page hierarchy."
                 Variant="DemoPageLayoutVariant.Vertical">
     <Preview>
         <div class="d-flex justify-center w-100">
@@ -126,7 +126,7 @@
             }
 
             <MudItem xs="12">
-                <div class="d-flex flex-wrap align-center justify-start" style="column-gap: 16px; row-gap: 4px;">
+                <div class="d-flex flex-wrap align-center justify-start" style="column-gap: 12px;">
                     <MudCheckBox @bind-Value="_showIcons"
                                  Label="Show Icons"
                                  Color="Color.Primary" />
