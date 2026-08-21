@@ -1,96 +1,231 @@
 @page "/components/checkbox"
 @using MudBlazor
 
-<!-- Controls -->
-<MudPaper Class="pa-3 mb-3" Elevation="0">
-    <MudStack Spacing="2">
+<DemoPageLayout Title="Checkbox"
+                Description="A form input for boolean values or selecting multiple items in a list. Use checkboxes (instead of switches or radio buttons) if multiple options can be selected from a list."
+                Variant="DemoPageLayoutVariant.Horizontal">
+    <Preview>
+        <MudPaper Class="w-100 pa-4 d-flex flex-column align-center gap-4" Elevation="1">
+            <div class="d-flex flex-wrap justify-center align-center" style="column-gap: 24px; row-gap: 0;">
+                <MudCheckBox T="bool" @bind-Value="Label_CheckBox1" Label="Default" Color="_color" Size="_size"
+                             UncheckedColor="_uncheckedColor" CheckedIcon="@CheckedIcon" UncheckedIcon="@UncheckedIcon"
+                             Dense="_dense" ReadOnly="_readOnly" Disabled="_disabled" KeyboardEnabled="_keyboardEnabled"
+                             LabelPlacement="_placement" />
+                <MudCheckBox T="bool" @bind-Value="Label_CheckBox2" Label="Primary" Color="Color.Primary" Size="_size"
+                             Dense="_dense" ReadOnly="_readOnly" LabelPlacement="_placement" />
+                <MudCheckBox T="bool" @bind-Value="Label_CheckBox3" Label="Secondary" Color="Color.Secondary"
+                             Size="_size" Dense="_dense" ReadOnly="_readOnly" LabelPlacement="Placement.Start" />
+                <MudCheckBox T="bool" @bind-Value="Label_CheckBoxDisabled" Disabled="true" Label="Disabled"
+                             Size="_size" Dense="_dense" LabelPlacement="Placement.Start" />
+            </div>
 
-        <MudGrid>
+            <MudDivider Class="w-100" />
+
+            <div class="d-flex flex-wrap justify-center align-center" style="column-gap: 16px; row-gap: 0;">
+                @if (_triState)
+                {
+                    <MudCheckBox T="bool?" @bind-Value="_tri" TriState="true" Color="_color"
+                                 UncheckedColor="_uncheckedColor" IndeterminateIcon="@IndeterminateIcon" Size="_size"
+                                 Dense="_dense" ReadOnly="_readOnly" Disabled="_disabled" KeyboardEnabled="_keyboardEnabled"
+                                 LabelPlacement="_placement" Label="Tri-state" />
+                }
+                else
+                {
+                    <MudCheckBox T="bool" @bind-Value="_binary" Color="_color" UncheckedColor="_uncheckedColor"
+                                 Size="_size" Dense="_dense" ReadOnly="_readOnly" Disabled="_disabled"
+                                 KeyboardEnabled="_keyboardEnabled" LabelPlacement="_placement"
+                                 Label="Standard" />
+                }
+                <MudText>Value: @(_tri is null ? "null" : _tri.Value ? "true" : "false")</MudText>
+                <MudButton Variant="Variant.Text" OnClick="@(() => _tri = null)">Reset</MudButton>
+            </div>
+
+            <MudDivider Class="w-100" />
+
+            <MudForm @ref="_validationForm">
+                <div class="d-flex flex-wrap justify-center align-center" style="column-gap: 16px; row-gap: 0;">
+                    <MudCheckBox T="bool?" @bind-Value="_validationValue" TriState="true"
+                                 Required="@_required" RequiredError="@_requiredError"
+                                 Error="@_error" ErrorText="@_errorText" Label="Validation checkbox" />
+                    <MudButton Variant="Variant.Outlined" OnClick="ValidateCheckbox">Validate</MudButton>
+                    <MudButton Variant="Variant.Text" OnClick="ResetCheckboxValidation">Reset</MudButton>
+                    <MudText Typo="Typo.caption">@_validationState</MudText>
+                </div>
+                @if (_error && !string.IsNullOrWhiteSpace(_errorText))
+                {
+                    <MudText Color="Color.Error" Typo="Typo.caption" Class="w-100 text-center">@_errorText</MudText>
+                }
+                else if (_required && _validationState == "Invalid" && !string.IsNullOrWhiteSpace(_requiredError))
+                {
+                    <MudText Color="Color.Error" Typo="Typo.caption" Class="w-100 text-center">@_requiredError</MudText>
+                }
+            </MudForm>
+        </MudPaper>
+    </Preview>
+
+    <Options>
+        <MudGrid Spacing="4" Class="w-100">
             <MudItem xs="12" sm="6">
-                <MudSelect T="Color" Label="Color" @bind-Value="_color" Dense="true">
-                    @foreach (Color c in Enum.GetValues(typeof(Color)))
+                <MudSelect T="Color" Label="Color" @bind-Value="_color" Class="w-100">
+                    @foreach (Color color in Enum.GetValues(typeof(Color)))
                     {
-                        <MudSelectItem Value="@c">@c</MudSelectItem>
+                        <MudSelectItem Value="@color">@color</MudSelectItem>
                     }
                 </MudSelect>
             </MudItem>
 
             <MudItem xs="12" sm="6">
-                <MudSelect T="Size" Label="Size" @bind-Value="_size" Dense="true">
+                <MudSelect T="Size" Label="Size" @bind-Value="_size" Class="w-100">
                     <MudSelectItem Value="@Size.Small">Small</MudSelectItem>
                     <MudSelectItem Value="@Size.Medium">Medium</MudSelectItem>
                     <MudSelectItem Value="@Size.Large">Large</MudSelectItem>
                 </MudSelect>
             </MudItem>
+
+            <MudItem xs="12" sm="6">
+                <MudSelect T="Color?" Label="Unchecked color" @bind-Value="_uncheckedColor" Class="w-100">
+                    <MudSelectItem Value="@((Color?)null)">Default</MudSelectItem>
+                    @foreach (Color color in Enum.GetValues(typeof(Color)))
+                    {
+                        <MudSelectItem Value="@((Color?)color)">@color</MudSelectItem>
+                    }
+                </MudSelect>
+            </MudItem>
+
+            <MudItem xs="12" sm="6">
+                <MudSelect T="CheckboxIconPreset" Label="Checked icon" @bind-Value="_checkedIconPreset" Class="w-100">
+                    <MudSelectItem Value="@CheckboxIconPreset.Default">Default</MudSelectItem>
+                    <MudSelectItem Value="@CheckboxIconPreset.CheckCircle">Check circle</MudSelectItem>
+                    <MudSelectItem Value="@CheckboxIconPreset.Star">Star</MudSelectItem>
+                </MudSelect>
+            </MudItem>
+
+            <MudItem xs="12" sm="6">
+                <MudSelect T="CheckboxIconPreset" Label="Unchecked icon" @bind-Value="_uncheckedIconPreset" Class="w-100">
+                    <MudSelectItem Value="@CheckboxIconPreset.Default">Default</MudSelectItem>
+                    <MudSelectItem Value="@CheckboxIconPreset.RadioButtonUnchecked">Radio button unchecked</MudSelectItem>
+                    <MudSelectItem Value="@CheckboxIconPreset.Remove">Remove</MudSelectItem>
+                </MudSelect>
+            </MudItem>
+
+            <MudItem xs="12" sm="6">
+                <MudSelect T="CheckboxIconPreset" Label="Indeterminate icon" @bind-Value="_indeterminateIconPreset" Class="w-100">
+                    <MudSelectItem Value="@CheckboxIconPreset.Default">Default</MudSelectItem>
+                    <MudSelectItem Value="@CheckboxIconPreset.Remove">Remove</MudSelectItem>
+                    <MudSelectItem Value="@CheckboxIconPreset.HorizontalRule">Horizontal rule</MudSelectItem>
+                </MudSelect>
+            </MudItem>
+
+            <MudItem xs="12">
+                <MudText Typo="Typo.caption">Label placement</MudText>
+                <MudRadioGroup T="Placement" @bind-Value="_placement">
+                    <div class="d-flex flex-wrap align-center" style="column-gap: 12px; row-gap: 0;">
+                        <MudRadio Value="Placement.Top">Top</MudRadio>
+                        <MudRadio Value="Placement.Bottom">Bottom</MudRadio>
+                        <MudRadio Value="Placement.Start">Start</MudRadio>
+                        <MudRadio Value="Placement.End">End</MudRadio>
+                    </div>
+                </MudRadioGroup>
+            </MudItem>
+
+            <MudItem xs="12">
+                <div class="d-flex flex-wrap align-center justify-start" style="column-gap: 12px; row-gap: 0;">
+                    <MudSwitch Color="Color.Primary" @bind-Value="_dense" Label="Dense" />
+                    <MudSwitch Color="Color.Primary" @bind-Value="_readOnly" Label="Read only" />
+                    <MudSwitch Color="Color.Primary" @bind-Value="_triState" Label="Tri-state" />
+                    <MudSwitch Color="Color.Primary" @bind-Value="_disabled" Label="Disabled" />
+                    <MudSwitch Color="Color.Primary" @bind-Value="_keyboardEnabled" Label="Keyboard enabled" />
+                </div>
+            </MudItem>
+
+            <MudItem xs="12">
+                <MudText Typo="Typo.caption">Validation</MudText>
+                <div class="d-flex flex-wrap align-center justify-start" style="column-gap: 12px; row-gap: 0;">
+                    <MudSwitch Color="Color.Primary" @bind-Value="_required" Label="Required" />
+                    <MudSwitch Color="Color.Primary" @bind-Value="_error" Label="Error" />
+                </div>
+            </MudItem>
+
+            <MudItem xs="12" sm="6">
+                <MudTextField T="string" Label="Error text" @bind-Value="_errorText" Clearable Class="w-100" />
+            </MudItem>
+
+            <MudItem xs="12" sm="6">
+                <MudTextField T="string" Label="Required error" @bind-Value="_requiredError" Clearable Class="w-100" />
+            </MudItem>
         </MudGrid>
-
-        <MudStack Row Spacing="2" Class="align-center">
-            <MudSwitch Color="Color.Primary" @bind-Value="_dense" Label="Dense" />
-            <MudSwitch Color="Color.Primary" @bind-Value="_readOnly" Label="ReadOnly" />
-        </MudStack>
-
-        <!-- Content (label) placement like the screenshot -->
-        <MudText Typo="Typo.subtitle2">Content (Label) placement</MudText>
-        <MudRadioGroup @bind-Value="_placement">
-            <MudRadio Value="Placement.Top">Top</MudRadio>
-            <MudRadio Value="Placement.Bottom">Bottom</MudRadio>
-            <MudRadio Value="Placement.Start">Start (Left)</MudRadio>
-            <MudRadio Value="Placement.End">End (Right)</MudRadio>
-        </MudRadioGroup>
-
-    </MudStack>
-</MudPaper>
-
-<!-- Preview using selected options -->
-<MudPaper Class="pa-3 mb-3" Elevation="0">
-    <MudText Typo="Typo.subtitle1" Class="mb-2" Style="font-weight: 600;">Preview</MudText>
-
-    <MudStack Spacing="1">
-
-        <MudCheckBox T="bool" @bind-Value="Label_CheckBox1" Label="Default" Color="_color" Size="_size" Dense="_dense"
-            ReadOnly="_readOnly" LabelPlacement="_placement" />
-
-        <MudCheckBox T="bool" @bind-Value="Label_CheckBox2" Label="Primary" Color="Color.Primary" Size="_size"
-            Dense="_dense" ReadOnly="_readOnly" LabelPlacement="_placement" />
-
-        <MudCheckBox T="bool" @bind-Value="Label_CheckBox3" Label="Secondary (Start/Left)" Color="Color.Secondary"
-            Size="_size" Dense="_dense" ReadOnly="_readOnly" LabelPlacement="Placement.Start" />
-
-        <MudCheckBox T="bool" @bind-Value="Label_CheckBoxDisabled" Disabled="true" Label="Disabled" Size="_size"
-            Dense="_dense" LabelPlacement="Placement.Start" />
-    </MudStack>
-</MudPaper>
-
-<!-- Indeterminate (tri-state) demo -->
-<MudPaper Class="pa-3">
-    <MudText Typo="Typo.subtitle1" Class="mb-2">Indeterminate state</MudText>
-
-    <MudStack Row Spacing="2" Class="align-center">
-        <MudCheckBox T="bool?" @bind-Value="_tri" TriState="true" Color="_color" Size="_size" Dense="_dense"
-            ReadOnly="_readOnly" LabelPlacement="_placement" Label="Tri-state checkbox" />
-
-        <MudText>Value:
-            @(_tri is null ? "null" : _tri!.Value ? "true" : "false")
-        </MudText>
-
-        <MudButton Variant="Variant.Text" OnClick="@(() => _tri = null)">Reset to null</MudButton>
-    </MudStack>
-</MudPaper>
+    </Options>
+</DemoPageLayout>
 
 @code {
-    // Bindings for preview checkboxes
-    public bool Label_CheckBox1 { get; set; } = true;
-    public bool Label_CheckBox2 { get; set; } = false;
-    public bool Label_CheckBox3 { get; set; } = false;
-    public bool Label_CheckBoxDisabled { get; set; } = false;
+    private bool Label_CheckBox1 = true;
+    private bool Label_CheckBox2;
+    private bool Label_CheckBox3;
+    private bool Label_CheckBoxDisabled;
 
-    // Controls
     private Color _color = Color.Default;
+    private Color? _uncheckedColor;
     private Size _size = Size.Medium;
-    private bool _dense = false;
-    private bool _readOnly = false;
-    private Placement _placement = Placement.End; // Start (Left) by default
+    private bool _dense;
+    private bool _readOnly;
+    private bool _triState;
+    private bool _disabled;
+    private bool _keyboardEnabled = true;
+    private Placement _placement = Placement.End;
+    private bool _binary;
+    private bool? _tri;
+    private MudForm? _validationForm;
+    private bool? _validationValue;
+    private bool _required;
+    private bool _error;
+    private string? _errorText;
+    private string _requiredError = "Required";
+    private string _validationState = "Not validated";
+    private CheckboxIconPreset _checkedIconPreset;
+    private CheckboxIconPreset _uncheckedIconPreset;
+    private CheckboxIconPreset _indeterminateIconPreset;
 
-    // Tri-state value
-    private bool? _tri = null;
+    private string? CheckedIcon => GetIcon(_checkedIconPreset, Icons.Material.Filled.CheckBox);
+    private string? UncheckedIcon => GetIcon(_uncheckedIconPreset, Icons.Material.Filled.CheckBoxOutlineBlank);
+    private string? IndeterminateIcon => GetIcon(_indeterminateIconPreset, Icons.Material.Filled.IndeterminateCheckBox);
+
+    private static string? GetIcon(CheckboxIconPreset preset, string defaultIcon) => preset switch
+    {
+        CheckboxIconPreset.Default => defaultIcon,
+        CheckboxIconPreset.CheckCircle => Icons.Material.Filled.CheckCircle,
+        CheckboxIconPreset.Star => Icons.Material.Filled.Star,
+        CheckboxIconPreset.RadioButtonUnchecked => Icons.Material.Filled.RadioButtonUnchecked,
+        CheckboxIconPreset.Remove => Icons.Material.Filled.Remove,
+        CheckboxIconPreset.HorizontalRule => Icons.Material.Filled.HorizontalRule,
+        _ => defaultIcon
+    };
+
+    private enum CheckboxIconPreset
+    {
+        Default,
+        CheckCircle,
+        Star,
+        RadioButtonUnchecked,
+        Remove,
+        HorizontalRule
+    }
+
+    private async Task ValidateCheckbox()
+    {
+        if (_validationForm is null)
+            return;
+
+        await _validationForm.ValidateAsync();
+        _validationState = !_error && _validationForm.IsValid ? "Valid" : "Invalid";
+    }
+
+    private async Task ResetCheckboxValidation()
+    {
+        if (_validationForm is null)
+            return;
+
+        _validationValue = null;
+        await _validationForm.ResetValidationAsync();
+        _validationState = "Not validated";
+    }
 }
