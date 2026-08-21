@@ -586,3 +586,36 @@ Updated [`Pages/Components/Navigation/MudLinkDemo.razor`](./Pages/Components/Nav
 - Removed the unnecessary click-handler option from the link controls
 - Added the MudExitPrompt demo with its supported configuration options
 - Added Exit Prompt to the navigation menu under Drawer
+
+## 2026-08-21
+
+### MudPaper Demo Migration
+
+Updated [`Pages/Components/Layout/MudPaperDemo.razor`](./Pages/Components/Layout/MudPaperDemo.razor):
+
+- Migrated the Paper demo to the shared horizontal layout
+- Added a centered live preview with configurable elevation, outline, square shape, width, and height
+- Applied the MudPaper API default values
+- Preserved width presets and added clearable dimension fields
+
+### MudExpansion Panels Demo
+
+Updated [`Pages/Components/DataDisplay/MudExpansionPanelsDemo.razor`](./Pages/Components/DataDisplay/MudExpansionPanelsDemo.razor):
+
+- Added header content modes for plain text, custom icon content, and an icon with badge
+- Added expansion icon presets, including the API-default `ExpandMore` icon
+- Added async data loading, selectable panel disabling, initial expansion, maximum height, and keep-content-alive controls
+- Renamed the API-aligned option to `Hide icon`
+- Applied the shared Dense setting to each panel so headers and content use compact spacing consistently
+- Corrected the `Outlined` default to `true` according to MudBlazor 9.6.0
+
+## 2026-08-22
+
+### MudCheckbox Validation Controls
+
+Updated [`Pages/Components/Inputs/MudCheckBoxDemo.razor`](./Pages/Components/Inputs/MudCheckBoxDemo.razor):
+
+- Added a dedicated nullable tri-state validation checkbox example
+- Added Required and Error controls with configurable error messages
+- Added Validate and Reset actions with validation status feedback
+- Added explicit error-message rendering for reliable visual feedback
