@@ -26,10 +26,10 @@
                     EndIcon="@SelectedEndIcon"
                     Label="@_label"
                     Size="@_fabSize"
-                    DropShadow="@_dropShadow" />
+                    DropShadow="@_dropShadow"
+                    Disabled="@_disabled" />
 
             <MudFab StartIcon="@Icons.Material.Filled.Save"
-                    Disabled="@_disabled"
                     Size="@_fabSize"
                     DropShadow="@_dropShadow" />
         </div>
@@ -67,7 +67,7 @@
 
             <MudItem xs="12" md="6">
                 <MudTextField Label="Extended Label"
-                              @bind-Value="_label" />
+                              @bind-Value="_label" ShrinkLabel="true" Clearable="true"/>
             </MudItem>
 
             <MudItem xs="12" md="6">
@@ -99,7 +99,7 @@
             <MudItem xs="12">
                 <div class="d-flex flex-wrap align-center justify-start" style="column-gap: 12px;">
                     <MudCheckBox @bind-Value="_dropShadow" Label="Drop Shadow" Color="Color.Primary" />
-                    <MudCheckBox @bind-Value="_disabled" Label="Disable Save FAB" Color="Color.Primary" />
+                    <MudCheckBox @bind-Value="_disabled" Label="Disable Extended FAB" Color="Color.Primary" />
                 </div>
             </MudItem>
         </MudGrid>

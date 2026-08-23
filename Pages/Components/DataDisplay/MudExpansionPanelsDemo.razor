@@ -1,79 +1,256 @@
 @page "/components/expansionpanels"
 @using MudBlazor
 
-<!-- Controls -->
-<MudStack Row Spacing="2" Class="align-center">
-    <MudCheckBox @bind-Value="_multi" Label="MultiExpansion" />
-    <MudCheckBox @bind-Value="_dense" Label="Dense" />
-    <MudCheckBox @bind-Value="_gutters" Label="Gutters" />
-    <MudCheckBox @bind-Value="_outlined" Label="Outlined" />
-    <MudCheckBox @bind-Value="_square" Label="Square" />
-    <MudCheckBox @bind-Value="_hideIcon" Label="Hide Icon" />
-    <div class="ml-4" style="min-width:240px;">
-        <MudSlider @bind-Value="_elevation" Min="0" Max="25" Step="1" Color="Color.Info">Elevation: @_elevation
-        </MudSlider>
-    </div>
-</MudStack>
+<DemoPageLayout Title="Expansion Panels"
+                Description="A container which manages MudExpansionPanel components such that when one panel is expanded the others are collapsed automatically."
+                Variant="DemoPageLayoutVariant.Horizontal">
+    <Preview>
+        <MudExpansionPanels Class="w-100"
+                            MultiExpansion="@_multi"
+                            Dense="@_dense"
+                            Outlined="@_outlined"
+                            Elevation="@_elevation"
+                            Square="@_square"
+                            Gutters="@_gutters">
+            <MudExpansionPanel Text="Jedi Council"
+                                Icon="@ExpansionIcon"
+                                HideIcon="@_hideEndIcon"
+                                Dense="@_dense"
+                                Disabled="@IsPanelDisabled(ExpansionPanelChoice.JediCouncil)"
+                                Expanded="@IsPanelExpanded(ExpansionPanelChoice.JediCouncil)"
+                                KeepContentAlive="@_keepContentAlive"
+                                MaxHeight="@MaxPanelHeight"
+                                TitleContent="@HeaderContent">
+                <ChildContent>Panel content</ChildContent>
+            </MudExpansionPanel>
 
-<!-- Panels -->
-<MudExpansionPanels Class="mt-5" MultiExpansion="_multi" Dense="_dense" Outlined="_outlined" Elevation="_elevation"
-    Square="_square" Gutters="@_gutters">
+            <MudExpansionPanel Text="Clone Army"
+                                Icon="@ExpansionIcon"
+                                HideIcon="@_hideEndIcon"
+                                Dense="@_dense"
+                                Disabled="@IsPanelDisabled(ExpansionPanelChoice.CloneArmy)"
+                                Expanded="@IsPanelExpanded(ExpansionPanelChoice.CloneArmy)"
+                                KeepContentAlive="@_keepContentAlive"
+                                MaxHeight="@MaxPanelHeight">
+                <MudText Class="mb-2">
+                    Clones bred on Kamino, commanded by the Republic's generals.
+                </MudText>
+                <MudList T="string" Dense="@_dense">
+                    <MudListItem T="string">CT-5555 "Fives"</MudListItem>
+                    <MudListItem T="string">CC-2224 "Cody"</MudListItem>
+                    <MudListItem T="string">CT-7567 "Rex"</MudListItem>
+                </MudList>
+            </MudExpansionPanel>
 
-    <MudExpansionPanel Text="Jedi Council" HideIcon="_hideIcon">
-        <TitleContent>
-            <div class="d-flex">
-                <MudIcon Icon="@Icons.Material.Filled.Info" class="mr-3"></MudIcon>
-                <MudText>Panel header as <strong>RenderFragment</strong></MudText>
-            </div>
-        </TitleContent>
+            <MudExpansionPanel Text="Sith"
+                                Icon="@ExpansionIcon"
+                                HideIcon="@_hideEndIcon"
+                                Dense="@_dense"
+                                Disabled="@IsPanelDisabled(ExpansionPanelChoice.Sith)"
+                                Expanded="@IsPanelExpanded(ExpansionPanelChoice.Sith)"
+                                KeepContentAlive="@_keepContentAlive"
+                                MaxHeight="@MaxPanelHeight">
+                <MudText Class="mb-2">
+                    Always two there are: a master and an apprentice.
+                </MudText>
+                <MudList T="string" Dense="@_dense">
+                    <MudListItem T="string">Darth Sidious</MudListItem>
+                    <MudListItem T="string">Darth Vader</MudListItem>
+                </MudList>
+            </MudExpansionPanel>
 
-        <ChildContent>
-            Panel Content
-        </ChildContent>
-    </MudExpansionPanel>
+            <MudExpansionPanel Text="Async Data"
+                                Icon="@ExpansionIcon"
+                                HideIcon="@_hideEndIcon"
+                                Dense="@_dense"
+                                Disabled="@IsPanelDisabled(ExpansionPanelChoice.AsyncData)"
+                                Expanded="@IsPanelExpanded(ExpansionPanelChoice.AsyncData)"
+                                KeepContentAlive="@_keepContentAlive"
+                                MaxHeight="@MaxPanelHeight"
+                                ExpandedChanged="OnAsyncPanelExpanded">
+                @if (!_asyncLoading)
+                {
+                    <MudText>Enable async loading to fetch panel data when this section opens.</MudText>
+                }
+                else if (_asyncPanelLoading)
+                {
+                    <div class="d-flex align-center ga-3">
+                        <MudProgressCircular Indeterminate="true" Size="Size.Small" />
+                        <MudText>Loading data...</MudText>
+                    </div>
+                }
+                else
+                {
+                    <MudList T="string" Dense="@_dense">
+                        @foreach (var item in _asyncItems)
+                        {
+                            <MudListItem T="string">@item</MudListItem>
+                        }
+                    </MudList>
+                }
+            </MudExpansionPanel>
+        </MudExpansionPanels>
+    </Preview>
 
-    <MudExpansionPanel Text="Clone Army" HideIcon="_hideIcon">
-        <MudText Class="mb-2">
-            Clones bred on Kamino, commanded by the Republic’s generals.
-        </MudText>
+    <Options>
+        <MudGrid Spacing="4" Class="w-100">
+            <MudItem xs="12">
+                <MudSelect T="HeaderIconMode" @bind-Value="_headerIconMode" Label="Header icon">
+                    <MudSelectItem Value="@HeaderIconMode.Default">Default</MudSelectItem>
+                    <MudSelectItem Value="@HeaderIconMode.Custom">Custom header icon</MudSelectItem>
+                    <MudSelectItem Value="@HeaderIconMode.Badge">MudIcon with badge</MudSelectItem>
+                </MudSelect>
+            </MudItem>
 
-        <MudList T="string" Dense="_dense">
-            <MudListItem T="string">CT-5555 “Fives”</MudListItem>
-            <MudListItem T="string">CC-2224 “Cody”</MudListItem>
-            <MudListItem T="string">CT-7567 “Rex”</MudListItem>
-        </MudList>
-    </MudExpansionPanel>
+            <MudItem xs="12">
+                <MudSelect T="ExpansionIconPreset" @bind-Value="_expansionIconPreset" Label="Expansion icon">
+                    <MudSelectItem Value="@ExpansionIconPreset.Default">Default</MudSelectItem>
+                    <MudSelectItem Value="@ExpansionIconPreset.Add">Add</MudSelectItem>
+                    <MudSelectItem Value="@ExpansionIconPreset.ChevronRight">Chevron right</MudSelectItem>
+                    <MudSelectItem Value="@ExpansionIconPreset.KeyboardArrowDown">Keyboard arrow down</MudSelectItem>
+                </MudSelect>
+            </MudItem>
 
-    <MudExpansionPanel Text="Sith" HideIcon="_hideIcon">
-        <MudText Class="mb-2">
-            Always two there are: a master and an apprentice.
-        </MudText>
+            <MudItem xs="12">
+                <MudSlider T="int" @bind-Value="_elevation" Min="0" Max="24" Step="1" Color="Color.Primary">
+                    Elevation: @_elevation
+                </MudSlider>
+            </MudItem>
 
-        <MudList T="string" Dense="_dense">
-            <MudListItem T="string">Darth Sidious</MudListItem>
-            <MudListItem T="string">Darth Vader</MudListItem>
-        </MudList>
-    </MudExpansionPanel>
+            <MudItem xs="12">
+                <MudSlider T="int" @bind-Value="_maxHeight" Min="0" Max="600" Step="10" Color="Color.Primary">
+                    Max height: @(_maxHeight == 0 ? "Default" : $"{_maxHeight}px")
+                </MudSlider>
+            </MudItem>
 
-    <MudExpansionPanel Text="Watermelon" HideIcon="_hideIcon" Disabled="true">
-        <MudText Class="mb-2">
-            Watermelon sugar high
-        </MudText>
+            <MudItem xs="12">
+                <MudSelect T="ExpansionPanelChoice" @bind-Value="_initiallyExpandedPanel" Label="Initially expanded panel">
+                    <MudSelectItem Value="@ExpansionPanelChoice.None">None</MudSelectItem>
+                    <MudSelectItem Value="@ExpansionPanelChoice.JediCouncil">Jedi Council</MudSelectItem>
+                    <MudSelectItem Value="@ExpansionPanelChoice.CloneArmy">Clone Army</MudSelectItem>
+                    <MudSelectItem Value="@ExpansionPanelChoice.Sith">Sith</MudSelectItem>
+                    <MudSelectItem Value="@ExpansionPanelChoice.AsyncData">Async Data</MudSelectItem>
+                </MudSelect>
+            </MudItem>
 
-        <MudList T="string" Dense="_dense">
-            <MudListItem T="string">Apple</MudListItem>
-            <MudListItem T="string">Kiwi</MudListItem>
-        </MudList>
-    </MudExpansionPanel>
+            <MudItem xs="12">
+                <div class="d-flex flex-wrap align-center justify-start" style="column-gap: 12px; row-gap: 0;">
+                    <MudCheckBox @bind-Value="_multi" Label="Multi expansion" Color="Color.Primary" />
+                    <MudCheckBox @bind-Value="_dense" Label="Dense" Color="Color.Primary" />
+                    <MudCheckBox @bind-Value="_gutters" Label="Gutters" Color="Color.Primary" />
+                    <MudCheckBox @bind-Value="_outlined" Label="Outlined" Color="Color.Primary" />
+                    <MudCheckBox @bind-Value="_square" Label="Square" Color="Color.Primary" />
+                    <MudCheckBox @bind-Value="_hideEndIcon" Label="Hide icon" Color="Color.Primary" />
+                    <MudCheckBox @bind-Value="_keepContentAlive" Label="Keep content alive" Color="Color.Primary" />
+                    <MudCheckBox @bind-Value="_asyncLoading" Label="Async loading of data" Color="Color.Primary" />
+                    <MudCheckBox @bind-Value="_disablePanel" Label="Disable panel" Color="Color.Primary" />
+                </div>
+            </MudItem>
 
-</MudExpansionPanels>
+            @if (_disablePanel)
+            {
+                <MudItem xs="12">
+                    <MudSelect T="ExpansionPanelChoice" @bind-Value="_disabledPanel" Label="Panel to disable">
+                        <MudSelectItem Value="@ExpansionPanelChoice.JediCouncil">Jedi Council</MudSelectItem>
+                        <MudSelectItem Value="@ExpansionPanelChoice.CloneArmy">Clone Army</MudSelectItem>
+                        <MudSelectItem Value="@ExpansionPanelChoice.Sith">Sith</MudSelectItem>
+                        <MudSelectItem Value="@ExpansionPanelChoice.AsyncData">Async Data</MudSelectItem>
+                    </MudSelect>
+                </MudItem>
+            }
+        </MudGrid>
+    </Options>
+</DemoPageLayout>
 
 @code {
-    private bool _multi = false;
-    private bool _dense = false;
+    private bool _multi;
+    private bool _dense;
     private bool _gutters = true;
-    private bool _outlined = false;
-    private bool _hideIcon = false;
-    private bool _square = false;
+    private bool _outlined = true;
+    private bool _square;
+    private bool _hideEndIcon;
+    private bool _keepContentAlive;
+    private bool _disablePanel;
+    private bool _asyncLoading;
+    private bool _asyncPanelLoading;
+    private bool _asyncDataLoaded;
     private int _elevation = 1;
+    private int _maxHeight;
+    private HeaderIconMode _headerIconMode;
+    private ExpansionIconPreset _expansionIconPreset;
+    private ExpansionPanelChoice _initiallyExpandedPanel;
+    private ExpansionPanelChoice _disabledPanel = ExpansionPanelChoice.AsyncData;
+    private readonly List<string> _asyncItems = new();
+
+    private RenderFragment? HeaderContent => _headerIconMode switch
+    {
+        HeaderIconMode.Custom => @<div class="d-flex align-center">
+            <MudIcon Icon="@Icons.Material.Filled.Info" Class="mr-3" />
+            <MudText>Panel header as <strong>RenderFragment</strong></MudText>
+        </div>,
+        HeaderIconMode.Badge => @<div class="d-flex align-center">
+            <MudBadge Content="3" Color="Color.Primary" Overlap="true">
+                <MudIcon Icon="@Icons.Material.Filled.Info" />
+            </MudBadge>
+            <MudText Class="ml-4">Panel header with a badge icon</MudText>
+        </div>,
+        _ => null
+    };
+
+    private string? ExpansionIcon => _expansionIconPreset switch
+    {
+        ExpansionIconPreset.Default => Icons.Material.Filled.ExpandMore,
+        ExpansionIconPreset.Add => Icons.Material.Filled.Add,
+        ExpansionIconPreset.ChevronRight => Icons.Material.Filled.ChevronRight,
+        ExpansionIconPreset.KeyboardArrowDown => Icons.Material.Filled.KeyboardArrowDown,
+        _ => null
+    };
+
+    private bool IsPanelDisabled(ExpansionPanelChoice panel) => _disablePanel && _disabledPanel == panel;
+
+    private bool IsPanelExpanded(ExpansionPanelChoice panel) => _initiallyExpandedPanel == panel;
+
+    private int? MaxPanelHeight => _maxHeight == 0 ? null : _maxHeight;
+
+    private async Task OnAsyncPanelExpanded(bool expanded)
+    {
+        if (!expanded || !_asyncLoading || _asyncDataLoaded || _asyncPanelLoading)
+        {
+            return;
+        }
+
+        _asyncPanelLoading = true;
+        await InvokeAsync(StateHasChanged);
+        await Task.Delay(700);
+
+        _asyncItems.Clear();
+        _asyncItems.AddRange(["Loaded item one", "Loaded item two", "Loaded item three"]);
+        _asyncDataLoaded = true;
+        _asyncPanelLoading = false;
+        await InvokeAsync(StateHasChanged);
+    }
+
+    private enum HeaderIconMode
+    {
+        Default,
+        Custom,
+        Badge
+    }
+
+    private enum ExpansionIconPreset
+    {
+        Default,
+        Add,
+        ChevronRight,
+        KeyboardArrowDown
+    }
+
+    private enum ExpansionPanelChoice
+    {
+        None,
+        JediCouncil,
+        CloneArmy,
+        Sith,
+        AsyncData
+    }
 }
