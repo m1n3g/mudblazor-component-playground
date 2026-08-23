@@ -619,3 +619,12 @@ Updated [`Pages/Components/Inputs/MudCheckBoxDemo.razor`](./Pages/Components/Inp
 - Added Required and Error controls with configurable error messages
 - Added Validate and Reset actions with validation status feedback
 - Added explicit error-message rendering for reliable visual feedback
+
+## 2026-08-23
+
+### MudButtonFab Demo Update
+
+Updated [`Pages/Components/Buttons/MudButtonFabDemo.razor`](./Pages/Components/Buttons/MudButtonFabDemo.razor):
+
+- Reassigned the disable control from the save FAB to the fourth extended FAB
+- Renamed the option to `Disable Extended FAB` to match its behavior
