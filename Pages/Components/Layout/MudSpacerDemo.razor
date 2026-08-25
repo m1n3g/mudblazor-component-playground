@@ -1,12 +1,16 @@
 @page "/components/spacer"
 @using MudBlazor
 
-<MudPaper Class=" pa-4 align-start d-flex" Style="width: 250px;" Outlined="true">
-    <MudPaper Class="pa-3" Elevation="6">Item 1</MudPaper>
-    <MudSpacer />
-    <MudPaper Class="pa-3" Elevation="6">Item 2</MudPaper>
-</MudPaper>
+<DemoPageLayout Title="Spacer"
+                Description="The MudSpacer component simply expands and fills available space. Its size is dependent on the parent's size."
+                Variant="DemoPageLayoutVariant.PreviewOnly">
+    <Preview>
+        <MudPaper Class="pa-4 d-flex align-center w-100" Outlined="true" Style="max-width: 720px;">
+            <MudPaper Class="pa-3" Elevation="6">Item 1</MudPaper>
+            <MudSpacer />
+            <MudPaper Class="pa-3" Elevation="6">Item 2</MudPaper>
+        </MudPaper>
+    </Preview>
+</DemoPageLayout>
 
-@*
-    MudSpacer is shorthand for: <div class="flex-grow-1" />
-*@
+@* MudSpacer is shorthand for: <div class="flex-grow-1" /> *@
