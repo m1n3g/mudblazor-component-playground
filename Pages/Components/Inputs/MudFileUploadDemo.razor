@@ -3,229 +3,449 @@
 @implements IDisposable
 @using MudBlazor
 
-<!-- Top-center success alert -->
-@if (_showAlert)
-{
-    <MudAlert Severity="Severity.Success"
-              Variant="Variant.Filled"
-              Dense="true"
-              ShowCloseIcon="true"
-              CloseIconClicked="OnAlertClosed"
-              Class="top-center-alert">
-        @_alertText
-    </MudAlert>
-}
+<DemoPageLayout Title="File Upload"
+                Description="A form component that lets users upload one or more files. The component ships with a default button and drag-and-drop area plus a built-in SelectedTemplate to show the chosen files."
+                Variant="DemoPageLayoutVariant.Vertical">
+    <Preview>
+        <MudStack Spacing="3" Class="w-100">
+                           <MudFileUpload T="IReadOnlyList<IBrowserFile>"
+                           @ref="_fileUpload"
+                           FilesChanged="OnFilesChanged"
+                           AppendMultipleFiles="@_appendMultipleFiles"
+                           MaximumFileCount="@_maximumFileCount"
+                           MaxFileSize="@MaximumFileSizeBytes"
+                           Accept="@AcceptedFileTypes"
+                           Hidden="@_hidden"
+                           DragAndDrop="@_dragAndDrop"
+                           Disabled="@_disabled"
+                           Error="@_showError"
+                           ErrorText="@_errorText"
+                           SuppressOnChangeWhenInvalid="@_suppressOnChangeWhenInvalid"
+                           InputClass="absolute mud-width-full mud-height-full overflow-hidden z-10 input-transparent"
+                           tabindex="-1"
+                           OnDrop="HandleDrop"
+                           OnDragEnter="HandleDragEnter"
+                           OnDragLeave="HandleDragLeave"
+                           OnDragEnd="HandleDragEnd"
+                           SelectedTemplate="@(new RenderFragment<IReadOnlyList<IBrowserFile>>(_ => builder => { }))"
+                           >
+                <CustomContent Context="fileUpload">
+                    <MudPaper Height="300px"
+                              Outlined="true"
+                              Class="@_dragClass"
+                              Style="overflow: hidden;"
+                              @ondragover:preventDefault="@(!_dragAndDrop)"
+                              @ondrop:preventDefault="@(!_dragAndDrop)">
+                        <MudStack AlignItems="AlignItems.Center" Justify="Justify.Center" Class="mud-height-full pa-4">
+                            <MudIcon Icon="@Icons.Material.Filled.CloudUpload" Size="Size.Large" Color="Color.Primary" />
+                            <MudText Typo="Typo.h6">Drag and drop files here or click</MudText>
+                            @if (_fileSelectionDisplay == FileSelectionDisplay.BuiltIn)
+                            {
+                                <div class="file-chip-list">
+                                    @foreach (var fileName in fileUpload.GetFilenames())
+                                    {
+                                        <MudChip T="string"
+                                                 Color="Color.Dark"
+                                                 OnClose="@(async () => await fileUpload.RemoveFileAsync(fileName))"
+                                                 Class="file-chip"
+                                                 @onclick:stopPropagation="true"
+                                                 tabindex="-1">
+                                            <span class="file-chip-text" title="@fileName">@fileName</span>
+                                        </MudChip>
+                                    }
+                                </div>
+                            }
+                        </MudStack>
+                    </MudPaper>
+                </CustomContent>
+            </MudFileUpload>
 
-<MudStack Style="width: 100%">
-    <MudFileUpload T="IReadOnlyList<IBrowserFile>"
-                   @ref="_fileUpload"
-                   FilesChanged="OnFilesChanged"
-                   AppendMultipleFiles
-                   Hidden="false"
-                   InputClass="absolute mud-width-full mud-height-full overflow-hidden z-10 input-transparent"
-                   tabindex="-1"
-                   @ondrop="ClearDragClass"
-                   @ondragenter="SetDragClass"
-                   @ondragleave="ClearDragClass"
-                   @ondragend="ClearDragClass">
-        <CustomContent>
-            <MudPaper Height="300px" Outlined="true" Class="@_dragClass">
-                <MudText Typo="Typo.h6">Drag and drop files here or click</MudText>
-                @foreach (var file in _fileNames)
+            <MudStack Row="true" Spacing="3" Class="flex-wrap justify-center">
+                @if (_uploadTrigger == UploadTrigger.Fab)
                 {
-                    <MudChip T="string" Color="Color.Dark" Text="@file" tabindex="-1" />
+                    <MudFab Color="Color.Primary"
+                            Disabled="@(_busy || _disabled)"
+                            StartIcon="@Icons.Material.Filled.CloudUpload"
+                            Label="Upload"
+                            OnClick="OpenFilePickerAsync" />
                 }
-            </MudPaper>
-        </CustomContent>
-    </MudFileUpload>
+                else if (_uploadTrigger == UploadTrigger.IconButton)
+                {
+                    <MudIconButton Color="Color.Primary"
+                                   Disabled="@(_busy || _disabled)"
+                                   Icon="@Icons.Material.Filled.CloudUpload"
+                                   OnClick="OpenFilePickerAsync"
+                                   aria-label="Open file picker" />
+                }
+                else
+                {
+                    <MudButton Color="Color.Primary"
+                               Disabled="@(_busy || _disabled)"
+                               OnClick="OpenFilePickerAsync"
+                               Variant="@(_uploadTrigger == UploadTrigger.Button ? Variant.Outlined : Variant.Filled)"
+                               StartIcon="@Icons.Material.Filled.CloudUpload">
+                        Open file picker
+                    </MudButton>
+                }
 
-    <MudStack Row="true" Spacing="3">
-        <MudButton Color="Color.Primary"
-                   Disabled="_busy"
-                   OnClick="OpenFilePickerAsync"
-                   Variant="Variant.Filled">
-            Open file picker
-        </MudButton>
+                <MudButton Color="Color.Primary"
+                           Size="Size.Medium"
+                           Disabled="@(_busy || _disabled || _files.Count == 0)"
+                           OnClick="UploadAsync"
+                           Variant="Variant.Filled">
+                    Upload
+                </MudButton>
 
-        <MudButton Color="Color.Primary"
-                   Disabled="@(_busy || !_fileNames.Any())"
-                   OnClick="UploadAsync"
-                   Variant="Variant.Filled">
-            Upload
-        </MudButton>
+                <MudButton Color="Color.Error"
+                           Size="Size.Medium"
+                           Disabled="@(_busy || _disabled || _files.Count == 0)"
+                           OnClick="ClearAsync"
+                           Variant="Variant.Filled">
+                    Clear
+                </MudButton>
+            </MudStack>
 
-        <MudButton Color="Color.Error"
-                   Disabled="@(_busy || !_fileNames.Any())"
-                   OnClick="ClearAsync"
-                   Variant="Variant.Filled">
-            Clear
-        </MudButton>
-    </MudStack>
+            @if (_fileSelectionDisplay == FileSelectionDisplay.Outside)
+            {
+                <div class="file-chip-list file-chip-list-outside">
+                    @foreach (var fileName in SelectedFileNames)
+                    {
+                        <MudChip T="string"
+                                 Color="Color.Dark"
+                                 OnClose="@(() => RemoveFileAsync(fileName))"
+                                 Class="file-chip"
+                                 @onclick:stopPropagation="true"
+                                 tabindex="-1">
+                            <span class="file-chip-text" title="@fileName">@fileName</span>
+                        </MudChip>
+                    }
+                </div>
+            }
 
-    <MudText Typo="Typo.subtitle2">Files selected: @_fileNames.Count</MudText>
-</MudStack>
+            @if (_showAlert)
+            {
+                <MudAlert Severity="Severity.Success"
+                          Variant="Variant.Filled"
+                          Dense="true"
+                          ShowCloseIcon="true"
+                          CloseIconClicked="OnAlertClosed">
+                    @_alertText
+                </MudAlert>
+            }
 
-<MudText Typo="Typo.h6" Class="mt-10" Style="font-weight:700">Type of MudButton Upload</MudText>
-<MudStack Row="true" Spacing="3" Class="my-2 align-center">
-    <MudFileUpload T="IBrowserFile" FilesChanged="UploadFiles">
-        <CustomContent>
-            <MudButton Variant="Variant.Filled" Color="Color.Primary" StartIcon="@Icons.Material.Filled.CloudUpload">
-                Upload Files
-            </MudButton>
-        </CustomContent>
-    </MudFileUpload>
+            <MudText Typo="Typo.subtitle2" Align="Align.Center">Files selected: @_files.Count</MudText>
+        </MudStack>
 
-    <MudFileUpload T="IBrowserFile" FilesChanged="UploadFiles">
-        <CustomContent>
-            <MudFab Color="Color.Secondary" StartIcon="@Icons.Material.Filled.Image" Label="Load picture" />
-        </CustomContent>
-    </MudFileUpload>
+    </Preview>
 
-    <MudFileUpload T="IBrowserFile" FilesChanged="UploadFiles">
-        <CustomContent>
-            <MudFab Color="Color.Success" StartIcon="@Icons.Material.Filled.AttachFile" />
-        </CustomContent>
-    </MudFileUpload>
+    <Options>
+        <MudGrid Spacing="4" Justify="Justify.FlexStart" Class="w-100">
+            <MudItem xs="12" md="6">
+                <MudSelect T="FileTypePreset" Label="Accepted file types" @bind-Value="_fileTypePreset" @bind-Value:after="ClearValidationAsync">
+                    <MudSelectItem Value="FileTypePreset.Any">Any file</MudSelectItem>
+                    <MudSelectItem Value="FileTypePreset.Images">Images</MudSelectItem>
+                    <MudSelectItem Value="FileTypePreset.Documents">Documents</MudSelectItem>
+                    <MudSelectItem Value="FileTypePreset.ImagesAndPdf">Images and PDF</MudSelectItem>
+                    <MudSelectItem Value="FileTypePreset.Pdf">PDF</MudSelectItem>
+                </MudSelect>
+            </MudItem>
 
-    <MudFileUpload T="IBrowserFile" FilesChanged="UploadFiles">
-        <CustomContent>
-            <MudIconButton Color="Color.Info" Icon="@Icons.Material.Filled.PhotoCamera" />
-        </CustomContent>
-    </MudFileUpload>
+            <MudItem xs="12" md="6">
+                <MudSelect T="UploadTrigger" Label="Upload trigger" @bind-Value="_uploadTrigger" @bind-Value:after="ClearValidationAsync">
+                    <MudSelectItem Value="UploadTrigger.Default">Default</MudSelectItem>
+                    <MudSelectItem Value="UploadTrigger.Button">Button</MudSelectItem>
+                    <MudSelectItem Value="UploadTrigger.Fab">FAB</MudSelectItem>
+                    <MudSelectItem Value="UploadTrigger.IconButton">Icon button</MudSelectItem>
+                </MudSelect>
+            </MudItem>
 
-    <MudFileUpload T="IBrowserFile" FilesChanged="UploadFiles" Disabled>
-        <CustomContent>
-            <MudButton Variant="Variant.Filled" Color="Color.Primary">Disabled Button</MudButton>
-        </CustomContent>
-    </MudFileUpload>
-</MudStack>
+            <MudItem xs="12" md="6">
+                <MudNumericField T="int"
+                                 Label="Maximum file count"
+                                 Min="1"
+                                 Max="100"
+                                 @bind-Value="_maximumFileCount"
+                                 @bind-Value:after="ClearValidationAsync" />
+            </MudItem>
 
-@if (_files.Any())
-{
-    <MudText Typo="Typo.h6">@_files.Count File@(_files.Count == 1 ? "" : "s"):</MudText>
-    <MudList T="string">
-        @foreach (var file in _files)
-        {
-            <MudListItem Icon="@Icons.Material.Filled.AttachFile" @key="@file">
-                @file.Name <code>@file.Size bytes</code>
-            </MudListItem>
-        }
-    </MudList>
-}
+            <MudItem xs="12" md="6">
+                <MudNumericField T="int"
+                                 Label="Maximum file size (MB)"
+                                 HelperText="Set 0 for no limit"
+                                 Min="0"
+                                 Max="10240"
+                                 @bind-Value="_maximumFileSizeMb"
+                                 @bind-Value:after="ClearValidationAsync" />
+            </MudItem>
+
+            <MudItem xs="12" md="6">
+                <MudSelect T="FileSelectionDisplay" Label="Selected file display" @bind-Value="_fileSelectionDisplay" @bind-Value:after="ClearValidationAsync">
+                    <MudSelectItem Value="@FileSelectionDisplay.Outside">Default chips (outside)</MudSelectItem>
+                    <MudSelectItem Value="@FileSelectionDisplay.BuiltIn">Inline chips (inside)</MudSelectItem>
+                </MudSelect>
+            </MudItem>
+
+            <MudItem xs="12" md="6">
+                <MudTextField Label="Error text"
+                              @bind-Value="_errorText"
+                              @bind-Value:after="ClearValidationAsync"
+                              Clearable="true"
+                              Disabled="@(!_showError)" />
+            </MudItem>
+
+            <MudItem xs="12">
+                <div class="d-flex flex-wrap align-center justify-start" style="column-gap: 12px; row-gap: 0;">
+                    <MudCheckBox @bind-Value="_appendMultipleFiles" @bind-Value:after="ClearValidationAsync" Label="Append multiple files" Color="Color.Primary" />
+                    <MudCheckBox @bind-Value="_hidden" @bind-Value:after="ClearValidationAsync" Label="Hidden input" Color="Color.Primary" />
+                    <MudCheckBox @bind-Value="_dragAndDrop" @bind-Value:after="ClearValidationAsync" Label="Drag and drop" Color="Color.Primary" />
+                    <MudCheckBox @bind-Value="_disabled" @bind-Value:after="ClearValidationAsync" Label="Disabled" Color="Color.Primary" />
+                    <MudCheckBox @bind-Value="_showError" @bind-Value:after="ClearValidationAsync" Label="Show error" Color="Color.Primary" />
+                    <MudCheckBox @bind-Value="_suppressOnChangeWhenInvalid" @bind-Value:after="ClearValidationAsync" Label="Suppress invalid change" Color="Color.Primary" />
+                </div>
+            </MudItem>
+
+        </MudGrid>
+    </Options>
+</DemoPageLayout>
 
 <style>
-.top-center-alert {
-    position: fixed;
-    top: 16px;
-    left: 50%;
-    transform: translateX(-50%);
-    z-index: 1400;
-    min-width: 280px;
-}
+    .input-transparent {
+        opacity: 0;
+    }
 
-.input-transparent {
-    opacity: 0;
-}
+    .file-chip-list {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 8px;
+        max-height: 180px;
+        max-width: 100%;
+        position: relative;
+        z-index: 20;
+        overflow-y: auto;
+        overflow-x: hidden;
+        padding: 4px;
+    }
+
+    .file-chip-list-outside {
+        width: 100%;
+    }
+
+    .file-chip {
+        position: relative;
+        z-index: 20;
+        display: inline-flex;
+        width: min(100%, 300px);
+        box-sizing: border-box;
+        min-width: 0;
+        max-width: 100%;
+        pointer-events: auto;
+    }
+
+    .file-chip-list:not(.file-chip-list-outside) .file-chip {
+        width: 100%;
+    }
+
+    .file-chip .mud-chip-content {
+        display: flex;
+        align-items: center;
+        min-width: 0;
+        max-width: 100%;
+        width: auto;
+        flex: 1 1 0;
+        overflow: hidden;
+    }
+
+    .file-chip .mud-chip-label {
+        display: flex;
+        flex: 1 1 auto;
+        min-width: 0;
+        max-width: 100%;
+        overflow: hidden;
+    }
+
+    .file-chip-text {
+        display: block;
+        flex: 1 1 auto;
+        min-width: 0;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    .file-chip .mud-chip-close-button,
+    .file-chip .mud-chip-close {
+        flex: 0 0 18px;
+        min-width: 18px;
+        width: 18px;
+    }
+
 </style>
 
 @code {
-    // single-file demo list (kept from your sample)
-    private readonly IList<IBrowserFile> _files = new List<IBrowserFile>();
-
-    // main uploader state
-    private readonly List<string> _fileNames = new();
+    private IReadOnlyList<IBrowserFile> _files = Array.Empty<IBrowserFile>();
     private MudFileUpload<IReadOnlyList<IBrowserFile>>? _fileUpload;
 
-    // UI / alerts
     private bool _busy;
     private bool _showAlert;
     private string _alertText = string.Empty;
+    private bool _appendMultipleFiles = false;
+    private bool _hidden;
+    private bool _dragAndDrop = false;
+    private bool _disabled;
+    private int _maximumFileCount = 10;
+    private int _maximumFileSizeMb;
+    private bool _showError;
+    private bool _suppressOnChangeWhenInvalid;
+    private string _errorText = "The selected file is invalid.";
+    private FileTypePreset _fileTypePreset = FileTypePreset.Any;
+    private UploadTrigger _uploadTrigger = UploadTrigger.Default;
+    private FileSelectionDisplay _fileSelectionDisplay = FileSelectionDisplay.Outside;
 
-    // drag styles
-    private const string DefaultDragClass =
-        "relative rounded-lg border-2 border-dashed pa-4 mt-4 mud-width-full mud-height-full";
+    private IReadOnlyList<string> SelectedFileNames
+        => _fileUpload?.GetFilenames() ?? Array.Empty<string>();
+
+    private string? AcceptedFileTypes => _fileTypePreset switch
+    {
+        FileTypePreset.Images => "image/*",
+        FileTypePreset.Documents => ".doc,.docx,.xls,.xlsx,.ppt,.pptx,.txt",
+        FileTypePreset.ImagesAndPdf => "image/*,.pdf",
+        FileTypePreset.Pdf => ".pdf",
+        _ => null
+    };
+
+    private long? MaximumFileSizeBytes => _maximumFileSizeMb > 0
+        ? _maximumFileSizeMb * 1024L * 1024L
+        : null;
+
+    private const string DefaultDragClass = "relative rounded-lg border-2 border-dashed pa-4 mt-4 mud-width-full mud-height-full";
     private string _dragClass = DefaultDragClass;
-
-    // disposal guard for delayed tasks
     private bool _disposed;
+
     public void Dispose() => _disposed = true;
 
-    private void OnAlertClosed(MudAlert? _ = null) => _showAlert = false;
+    private void OnAlertClosed(MudAlert? _) => _showAlert = false;
 
-    private void UploadFiles(IBrowserFile file)
+    private Task OnFilesChanged(IReadOnlyList<IBrowserFile>? files)
     {
-        _files.Add(file);
-        StateHasChanged();
+        _files = files ?? Array.Empty<IBrowserFile>();
+        ClearDragClass();
+        return Task.CompletedTask;
     }
 
-    private void OnFilesChanged(IReadOnlyList<IBrowserFile> files)
+    private async Task ClearValidationAsync()
     {
-        _fileNames.Clear();
-        foreach (var f in files)
-            _fileNames.Add(f.Name);
+        if (_fileUpload is null)
+            return;
 
-        ClearDragClass();
-        StateHasChanged();
+        try
+        {
+            await _fileUpload.ResetValidationAsync();
+        }
+        catch (ObjectDisposedException) { }
+        catch (InvalidOperationException) { }
+    }
+
+    private async Task RemoveFileAsync(string fileName)
+    {
+        if (_fileUpload is null)
+            return;
+
+        try
+        {
+            if (await _fileUpload.RemoveFileAsync(fileName))
+            {
+                _files = _files
+                    .Where(file => !string.Equals(file.Name, fileName, StringComparison.Ordinal))
+                    .ToArray();
+                ClearDragClass();
+                if (!_disposed)
+                    await InvokeAsync(StateHasChanged);
+            }
+        }
+        catch (Exception ex)
+        {
+            _alertText = $"Could not remove file: {ex.Message}";
+            _showAlert = true;
+            if (!_disposed)
+                await InvokeAsync(StateHasChanged);
+        }
     }
 
     private async Task UploadAsync()
     {
-        if (_fileNames.Count == 0 || _busy) return;
+        await ClearValidationAsync();
+
+        if (_files.Count == 0 || _busy) return;
+
         _busy = true;
         try
         {
-            // TODO: perform upload
-
-            _alertText = $"Uploaded {_fileNames.Count} file{(_fileNames.Count == 1 ? "" : "s")} successfully.";
+            _alertText = $"Uploaded {_files.Count} file{(_files.Count == 1 ? "" : "s")} successfully.";
             _showAlert = true;
             StateHasChanged();
 
-            // clear picker on UI thread
             if (_fileUpload is not null)
-                await InvokeAsync(async () => await _fileUpload.ClearAsync());
+            {
+                try { await _fileUpload.ClearAsync(); }
+                catch (ObjectDisposedException) { }
+                catch (InvalidOperationException) { }
+                catch (Exception) { }
+            }
 
-            _fileNames.Clear();
+            _files = Array.Empty<IBrowserFile>();
             ClearDragClass();
-            StateHasChanged();
         }
-        catch (ObjectDisposedException) { /* ignore if user navigated */ }
-        catch (InvalidOperationException) { /* ignore render-thread races */ }
+        catch (ObjectDisposedException) { }
+        catch (InvalidOperationException) { }
         catch (Exception ex)
         {
             _alertText = $"Upload failed: {ex.Message}";
             _showAlert = true;
-            StateHasChanged();
         }
         finally
         {
             _busy = false;
         }
+
+        if (!_disposed)
+            await InvokeAsync(StateHasChanged);
 
         _ = HideAlertSoonAsync();
     }
 
     private async Task ClearAsync()
     {
+        await ClearValidationAsync();
+
         if (_busy) return;
+
         _busy = true;
         try
         {
             if (_fileUpload is not null)
-                await InvokeAsync(async () => await _fileUpload.ClearAsync());
+                await _fileUpload.ClearAsync();
         }
         catch (ObjectDisposedException) { }
         catch (InvalidOperationException) { }
         finally
         {
-            _fileNames.Clear();
+            _files = Array.Empty<IBrowserFile>();
             ClearDragClass();
             _busy = false;
             if (!_disposed) await InvokeAsync(StateHasChanged);
         }
     }
 
-    private Task OpenFilePickerAsync()
-        => _busy ? Task.CompletedTask : (_fileUpload?.OpenFilePickerAsync() ?? Task.CompletedTask);
+    private async Task OpenFilePickerAsync()
+    {
+        await ClearValidationAsync();
+
+        if (_busy || _fileUpload is null)
+            return;
+
+        await _fileUpload.OpenFilePickerAsync();
+    }
 
     private async Task HideAlertSoonAsync()
     {
@@ -235,6 +455,42 @@
         await InvokeAsync(StateHasChanged);
     }
 
-    private void SetDragClass()   => _dragClass = $"{DefaultDragClass} mud-border-primary";
+    private void HandleDragEnter(DragEventArgs _)
+    {
+        if (_dragAndDrop)
+            SetDragClass();
+    }
+
+    private void HandleDragLeave(DragEventArgs _) => ClearDragClass();
+    private void HandleDragEnd(DragEventArgs _) => ClearDragClass();
+
+    private void HandleDrop(DragEventArgs _)
+    {
+        ClearDragClass();
+    }
+    private void SetDragClass() => _dragClass = $"{DefaultDragClass} mud-border-primary";
     private void ClearDragClass() => _dragClass = DefaultDragClass;
+
+    private enum UploadTrigger
+    {
+        Default,
+        Button,
+        Fab,
+        IconButton
+    }
+
+    private enum FileTypePreset
+    {
+        Any,
+        Images,
+        Documents,
+        ImagesAndPdf,
+        Pdf
+    }
+
+    private enum FileSelectionDisplay
+    {
+        Outside,
+        BuiltIn
+    }
 }
