@@ -29,3 +29,8 @@
 - When a demo uses sliders for numeric properties such as `Elevation`, include the current value in the slider label, for example `Elevation: 0`.
 - If a demo exposes non-default behavior, make it a deliberate user selection instead of the initial page state.
 - If the API documentation does not explicitly state a default, prefer the component's natural default value and note that assumption in code comments or changelog only when it affects behavior.
+
+## Demo-Specific Styling
+
+- Keep CSS that is specific to a component demo inside that page's `.razor` file, normally in a local `<style>` block.
+- Do not create an external `.razor.css` file for a demo-specific style unless the user explicitly requests it or the style is shared by multiple components.
