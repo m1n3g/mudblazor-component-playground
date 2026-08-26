@@ -8,36 +8,61 @@
         <div class="d-flex flex-wrap justify-center align-center w-100" style="gap: 16px;">
             <MudFab Color="@_primaryColor"
                     StartIcon="@Icons.Material.Filled.Add"
+                    Variant="@_variant"
                     Size="@_fabSize"
-                    DropShadow="@_dropShadow" />
+                    DropShadow="@_dropShadow"
+                    Ripple="@_ripple"
+                    Disabled="@_disabled" />
 
             <MudFab Color="@_secondaryColor"
                     StartIcon="@Icons.Material.Filled.Edit"
+                    Variant="@_variant"
                     Size="@_fabSize"
-                    DropShadow="@_dropShadow" />
+                    DropShadow="@_dropShadow"
+                    Ripple="@_ripple"
+                    Disabled="@_disabled" />
 
             <MudFab Color="@_tertiaryColor"
                     StartIcon="@Icons.Material.Filled.ShoppingCart"
+                    Variant="@_variant"
                     Size="@_fabSize"
-                    DropShadow="@_dropShadow" />
+                    DropShadow="@_dropShadow"
+                    Ripple="@_ripple"
+                    Disabled="@_disabled" />
 
             <MudFab Color="@_extendedColor"
                     StartIcon="@SelectedStartIcon"
                     EndIcon="@SelectedEndIcon"
                     Label="@_label"
+                    Variant="@_variant"
                     Size="@_fabSize"
                     DropShadow="@_dropShadow"
+                    Ripple="@_ripple"
                     Disabled="@_disabled" />
 
             <MudFab StartIcon="@Icons.Material.Filled.Save"
+                    Variant="@_variant"
                     Size="@_fabSize"
-                    DropShadow="@_dropShadow" />
+                    DropShadow="@_dropShadow"
+                    Ripple="@_ripple"
+                    Disabled="@_disabled" />
         </div>
     </Preview>
 
     <Options>
         <MudGrid Spacing="4" Justify="Justify.Center" Class="w-100">
-            <MudItem xs="12">
+            <MudItem xs="12" md="6">
+                <MudSelect T="Variant"
+                           Label="Variant"
+                           Dense="true"
+                           @bind-Value="_variant">
+                    <MudSelectItem Value="Variant.Filled">Filled</MudSelectItem>
+                    <MudSelectItem Value="Variant.Outlined">Outlined</MudSelectItem>
+                    <MudSelectItem Value="Variant.Text">Text</MudSelectItem>
+                </MudSelect>
+            </MudItem>
+
+            <MudItem xs="12" md="6">
                 <MudSelect T="Size"
                            Label="Size"
                            Dense="true"
@@ -66,7 +91,7 @@
             </MudItem>
 
             <MudItem xs="12" md="6">
-                <MudTextField Label="Extended Label"
+                <MudTextField Label="Label"
                               @bind-Value="_label" ShrinkLabel="true" Clearable="true"/>
             </MudItem>
 
@@ -98,8 +123,9 @@
 
             <MudItem xs="12">
                 <div class="d-flex flex-wrap align-center justify-start" style="column-gap: 12px;">
+                    <MudCheckBox @bind-Value="_disabled" Label="Disabled" Color="Color.Primary" />
                     <MudCheckBox @bind-Value="_dropShadow" Label="Drop Shadow" Color="Color.Primary" />
-                    <MudCheckBox @bind-Value="_disabled" Label="Disable Extended FAB" Color="Color.Primary" />
+                    <MudCheckBox @bind-Value="_ripple" Label="Ripple" Color="Color.Primary" />
                 </div>
             </MudItem>
         </MudGrid>
@@ -110,10 +136,12 @@
     private const string NoIconOption = "__NONE__";
 
     private Size _fabSize = Size.Medium;
+    private Variant _variant = Variant.Filled;
     private string _label = "Bookmark";
     private Color _extendedColor = Color.Default;
     private bool _dropShadow = true;
     private bool _disabled = false;
+    private bool _ripple = true;
     private string _startIconSelection = Icons.Material.Filled.Bookmark;
     private string _endIconSelection = NoIconOption;
 
