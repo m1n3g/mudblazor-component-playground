@@ -9,23 +9,25 @@
             @if (_skeletonType == SkeletonType.Text)
             {
                 <MudStack Spacing="2" Style="padding: 24px;">
-                    <MudSkeleton SkeletonType="SkeletonType.Text" Animation="@_animation" Width="85%" />
-                    <MudSkeleton SkeletonType="SkeletonType.Text" Animation="@_animation" Width="100%" />
-                    <MudSkeleton SkeletonType="SkeletonType.Text" Animation="@_animation" Width="72%" />
-                    <MudSkeleton SkeletonType="SkeletonType.Text" Animation="@_animation" Width="92%" />
-                    <MudSkeleton SkeletonType="SkeletonType.Text" Animation="@_animation" Width="58%" />
+                    <MudSkeleton SkeletonType="SkeletonType.Text" Animation="@_animation"
+                                 Width="@GetTextWidth(0)" Height="@TextHeight" />
+                    <MudSkeleton SkeletonType="SkeletonType.Text" Animation="@_animation"
+                                 Width="@GetTextWidth(1)" Height="@TextHeight" />
+                    <MudSkeleton SkeletonType="SkeletonType.Text" Animation="@_animation"
+                                 Width="@GetTextWidth(2)" Height="@TextHeight" />
+                    <MudSkeleton SkeletonType="SkeletonType.Text" Animation="@_animation"
+                                 Width="@GetTextWidth(3)" Height="@TextHeight" />
+                    <MudSkeleton SkeletonType="SkeletonType.Text" Animation="@_animation"
+                                 Width="@GetTextWidth(4)" Height="@TextHeight" />
                 </MudStack>
             }
             else if (_skeletonType == SkeletonType.Circle)
             {
-                <MudStack Spacing="0">
+                <MudStack Spacing="0" Style="position: relative;">
                     <div style="height: 180px; background: var(--mud-palette-background-grey);"></div>
-                    <MudStack Spacing="2" AlignItems="AlignItems.Center" Justify="Justify.Center" Style="position: absolute; inset: 0; padding: 24px;">
-                        <MudSkeleton SkeletonType="SkeletonType.Circle" Animation="@_animation"
-                                     Width="@CircleWidth" Height="@CircleHeight" Style="max-width: 100%; max-height: 100%;" />
-                        <div style="width: 88px; height: 12px; background: var(--mud-palette-background-grey);"></div>
-                        <div style="width: 64px; height: 12px; background: var(--mud-palette-background-grey);"></div>
-                    </MudStack>
+                    <MudSkeleton SkeletonType="SkeletonType.Circle" Animation="@_animation"
+                                 Width="@CircleWidth" Height="@CircleHeight"
+                                 Style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); max-width: 100%; max-height: 100%;" />
                 </MudStack>
             }
             else
@@ -34,24 +36,6 @@
                              Animation="@_animation"
                              Width="@MediaWidth"
                              Height="@MediaHeight" />
-                <MudCardContent>
-                    <MudStack Spacing="2">
-                        <MudSkeleton SkeletonType="SkeletonType.Text" Animation="@_animation"
-                                     Width="30%" Height="42px" />
-                        <MudSkeleton SkeletonType="SkeletonType.Text" Animation="@_animation"
-                                     Width="80%" />
-                        <MudSkeleton SkeletonType="SkeletonType.Text" Animation="@_animation"
-                                     Width="100%" />
-                    </MudStack>
-                </MudCardContent>
-                <MudCardActions>
-                    <MudStack Row="true" Spacing="2">
-                        <MudSkeleton SkeletonType="SkeletonType.Text" Animation="@_animation"
-                                     Width="64px" Height="@ActionHeight" />
-                        <MudSkeleton SkeletonType="SkeletonType.Text" Animation="@_animation"
-                                     Width="105px" Height="@ActionHeight" />
-                        </MudStack>
-                    </MudCardActions>
             }
         </MudCard>
     </Preview>
@@ -75,11 +59,14 @@
             </MudItem>
 
             <MudItem xs="12">
-                <MudTextField Label="Width" @bind-Value="_width" Clearable="true" HelperText="CSS value such as 250px or 100%" />
+                <MudTextField Label="Width" @bind-Value="_width" @bind-Value:after="OnWidthChanged" ShrinkLabel="true" Clearable="true" HelperText="CSS value such as 250px or 100%" />
             </MudItem>
 
             <MudItem xs="12">
-                <MudTextField Label="Height" @bind-Value="_height" Clearable="true" HelperText="CSS value such as 32px or 110px" />
+                <MudTextField Label="Height" @bind-Value="_height" ShrinkLabel="true" Clearable="true" HelperText="CSS value such as 32px or 110px" />
+                <MudButton Variant="Variant.Outlined" Color="Color.Primary" OnClick="ResetDimensions" Class="mt-5">
+                    Reset dimensions
+                </MudButton>
             </MudItem>
         </MudGrid>
     </Options>
@@ -89,11 +76,22 @@
     private SkeletonType _skeletonType = SkeletonType.Text;
     private Animation _animation = Animation.Pulse;
     private string? _width = "100%";
-    private string? _height = "250px";
+    private string? _height;
+    private bool _widthCustomized;
 
+    private static readonly string[] DefaultTextWidths = ["20%", "35%", "85%", "85%", "100%"];
     private string? MediaWidth => _skeletonType == SkeletonType.Circle ? "250px" : _width;
-    private string? MediaHeight => _skeletonType == SkeletonType.Circle ? "250px" : _height;
+    private string? MediaHeight => _skeletonType == SkeletonType.Circle ? "250px" : _height ?? "250px";
+    private string? TextHeight => _height;
     private string CircleWidth => _width is "100%" or null or "" ? "96px" : _width;
     private string CircleHeight => _height is "250px" or null or "" ? "96px" : _height;
-    private string ActionHeight => "40px";
+    private string? GetTextWidth(int index) => _widthCustomized ? _width : DefaultTextWidths[index];
+    private void OnWidthChanged() => _widthCustomized = true;
+
+    private void ResetDimensions()
+    {
+        _width = "100%";
+        _height = null;
+        _widthCustomized = false;
+    }
 }
