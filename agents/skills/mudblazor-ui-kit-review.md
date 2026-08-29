@@ -235,6 +235,45 @@ Stroke weight must use the appropriate `border-width` variable (e.g. `border-wid
 If the stroke weight uses a hardcoded value but a matching `border-width` variable exists, report it as an issue.
 
 
+### Layer Naming Convention
+
+Rename inner component layers to match real MudBlazor CSS class names using lowercase kebab-case.
+
+All MudBlazor CSS class names start with `mud-`.
+
+#### Rules
+
+1. **Known CSS class name**: If the layer maps to a known MudBlazor CSS class, use that class name exactly.
+   - Example: `MudAlertIcon` → `mud-alert-icon`
+   - Example: `MudAlertMessage` → `mud-alert-message`
+   - Example: `MudAlertClose` → `mud-alert-close`
+
+2. **User-specified class name**: If the user explicitly provides a class name for a layer, use that name exactly.
+   - Example: User says "rename as mud-alert-text" → `mud-alert-text`
+
+3. **PascalCase legacy format**: If a layer uses the old PascalCase format (first letter uppercase, no spacing, e.g. `MudSomethingName`), convert to kebab-case: split on uppercase boundaries, lowercase everything, join with hyphens.
+   - `MudBreadcrumbItem` → `mud-breadcrumb-item`
+   - `MudText` → `mud-text`
+   - `MudAppBar` → `mud-app-bar`
+   - `logoContainer` → `logo-container`
+
+4. **Icon instances from the Icons page**: If an inner layer is an instance whose main component lives on the `Icons` page, rename it to `mud-icon`.
+   - Example: `event_note` (instance from Icons page) → `mud-icon`
+   - Example: `settings_ethernet` (instance from Icons page) → `mud-icon`
+   - Only apply this rule to icon instances sourced from the `Icons` page.
+
+5. **Inner component instances from component pages**: If an inner layer is an instance of another MudBlazor component (e.g. `MudIconButton`, `MudBreadcrumbItem`), do NOT rename it. Keep the original component instance name as-is.
+   - Example: `MudIconButton` → keep as `MudIconButton`
+   - These are real component references and their names must match the
+     source component.
+
+6. **Generic or unspecified layers**: If a layer has a generic name (e.g. `text`) and no specific CSS class name is known or provided by
+   the user, prefer `mud-text` for text layers.
+
+7. **Do not invent class names**: Do not guess or fabricate CSS class names that do not exist in MudBlazor. If unsure whether a specific class name exists, use the generic `mud-` prefix pattern from rule 6 and report it as `NEEDS CONFIRMATION`.
+
+
+
 - Shadow/effect values (Local effect styles)
 
 When a matching UI Kit variable exists, the value should use the appropriate
