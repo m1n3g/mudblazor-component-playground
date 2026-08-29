@@ -103,6 +103,14 @@
     <Options>
         <MudGrid Spacing="4" Justify="Justify.Center" Class="w-100">
             <MudItem xs="12">
+                <MudSelect T="Margin" @bind-Value="_margin" Label="Margin" Dense="true">
+                    <MudSelectItem Value="Margin.None">None</MudSelectItem>
+                    <MudSelectItem Value="Margin.Dense">Dense</MudSelectItem>
+                    <MudSelectItem Value="Margin.Normal">Normal</MudSelectItem>
+                </MudSelect>
+            </MudItem>
+
+            <MudItem xs="12">
                 <div class="d-flex flex-wrap align-center justify-start" style="column-gap: 12px; row-gap: 0;">
                     <MudCheckBox @bind-Value="_dense" Label="Dense" Color="Color.Primary" />
                     <MudCheckBox @bind-Value="_readOnly" Label="Read only" Color="Color.Primary" />
@@ -114,14 +122,6 @@
                     <MudCheckBox @bind-Value="_shrinkLabel" Label="Shrink label" Color="Color.Primary" />
                     <MudCheckBox @bind-Value="_immediate" Label="Immediate" Color="Color.Secondary" />
                 </div>
-            </MudItem>
-
-            <MudItem xs="12">
-                <MudSelect T="Margin" @bind-Value="_margin" Label="Margin" Dense="true">
-                    <MudSelectItem Value="Margin.None">None</MudSelectItem>
-                    <MudSelectItem Value="Margin.Dense">Dense</MudSelectItem>
-                    <MudSelectItem Value="Margin.Normal">Normal</MudSelectItem>
-                </MudSelect>
             </MudItem>
 
             <MudItem xs="12">
