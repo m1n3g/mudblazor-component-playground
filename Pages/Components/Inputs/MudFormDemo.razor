@@ -5,7 +5,7 @@
 @inject ISnackbar Snackbar
 
 <DemoPageLayout Title="Form"
-                Description="Forms collect and validate user input with coordinated fields and actions."
+                Description="Collects and validates user input, monitoring and validating every input derived from MudFormComponent within it."
                 Variant="DemoPageLayoutVariant.Vertical">
     <Preview>
         <MudPaper Class="pa-4 w-100" Outlined="true">
@@ -32,37 +32,52 @@
                     <MudNumericField T="int?" Label="Age" For="@(() => _model.Age)" @bind-Value="_model.Age"
                                      Variant="Variant.Outlined" Margin="@ComputedMargin" Min="1" Max="120" Step="1"
                                      Disabled="@_disabled" ReadOnly="@_readOnly" Clearable="@_clearable" Immediate="@_immediate"
+                                     Placeholder="@(_placeholder ? "31" : null)"
                                      HelperText="@(_helperText ? "1-120" : null)" HelperTextOnFocus="@_helperOnFocus"
                                      ShrinkLabel="@_shrinkLabel" Adornment="Adornment.End" AdornmentText="yrs" />
 
                     <MudSelect T="string" Label="Country" For="@(() => _model.Country)" @bind-Value="_model.Country"
-                               Variant="Variant.Filled" Margin="@ComputedMargin" Disabled="@_disabled" ReadOnly="@_readOnly"
+                               Variant="Variant.Outlined" Margin="@ComputedMargin" Disabled="@_disabled" ReadOnly="@_readOnly"
                                Dense="@_dense" HelperText="@(_helperText ? "Choose one" : null)"
-                               HelperTextOnFocus="@_helperOnFocus" ShrinkLabel="@_shrinkLabel" Clearable="@_clearable">
+                               HelperTextOnFocus="@_helperOnFocus" ShrinkLabel="@_shrinkLabel" Clearable="@_clearable"
+                               Placeholder="@(_placeholder ? "Select country" : null)">
                         @foreach (var country in _countries)
                         {
                             <MudSelectItem Value="@country">@country</MudSelectItem>
                         }
                     </MudSelect>
 
+                    <MudTextField T="string" Label="Credit card number" For="@(() => _model.CreditCardNumber)"
+                                  @bind-Value="_model.CreditCardNumber" Variant="Variant.Outlined" Margin="@ComputedMargin"
+                                  Disabled="@_disabled" ReadOnly="@_readOnly" Clearable="@_clearable"
+                                  InputType="InputType.Text" Immediate="@_immediate" MaxLength="19"
+                                  Placeholder="@(_placeholder ? "4111 1111 1111 1111" : null)"
+                                  HelperText="@(_helperText ? "Enter a valid card number" : null)" HelperTextOnFocus="@_helperOnFocus"
+                                  ShrinkLabel="@_shrinkLabel" Adornment="Adornment.Start"
+                                  AdornmentIcon="@Icons.Material.Filled.CreditCard" />
+
                     <MudDatePicker Label="Birth date" For="@(() => _model.BirthDate)" @bind-Date="_model.BirthDate"
                                    Variant="Variant.Outlined" Margin="@ComputedMargin" Disabled="@_disabled" ReadOnly="@_readOnly"
                                    Clearable="@_clearable" ImmediateText="@_immediate"
+                                   MinDate="@MinBirthDate" MaxDate="@DateTime.Today"
+                                   Placeholder="@(_placeholder ? "mm/dd/yyyy" : null)"
                                    HelperText="@(_helperText ? "Pick your birthday" : null)" HelperTextOnFocus="@_helperOnFocus"
-                                   ShrinkLabel="@_shrinkLabel" Adornment="Adornment.End"
+                                   ShrinkLabel="@_shrinkLabel" Adornment="Adornment.Start"
                                    AdornmentIcon="@Icons.Material.Filled.Cake" />
 
                     <MudTextField T="string" Label="Password" For="@(() => _model.Password)" @bind-Value="_model.Password"
-                                  Variant="Variant.Filled" Margin="@ComputedMargin" Disabled="@_disabled" ReadOnly="@_readOnly"
+                                  Variant="Variant.Outlined" Margin="@ComputedMargin" Disabled="@_disabled" ReadOnly="@_readOnly"
                                   Clearable="@_clearable" InputType="InputType.Password" Immediate="@_immediate"
+                                  Placeholder="@(_placeholder ? "Enter password" : null)"
                                   HelperText="@(_helperText ? "Min 6 chars" : null)" HelperTextOnFocus="@_helperOnFocus"
                                   ShrinkLabel="@_shrinkLabel" Adornment="Adornment.Start"
                                   AdornmentIcon="@Icons.Material.Filled.Lock" />
 
                     <MudTextField T="string" Label="Confirm password" For="@(() => _model.ConfirmPassword)"
-                                  @bind-Value="_model.ConfirmPassword" Variant="Variant.Filled" Margin="@ComputedMargin"
+                                  @bind-Value="_model.ConfirmPassword" Variant="Variant.Outlined" Margin="@ComputedMargin"
                                   Disabled="@_disabled" ReadOnly="@_readOnly" Clearable="@_clearable"
                                   InputType="InputType.Password" Immediate="@_immediate"
+                                  Placeholder="@(_placeholder ? "Confirm password" : null)"
                                   HelperText="@(_helperText ? "Must match" : null)" HelperTextOnFocus="@_helperOnFocus"
                                   ShrinkLabel="@_shrinkLabel" Adornment="Adornment.Start"
                                   AdornmentIcon="@Icons.Material.Filled.LockReset" />
@@ -70,21 +85,15 @@
                     <MudCheckBox For="@(() => _model.AcceptTos)" @bind-Value="_model.AcceptTos"
                                  Label="I agree to the Terms of Service" Disabled="@_disabled" />
 
-                    <MudDivider Class="my-2" />
-
                     <MudStack Row="true" Spacing="2" Class="flex-wrap">
-                        <MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="@Submit" Disabled="@_disabled">Submit</MudButton>
-                        <MudButton Variant="Variant.Outlined" OnClick="@Validate" Disabled="@_disabled">Validate</MudButton>
-                        <MudButton Variant="Variant.Outlined" Color="Color.Warning" OnClick="@ResetValidation">Clear errors</MudButton>
-                        <MudButton Variant="Variant.Outlined" Color="Color.Secondary" OnClick="@ResetForm">Reset form</MudButton>
-                        <MudButton Variant="Variant.Text" OnClick="@FillSample" Disabled="@_disabled">Fill sample</MudButton>
+                        <MudButton Variant="Variant.Filled" Size="Size.Large" Color="Color.Primary" OnClick="@Submit" Disabled="@_disabled" FullWidth="true">Submit</MudButton>
                     </MudStack>
 
                     <MudStack Row="true" Spacing="1" Class="flex-wrap">
-                        <MudChip T="string" Color="@(_formIsValid ? Color.Success : Color.Error)" Variant="Variant.Filled">
+                        <MudChip T="string" Color="@FormStateColor" Variant="Variant.Text">
                             @_formState
                         </MudChip>
-                        <MudChip T="string" Variant="Variant.Outlined">Errors: @_errorCount</MudChip>
+                        <MudChip T="string" Variant="Variant.Text">@($"{_errorCount} errors")</MudChip>
                     </MudStack>
                 </MudStack>
             </MudForm>
@@ -114,6 +123,16 @@
                     <MudSelectItem Value="Margin.Normal">Normal</MudSelectItem>
                 </MudSelect>
             </MudItem>
+
+            <MudItem xs="12">
+                <MudText Typo="Typo.subtitle1" Class="mb-2">Form actions</MudText>
+                <MudStack Row="true" Spacing="2" Class="flex-wrap">
+                    <MudButton Variant="Variant.Outlined" OnClick="@Validate" Disabled="@_disabled">Validate</MudButton>
+                    <MudButton Variant="Variant.Outlined" Color="Color.Warning" OnClick="@ResetValidation">Clear errors</MudButton>
+                    <MudButton Variant="Variant.Outlined" Color="Color.Secondary" OnClick="@ResetForm">Reset form</MudButton>
+                    <MudButton Variant="Variant.Text" OnClick="@FillSample" Disabled="@_disabled">Fill sample</MudButton>
+                </MudStack>
+            </MudItem>
         </MudGrid>
     </Options>
 </DemoPageLayout>
@@ -133,6 +152,9 @@
         [Required]
         public string? Country { get; set; }
 
+        [Required, CreditCard]
+        public string? CreditCardNumber { get; set; }
+
         [Required]
         public DateTime? BirthDate { get; set; }
 
@@ -149,8 +171,10 @@
     private MudForm _form = default!;
     private RegistrationModel _model = new();
     private bool _formIsValid;
+    private bool _hasBeenValidated;
     private int _errorCount;
-    private string _formState => _formIsValid ? "Valid" : "Invalid";
+    private string _formState => !_hasBeenValidated ? "Not validated" : _formIsValid ? "Form is valid" : "Form needs attention";
+    private Color FormStateColor => !_hasBeenValidated ? Color.Default : _formIsValid ? Color.Success : Color.Error;
 
     private readonly string[] _countries =
     {
@@ -168,12 +192,14 @@
     private bool _immediate;
     private Margin _margin = Margin.None;
     private Margin ComputedMargin => _dense ? Margin.Dense : _margin;
+    private static readonly DateTime MinBirthDate = new(1900, 1, 1);
 
     private async Task Validate()
     {
         await _form.ValidateAsync();
         _formIsValid = _form.IsValid;
         _errorCount = _form.Errors?.Count() ?? 0;
+        _hasBeenValidated = true;
         StateHasChanged();
     }
 
@@ -188,6 +214,7 @@
     {
         await _form.ResetValidationAsync();
         _formIsValid = false;
+        _hasBeenValidated = false;
         _errorCount = 0;
     }
 
@@ -196,6 +223,7 @@
         _model = new();
         await _form.ResetValidationAsync();
         _formIsValid = false;
+        _hasBeenValidated = false;
         _errorCount = 0;
         StateHasChanged();
     }
@@ -208,6 +236,7 @@
             Email = "ada@analytical.engine",
             Age = 31,
             Country = _countries[0],
+            CreditCardNumber = "4111 1111 1111 1111",
             BirthDate = new DateTime(1815, 12, 10),
             Password = "secret1",
             ConfirmPassword = "secret1",
@@ -215,6 +244,7 @@
         };
         await _form.ResetValidationAsync();
         _formIsValid = false;
+        _hasBeenValidated = false;
         _errorCount = 0;
     }
 }
