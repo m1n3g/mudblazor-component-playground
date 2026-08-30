@@ -9,7 +9,8 @@
                 Variant="DemoPageLayoutVariant.Vertical">
     <Preview>
         <MudPaper Class="pa-4 w-100" Outlined="true">
-            <MudText Typo="Typo.h6" Class="mb-3">Registration</MudText>
+            <MudText Typo="Typo.subtitle1" Class="mb-3" Style="font-weight: 600;">Registration</MudText>
+
 
             <MudForm @ref="_form" Model="@_model">
                 <MudStack Spacing="2">
@@ -125,7 +126,7 @@
             </MudItem>
 
             <MudItem xs="12">
-                <MudText Typo="Typo.subtitle1" Class="mb-2">Form actions</MudText>
+                <MudText Typo="Typo.subtitle2" Class="mb-2">Form actions</MudText>
                 <MudStack Row="true" Spacing="2" Class="flex-wrap">
                     <MudButton Variant="Variant.Outlined" OnClick="@Validate" Disabled="@_disabled">Validate</MudButton>
                     <MudButton Variant="Variant.Outlined" Color="Color.Warning" OnClick="@ResetValidation">Clear errors</MudButton>

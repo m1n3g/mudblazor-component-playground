@@ -113,7 +113,7 @@
 
             @if (_showHeader)
             {
-                <MudItem xs="12">
+                <MudItem xs="12" md="6">
                     <MudSelect T="Color"
                                Label="Avatar Color"
                                Dense="true"
@@ -131,18 +131,9 @@
                 </MudItem>
             }
 
-            @if (_showMedia)
-            {
-                <MudItem xs="12">
-                    <MudSlider Min="160" Max="320" Step="10" @bind-Value="_mediaHeight" Color="Color.Primary">
-                        @($"Media Height: {_mediaHeight}px")
-                    </MudSlider>
-                </MudItem>
-            }
-
             @if (_showActions)
             {
-                <MudItem xs="12">
+                <MudItem xs="12" md="6">
                     <MudSelect T="CardActionsAlignment"
                                Label="Actions Alignment"
                                Dense="true"
@@ -153,6 +144,16 @@
                     </MudSelect>
                 </MudItem>
             }
+
+            @if (_showMedia)
+            {
+                <MudItem xs="12">
+                    <MudSlider Min="160" Max="320" Step="10" @bind-Value="_mediaHeight" Color="Color.Primary">
+                        @($"Media Height: {_mediaHeight}px")
+                    </MudSlider>
+                </MudItem>
+            }
+
         </MudGrid>
     </Options>
 </DemoPageLayout>

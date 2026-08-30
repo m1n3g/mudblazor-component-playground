@@ -117,7 +117,7 @@
             </MudItem>
 
             <MudItem xs="12">
-                <MudText Typo="Typo.caption">Label placement</MudText>
+                <MudText Typo="Typo.subtitle2">Label placement</MudText>
                 <MudRadioGroup T="Placement" @bind-Value="_placement">
                     <div class="d-flex flex-wrap align-center" style="column-gap: 12px; row-gap: 0;">
                         <MudRadio Value="Placement.Top">Top</MudRadio>
@@ -129,25 +129,20 @@
             </MudItem>
 
             <MudItem xs="12">
+                <MudText Typo="Typo.subtitle2">Behavior</MudText>
                 <div class="d-flex flex-wrap align-center justify-start" style="column-gap: 12px; row-gap: 0;">
-                    <MudSwitch Color="Color.Primary" @bind-Value="_dense" Label="Dense" />
-                    <MudSwitch Color="Color.Primary" @bind-Value="_readOnly" Label="Read only" />
-                    <MudSwitch Color="Color.Primary" @bind-Value="_triState" Label="Tri-state" />
-                    <MudSwitch Color="Color.Primary" @bind-Value="_disabled" Label="Disabled" />
-                    <MudSwitch Color="Color.Primary" @bind-Value="_keyboardEnabled" Label="Keyboard enabled" />
-                </div>
-            </MudItem>
-
-            <MudItem xs="12">
-                <MudText Typo="Typo.caption">Validation</MudText>
-                <div class="d-flex flex-wrap align-center justify-start" style="column-gap: 12px; row-gap: 0;">
-                    <MudSwitch Color="Color.Primary" @bind-Value="_required" Label="Required" />
-                    <MudSwitch Color="Color.Primary" @bind-Value="_error" Label="Error" />
+                    <MudCheckBox Color="Color.Primary" @bind-Value="_dense" Label="Dense" />
+                    <MudCheckBox Color="Color.Primary" @bind-Value="_readOnly" Label="Read only" />
+                    <MudCheckBox Color="Color.Primary" @bind-Value="_triState" Label="Tri-state" />
+                    <MudCheckBox Color="Color.Primary" @bind-Value="_disabled" Label="Disabled" />
+                    <MudCheckBox Color="Color.Primary" @bind-Value="_keyboardEnabled" Label="Keyboard enabled" />
+                    <MudCheckBox Color="Color.Primary" @bind-Value="_required" Label="Required" />
+                    <MudCheckBox Color="Color.Primary" @bind-Value="_error" Label="Error" />
                 </div>
             </MudItem>
 
             <MudItem xs="12" sm="6">
-                <MudTextField T="string" Label="Error text" @bind-Value="_errorText" Clearable Class="w-100" />
+                <MudTextField T="string" Label="Error text" ShrinkLabel="true" Placeholder="Enter error text "@bind-Value="_errorText" Clearable Class="w-100" />
             </MudItem>
 
             <MudItem xs="12" sm="6">
