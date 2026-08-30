@@ -1,6 +1,6 @@
 # MudBlazor UI Kit: Design System for Blazor Review
 
-UI Kit guideline version: 1.0.0
+UI Kit guideline version: 1.1.0
 
 ## Purpose
 
@@ -104,7 +104,7 @@ Do not recreate axis label text styles manually.
 
 Use:
 - `Type = Default` for label items with text
-- `Type = Spacer` for empty spacer items (e.g. top-left corner gap)
+- `Type = Spacer` for empty spacer items
 
 Set Position based on placement relative to the specimen grid:
 
@@ -112,10 +112,6 @@ Set Position based on placement relative to the specimen grid:
 - `bottom` — x-axis labels placed below the grid
 - `left` — y-axis labels placed to the left of the grid
 - `right` — y-axis labels placed to the right of the grid
-
-Set the instance height (or width) to match the corresponding component row
-or column dimension so the label aligns with its row/column in the specimen
-grid.
 
 #### Label Format
 
@@ -144,6 +140,64 @@ Each side can hold dual axes. For example:
 - y-axis on left side: align top-right
 - y-axis on right side: align top-left
 
+#### Spacer Rules
+
+The `.axis-label` spacer (`Type = Spacer`) is placed **only as the first
+child of the first y-axis frame** (e.g. y-axis1). Its purpose is to
+accommodate the height of the first x-axis row above plus the 28px gap
+to the component body.
+
+Spacer sizing:
+
+- Width: **HUG** (default instance width)
+- Height: **47px fixed** (default)
+
+Adjust the spacer height only when the x-axis label above uses multi-line
+text that increases its row height. Otherwise always use 47px.
+
+Do not place spacers in x-axis frames or in y-axis frames that do not have
+a corresponding x-axis row above them.
+
+#### Axis-Label Instance Sizing
+
+Internal text node: always **HUG content** for both width and height.
+
+**Top / Bottom labels** (x-axis):
+
+- Width: HUG content (follows the text width)
+- Height: **HUG content** (follows the text height)
+
+**Left / Right labels** (y-axis):
+
+- Width: **HUG content** (follows the text width)
+- Height: **Fixed** — set to the tallest variant height in the
+  corresponding row. For example, if a row contains variants with
+  heights 37px, 43px, and 37px, set the label height to 43px.
+
+When the component variants within a row have varying heights, always pick
+the maximum height for that row's label.
+
+#### X-Axis Frame Sizing
+
+- Padding left: **20px**
+- Padding right: **20px**
+- Gap (itemSpacing): **20px** (default; adjust if needed for alignment)
+- Padding top/bottom: 0
+
+These values mirror the component set's internal alignment, where variants
+are positioned 20px from the left edge with 20px gaps between them.
+
+#### Y-Axis Frame Sizing
+
+- First child: spacer (see Spacer Rules above)
+- Padding: **0** (no padding on any side)
+- Gap (itemSpacing): **20px** (default; matches the component set's
+  internal gap between variant rows)
+
+Each subsequent `.axis-label` instance height is set to follow the tallest
+variant height in the corresponding row (see Axis-Label Instance Sizing
+above). A second pass may be needed to fine-tune individual label heights
+after the initial setup.
 
 
 ## Documentation Content
