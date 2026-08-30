@@ -628,3 +628,32 @@ Updated [`Pages/Components/Buttons/MudButtonFabDemo.razor`](./Pages/Components/B
 
 - Reassigned the disable control from the save FAB to the fourth extended FAB
 - Renamed the option to `Disable Extended FAB` to match its behavior
+
+## 2026-08-26
+
+### MudFileUpload Demo Refinement
+
+Updated [`Pages/Components/Inputs/MudFileUploadDemo.razor`](./Pages/Components/Inputs/MudFileUploadDemo.razor):
+
+- Reorganized upload options into clear three-row groups for file types, triggers, limits, display, and errors
+- Added selectable upload triggers for the default button, button, FAB, and icon button
+- Added outside and inline file-display modes with bounded chips and filename ellipsis while keeping close controls visible
+- Added file count and file-size limits, accepted-file presets, drag-and-drop, invalid-change suppression, and error controls
+- Prevented drag-and-drop when the option is disabled
+- Reset validation feedback when options or upload actions are used without clearing selected files
+- Kept Upload and Clear actions as consistent medium filled buttons across trigger choices
+
+Result:
+
+- The File Upload demo now has a cleaner responsive options layout and more predictable validation and drag/drop behavior
+
+## 2026-08-28
+
+### MudSkeleton Demo Refinement
+
+Updated [`Pages/Components/Feedback/MudSkeletonDemo.razor`](./Pages/Components/Feedback/MudSkeletonDemo.razor):
+
+- Made all Skeleton options full-width within the options panel
+- Set the default skeleton type to `Text` and animation to `Pulse`
+- Added a paragraph-style Text preview and moved the card-style preview to Rectangle
+- Refined the Circle preview with a centered profile circle, normal background blocks, and constrained custom dimensions

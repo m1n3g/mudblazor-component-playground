@@ -29,3 +29,12 @@
 - When a demo uses sliders for numeric properties such as `Elevation`, include the current value in the slider label, for example `Elevation: 0`.
 - If a demo exposes non-default behavior, make it a deliberate user selection instead of the initial page state.
 - If the API documentation does not explicitly state a default, prefer the component's natural default value and note that assumption in code comments or changelog only when it affects behavior.
+- When a demo displays all `Variant` options, use `Text, Outlined, Filled` when `Text` is the API-default variant; otherwise use `Filled, Outlined, Text`. Determine the primary sequence from the API documentation first, and follow an explicit user-requested sequence second.
+- When a demo displays all `Size` options, list them in the order `Small, Medium, Large`.
+- Use `<MudText Typo="Typo.subtitle2" Style="font-weight: 600" Class="mb-3 >Label</MudText>` for grouped section labels, replacing `Label` with the section name.
+- Never use `MudPaper` in an options panel; use the panel's existing layout and grouping labels instead.
+
+## Demo-Specific Styling
+
+- Keep CSS that is specific to a component demo inside that page's `.razor` file, normally in a local `<style>` block.
+- Do not create an external `.razor.css` file for a demo-specific style unless the user explicitly requests it or the style is shared by multiple components.

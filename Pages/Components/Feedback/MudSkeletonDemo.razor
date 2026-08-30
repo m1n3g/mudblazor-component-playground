@@ -1,64 +1,97 @@
 @page "/components/skeleton"
 @using MudBlazor
 
-<MudText Typo="Typo.h6" Style="font-weight:700">Variants</MudText>
-<MudSkeleton Class="mt-2" Width="250px" />
-<MudSkeleton Class="mt-2" SkeletonType="SkeletonType.Circle" Width="50px" Height="50px" />
-<MudSkeleton Class="mt-2" SkeletonType="SkeletonType.Rectangle" Width="250px" Height="110px" />
-
-<MudGrid Class="mt-5" Spacing="2">
-    <!-- Column 1: Animations -->
-    <MudItem xs="12" md="4">
-        <MudText Typo="Typo.h6" Class="mb-2" Style="font-weight:700">Animations</MudText>
-        <MudSkeleton Class="mt-2" />
-        <MudSkeleton Class="mt-2" Animation="Animation.False" />
-        <MudSkeleton Class="mt-2" Animation="Animation.Wave" />
-    </MudItem>
-
-    <!-- Column 2: Pulsate Example (skeleton + loaded card) -->
-    <MudItem xs="12" md="4">
-        <MudText Typo="Typo.h6" Class="mb-2" Style="font-weight:700">Pulsate Example</MudText>
-
-        <MudCard Class="w-100">
-            <MudSkeleton SkeletonType="SkeletonType.Rectangle" Height="200px" />
-            <MudCardContent>
-                <MudSkeleton Width="30%" Height="42px" />
-                <MudSkeleton Width="80%" />
-                <MudSkeleton Width="100%" />
-            </MudCardContent>
-            <MudCardActions>
-                <MudSkeleton Width="64px" Height="40px" Class="ml-2" />
-                <MudSkeleton Width="105px" Height="40px" Class="ml-3" />
-            </MudCardActions>
+<DemoPageLayout Title="Skeleton"
+                Description="Displays a placeholder preview of content before the data gets loaded, reducing load-time frustration."
+                Variant="DemoPageLayoutVariant.Vertical">
+    <Preview>
+        <MudCard Class="w-100" Style="max-width: 620px;">
+            @if (_skeletonType == SkeletonType.Text)
+            {
+                <MudStack Spacing="2" Style="padding: 24px;">
+                    <MudSkeleton SkeletonType="SkeletonType.Text" Animation="@_animation"
+                                 Width="@GetTextWidth(0)" Height="@TextHeight" />
+                    <MudSkeleton SkeletonType="SkeletonType.Text" Animation="@_animation"
+                                 Width="@GetTextWidth(1)" Height="@TextHeight" />
+                    <MudSkeleton SkeletonType="SkeletonType.Text" Animation="@_animation"
+                                 Width="@GetTextWidth(2)" Height="@TextHeight" />
+                    <MudSkeleton SkeletonType="SkeletonType.Text" Animation="@_animation"
+                                 Width="@GetTextWidth(3)" Height="@TextHeight" />
+                    <MudSkeleton SkeletonType="SkeletonType.Text" Animation="@_animation"
+                                 Width="@GetTextWidth(4)" Height="@TextHeight" />
+                </MudStack>
+            }
+            else if (_skeletonType == SkeletonType.Circle)
+            {
+                <MudStack Spacing="0" Style="position: relative;">
+                    <div style="height: 180px; background: var(--mud-palette-background-grey);"></div>
+                    <MudSkeleton SkeletonType="SkeletonType.Circle" Animation="@_animation"
+                                 Width="@CircleWidth" Height="@CircleHeight"
+                                 Style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); max-width: 100%; max-height: 100%;" />
+                </MudStack>
+            }
+            else
+            {
+                <MudSkeleton SkeletonType="SkeletonType.Rectangle"
+                             Animation="@_animation"
+                             Width="@MediaWidth"
+                             Height="@MediaHeight" />
+            }
         </MudCard>
-    </MudItem>
+    </Preview>
 
-    <!-- Column 3: Wave Example -->
-    <MudItem xs="12" md="4">
-        <MudText Typo="Typo.h6" Class="mb-2" Style="font-weight:700">Wave Example</MudText>
+    <Options>
+        <MudGrid Spacing="4" Justify="Justify.Center" Class="w-100">
+            <MudItem xs="12">
+                <MudSelect T="SkeletonType" Label="Skeleton type" Dense="true" @bind-Value="_skeletonType">
+                    <MudSelectItem Value="SkeletonType.Text">Text</MudSelectItem>
+                    <MudSelectItem Value="SkeletonType.Circle">Circle</MudSelectItem>
+                    <MudSelectItem Value="SkeletonType.Rectangle">Rectangle</MudSelectItem>
+                </MudSelect>
+            </MudItem>
 
-        <MudCard Class="w-100">
-            <MudCardHeader>
-                <CardHeaderAvatar>
-                    <MudSkeleton SkeletonType="SkeletonType.Circle" Animation="Animation.Wave" Height="40px"
-                        Width="40px" />
-                </CardHeaderAvatar>
-                <CardHeaderContent>
-                    <MudSkeleton Animation="Animation.Wave" Width="40%" />
-                    <MudSkeleton Animation="Animation.Wave" Width="60%" />
-                </CardHeaderContent>
-            </MudCardHeader>
+            <MudItem xs="12">
+                <MudSelect T="Animation" Label="Animation" Dense="true" @bind-Value="_animation">
+                    <MudSelectItem Value="Animation.Pulse">Pulse</MudSelectItem>
+                    <MudSelectItem Value="Animation.Wave">Wave</MudSelectItem>
+                    <MudSelectItem Value="Animation.False">None</MudSelectItem>
+                </MudSelect>
+            </MudItem>
 
-            <MudSkeleton SkeletonType="SkeletonType.Rectangle" Animation="Animation.Wave" Height="250px" />
-            <MudCardContent>
-                <MudSkeleton Animation="Animation.Wave" />
-            </MudCardContent>
-            <MudCardActions>
-                <MudSkeleton SkeletonType="SkeletonType.Circle" Animation="Animation.Wave" Height="30px" Width="30px"
-                    Class="ml-2 mb-2" />
-                <MudSkeleton SkeletonType="SkeletonType.Circle" Animation="Animation.Wave" Height="30px" Width="30px"
-                    Class="ml-3 mb-2" />
-            </MudCardActions>
-        </MudCard>
-    </MudItem>
-</MudGrid>
+            <MudItem xs="12">
+                <MudTextField Label="Width" @bind-Value="_width" @bind-Value:after="OnWidthChanged" ShrinkLabel="true" Clearable="true" HelperText="CSS value such as 250px or 100%" />
+            </MudItem>
+
+            <MudItem xs="12">
+                <MudTextField Label="Height" @bind-Value="_height" ShrinkLabel="true" Clearable="true" HelperText="CSS value such as 32px or 110px" />
+                <MudButton Variant="Variant.Outlined" Color="Color.Primary" OnClick="ResetDimensions" Class="mt-5">
+                    Reset dimensions
+                </MudButton>
+            </MudItem>
+        </MudGrid>
+    </Options>
+</DemoPageLayout>
+
+@code {
+    private SkeletonType _skeletonType = SkeletonType.Text;
+    private Animation _animation = Animation.Pulse;
+    private string? _width = "100%";
+    private string? _height;
+    private bool _widthCustomized;
+
+    private static readonly string[] DefaultTextWidths = ["20%", "35%", "85%", "85%", "100%"];
+    private string? MediaWidth => _skeletonType == SkeletonType.Circle ? "250px" : _width;
+    private string? MediaHeight => _skeletonType == SkeletonType.Circle ? "250px" : _height ?? "250px";
+    private string? TextHeight => _height;
+    private string CircleWidth => _width is "100%" or null or "" ? "96px" : _width;
+    private string CircleHeight => _height is "250px" or null or "" ? "96px" : _height;
+    private string? GetTextWidth(int index) => _widthCustomized ? _width : DefaultTextWidths[index];
+    private void OnWidthChanged() => _widthCustomized = true;
+
+    private void ResetDimensions()
+    {
+        _width = "100%";
+        _height = null;
+        _widthCustomized = false;
+    }
+}

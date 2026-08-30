@@ -31,9 +31,9 @@
         <MudGrid Spacing="4" Justify="Justify.Center" Class="w-100">
             <MudItem xs="12" md="6">
                 <MudSelect T="Variant" Label="Variant" Dense="true" @bind-Value="_variant">
-                    <MudSelectItem Value="Variant.Filled">Filled</MudSelectItem>
-                    <MudSelectItem Value="Variant.Outlined">Outlined</MudSelectItem>
                     <MudSelectItem Value="Variant.Text">Text</MudSelectItem>
+                    <MudSelectItem Value="Variant.Outlined">Outlined</MudSelectItem>
+                    <MudSelectItem Value="Variant.Filled">Filled</MudSelectItem>
                 </MudSelect>
             </MudItem>
 
@@ -67,7 +67,6 @@
                 <MudSelect T="AlertShape"
                            Label="Corners"
                            Dense="true"
-                           HelperText="Rounded corners are controlled by the app theme in MudBlazor 9.6, not by a direct MudAlert parameter."
                            HelperTextOnFocus="false"
                            @bind-Value="_shape">
                     <MudSelectItem Value="AlertShape.Default">Theme Default</MudSelectItem>

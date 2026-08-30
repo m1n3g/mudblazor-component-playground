@@ -2,6 +2,12 @@
 @using MudBlazor
 @using Microsoft.AspNetCore.Components.Rendering
 
+<style>
+    .avatar-preview-mode-group .mud-radio-group {
+        column-gap: 12px;
+    }
+</style>
+
 <DemoPageLayout Title="Avatar"
                 Description="Represents a component which displays circular user profile pictures, icons or text."
                 Variant="DemoPageLayoutVariant.Vertical">
@@ -26,7 +32,8 @@
         <MudGrid Spacing="4" Justify="Justify.Center" Class="w-100">
             <MudItem xs="12">
                 <MudRadioGroup T="AvatarPreviewMode"
-                               @bind-Value="_previewMode">
+                               @bind-Value="_previewMode"
+                               Class="avatar-preview-mode-group">
                     <MudRadio T="AvatarPreviewMode" Value="AvatarPreviewMode.Avatar" Color="Color.Primary">Avatar</MudRadio>
                     <MudRadio T="AvatarPreviewMode" Value="AvatarPreviewMode.Group" Color="Color.Primary">Avatar Group</MudRadio>
                 </MudRadioGroup>
@@ -80,9 +87,9 @@
             {
                 <MudItem xs="12" md="6">
                     <MudSelect T="Variant" Label="Variant" Dense="true" @bind-Value="_variant">
-                        <MudSelectItem Value="Variant.Text">Text</MudSelectItem>
                         <MudSelectItem Value="Variant.Filled">Filled</MudSelectItem>
                         <MudSelectItem Value="Variant.Outlined">Outlined</MudSelectItem>
+                        <MudSelectItem Value="Variant.Text">Text</MudSelectItem>
                     </MudSelect>
                 </MudItem>
 
