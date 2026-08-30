@@ -1,129 +1,155 @@
 @page "/components/numericfield"
 @using MudBlazor
+@using System.Globalization
 
 <DemoPageLayout Title="Numeric Field"
                 Description="Numeric fields accept numbers with optional adornments, limits, and validation states."
                 Variant="DemoPageLayoutVariant.Vertical">
     <Preview>
         <MudStack Spacing="4" Class="w-100">
-            <MudText Typo="Typo.subtitle1">Start adornment</MudText>
-            <MudGrid Spacing="4">
-                @foreach (var variant in Enum.GetValues<Variant>())
-                {
-                    <MudItem xs="12" md="4">
-                        <MudNumericField T="decimal"
-                                         @bind-Value="_numStart"
-                                         Variant="@variant"
-                                         Label="@variant.ToString()"
-                                         Margin="@ComputedMargin"
-                                         ReadOnly="@_readOnly"
-                                         Disabled="@_disabled"
-                                         Clearable="@_clearable"
-                                         Immediate="true"
-                                         Placeholder="@(_placeholder ? "Enter number" : null)"
-                                         HelperText="@(_helperText ? "Helper text" : null)"
-                                         HelperTextOnFocus="@_helperOnFocus"
-                                         Error="@_hasError"
-                                         ErrorText="Please enter a number"
-                                         ShrinkLabel="@_shrinkLabel"
-                                         Adornment="Adornment.Start"
-                                         AdornmentIcon="@Icons.Material.Filled.AttachMoney" />
-                    </MudItem>
-                }
-            </MudGrid>
-
-            <MudText Typo="Typo.subtitle1">End adornment</MudText>
-            <MudGrid Spacing="4">
-                @foreach (var variant in Enum.GetValues<Variant>())
-                {
-                    <MudItem xs="12" md="4">
-                        <MudNumericField T="decimal"
-                                         @bind-Value="_numEnd"
-                                         Variant="@variant"
-                                         Label="@($"{variant} (End)")"
-                                         Margin="@ComputedMargin"
-                                         ReadOnly="@_readOnly"
-                                         Disabled="@_disabled"
-                                         Clearable="@_clearable"
-                                         Immediate="true"
-                                         Placeholder="@(_placeholder ? "Enter number" : null)"
-                                         HelperText="@(_helperText ? "Helper text" : null)"
-                                         HelperTextOnFocus="@_helperOnFocus"
-                                         Error="@_hasError"
-                                         ErrorText="Please enter a number"
-                                         ShrinkLabel="@_shrinkLabel"
-                                         Adornment="Adornment.End"
-                                         AdornmentIcon="@Icons.Material.Filled.ArrowForward" />
-                    </MudItem>
-                }
-            </MudGrid>
-
-            <MudDivider />
-
-            <MudGrid Spacing="4">
-                <MudItem xs="12" md="4">
-                    <MudNumericField T="decimal" Label="Amount" @bind-Value="_numCurrency"
-                                     Variant="Variant.Filled" Margin="@ComputedMargin"
-                                     ReadOnly="@_readOnly" Disabled="@_disabled" Clearable="@_clearable" Immediate="true"
-                                     HelperText="@(_helperText ? "Enter an amount" : null)"
-                                     HelperTextOnFocus="@_helperOnFocus" ShrinkLabel="@_shrinkLabel"
-                                     Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Payments" />
-                </MudItem>
-
-                <MudItem xs="12" md="4">
-                    <MudNumericField T="decimal" Label="Percent" @bind-Value="_numPercent"
-                                     Variant="Variant.Outlined" Margin="@ComputedMargin"
-                                     ReadOnly="@_readOnly" Disabled="@_disabled" Clearable="@_clearable" Immediate="true"
-                                     HelperText="@(_helperText ? "0 - 100" : null)"
-                                     HelperTextOnFocus="@_helperOnFocus" ShrinkLabel="@_shrinkLabel"
-                                     Min="0" Max="100" Step="1" Adornment="Adornment.End" AdornmentText="%" />
-                </MudItem>
-
-                <MudItem xs="12" md="4">
-                    <MudNumericField T="decimal" Label="Limited (Min/Max/Step)" @bind-Value="_numLimited"
-                                     Variant="Variant.Outlined" Margin="@ComputedMargin"
-                                     ReadOnly="@_readOnly" Disabled="@_disabled" Clearable="@_clearable" Immediate="true"
-                                     HelperText="@(_helperText ? $"Range: {_min} - {_max}, step {_step}" : null)"
-                                     HelperTextOnFocus="@_helperOnFocus" ShrinkLabel="@_shrinkLabel"
-                                     Min="@_min" Max="@_max" Step="@_step" />
-                </MudItem>
-            </MudGrid>
+            @switch (_bindingType)
+            {
+                case NumericBindingType.Int:
+                    @foreach (var variant in Variants)
+                    {
+                        <MudNumericField T="int" @key="variant" @bind-Value="_intValue" Variant="@variant" Label="@($"{variant} — {BindingTypeLabel}")"
+                                         Margin="@ComputedMargin" ReadOnly="@_readOnly" Disabled="@_disabled" Clearable="@_clearable"
+                                         Immediate="@_immediate" DebounceInterval="@_debounceInterval" Placeholder="@(_placeholder ? "Enter number" : null)"
+                                         OnDebounceIntervalElapsed="HandleDebounceIntervalElapsed"
+                                         HelperText="@(_helperText ? $"Range: {_min?.ToString() ?? "any"} - {_max}, step {_step}" : null)"
+                                         HelperTextOnFocus="@_helperOnFocus" Error="@_hasError" ErrorText="Please enter a number"
+                                         Required="@_required" RequiredError="A value is required" OnlyValidateIfDirty="@_onlyValidateIfDirty"
+                                         ShrinkLabel="@_shrinkLabel" Min="@IntMin" Max="@IntMax" Step="@IntStep"
+                                         MaxLength="@MaxLengthValue" Format="@FormatValue" Culture="@SelectedCulture" HideSpinButtons="@_hideSpinButtons" />
+                    }
+                    break;
+                case NumericBindingType.Double:
+                    @foreach (var variant in Variants)
+                    {
+                        <MudNumericField T="double" @key="variant" @bind-Value="_doubleValue" Variant="@variant" Label="@($"{variant} — {BindingTypeLabel}")"
+                                         Margin="@ComputedMargin" ReadOnly="@_readOnly" Disabled="@_disabled" Clearable="@_clearable"
+                                         Immediate="@_immediate" DebounceInterval="@_debounceInterval" Placeholder="@(_placeholder ? "Enter number" : null)"
+                                         OnDebounceIntervalElapsed="HandleDebounceIntervalElapsed"
+                                         HelperText="@(_helperText ? $"Range: {_min?.ToString() ?? "any"} - {_max}, step {_step}" : null)"
+                                         HelperTextOnFocus="@_helperOnFocus" Error="@_hasError" ErrorText="Please enter a number"
+                                         Required="@_required" RequiredError="A value is required" OnlyValidateIfDirty="@_onlyValidateIfDirty"
+                                         ShrinkLabel="@_shrinkLabel" Min="@DoubleMin" Max="@DoubleMax" Step="@DoubleStep"
+                                         MaxLength="@MaxLengthValue" Format="@FormatValue" Culture="@SelectedCulture" HideSpinButtons="@_hideSpinButtons" />
+                    }
+                    break;
+                case NumericBindingType.NullableInt:
+                    @foreach (var variant in Variants)
+                    {
+                        <MudNumericField T="int?" @key="variant" @bind-Value="_nullableIntValue" Variant="@variant" Label="@($"{variant} — {BindingTypeLabel}")"
+                                         Margin="@ComputedMargin" ReadOnly="@_readOnly" Disabled="@_disabled" Clearable="@_clearable"
+                                         Immediate="@_immediate" DebounceInterval="@_debounceInterval" Placeholder="@(_placeholder ? "Enter number" : null)"
+                                         OnDebounceIntervalElapsed="HandleDebounceIntervalElapsed"
+                                         HelperText="@(_helperText ? $"Range: {_min?.ToString() ?? "any"} - {_max}, step {_step}" : null)"
+                                         HelperTextOnFocus="@_helperOnFocus" Error="@_hasError" ErrorText="Please enter a number"
+                                         Required="@_required" RequiredError="A value is required" OnlyValidateIfDirty="@_onlyValidateIfDirty"
+                                         ShrinkLabel="@_shrinkLabel" Min="@IntMin" Max="@IntMax" Step="@IntStep"
+                                         MaxLength="@MaxLengthValue" Format="@FormatValue" Culture="@SelectedCulture" HideSpinButtons="@_hideSpinButtons" />
+                    }
+                    break;
+                case NumericBindingType.NullableDouble:
+                    @foreach (var variant in Variants)
+                    {
+                        <MudNumericField T="double?" @key="variant" @bind-Value="_nullableDoubleValue" Variant="@variant" Label="@($"{variant} — {BindingTypeLabel}")"
+                                         Margin="@ComputedMargin" ReadOnly="@_readOnly" Disabled="@_disabled" Clearable="@_clearable"
+                                         Immediate="@_immediate" DebounceInterval="@_debounceInterval" Placeholder="@(_placeholder ? "Enter number" : null)"
+                                         OnDebounceIntervalElapsed="HandleDebounceIntervalElapsed"
+                                         HelperText="@(_helperText ? $"Range: {_min?.ToString() ?? "any"} - {_max}, step {_step}" : null)"
+                                         HelperTextOnFocus="@_helperOnFocus" Error="@_hasError" ErrorText="Please enter a number"
+                                         Required="@_required" RequiredError="A value is required" OnlyValidateIfDirty="@_onlyValidateIfDirty"
+                                         ShrinkLabel="@_shrinkLabel" Min="@DoubleMin" Max="@DoubleMax" Step="@DoubleStep"
+                                         MaxLength="@MaxLengthValue" Format="@FormatValue" Culture="@SelectedCulture" HideSpinButtons="@_hideSpinButtons" />
+                    }
+                    break;
+            }
         </MudStack>
     </Preview>
 
     <Options>
         <MudGrid Spacing="4" Justify="Justify.Center" Class="w-100">
-            <MudItem xs="12" md="4">
-                <MudNumericField T="decimal" Label="Minimum" Margin="Margin.Dense" Immediate="true" @bind-Value="_min" />
-            </MudItem>
+            <MudItem xs="12">
+                <MudText Typo="Typo.subtitle2" Style="font-weight: 600" Class="mb-3">Value and limits</MudText>
+                <MudGrid Spacing="4">
+                    <MudItem xs="12">
+                        <MudSelect T="NumericBindingType" @bind-Value="_bindingType" Label="Data binding type" HelperText="Nullable values may start empty. Min, Max, and Step always use non-null defaults." Dense="true">
+                            <MudSelectItem Value="NumericBindingType.Int">Whole number (int) — starts at 0</MudSelectItem>
+                            <MudSelectItem Value="NumericBindingType.Double">Decimal number (double) — starts at 0.0</MudSelectItem>
+                            <MudSelectItem Value="NumericBindingType.NullableInt">Optional whole number (int?) — starts empty</MudSelectItem>
+                            <MudSelectItem Value="NumericBindingType.NullableDouble">Optional decimal number (double?) — starts empty</MudSelectItem>
+                        </MudSelect>
+                    </MudItem>
+                    <MudItem xs="12" md="6">
+                        <MudNumericField T="decimal?" Label="Minimum" HelperText="Smallest allowed value" Margin="Margin.Dense" Immediate="true" @bind-Value="_min" Placeholder="Use default minimum" />
+                    </MudItem>
+                    <MudItem xs="12" md="6">
+                        <MudNumericField T="decimal" Label="Maximum" HelperText="Largest allowed value" Margin="Margin.Dense" Immediate="true" @bind-Value="_max" />
+                    </MudItem>
+                    <MudItem xs="12" md="6">
+                        <MudNumericField T="decimal" Label="Step" HelperText="Increment between values" Margin="Margin.Dense" Immediate="true" @bind-Value="_step" />
+                    </MudItem>
+                    <MudItem xs="12" md="6">
+                        <MudNumericField T="int?" Label="Maximum length" HelperText="Maximum number of characters" Margin="Margin.Dense" Immediate="true" @bind-Value="_maxLength" Placeholder="No limit" />
+                    </MudItem>
 
-            <MudItem xs="12" md="4">
-                <MudNumericField T="decimal" Label="Maximum" Margin="Margin.Dense" Immediate="true" @bind-Value="_max" />
-            </MudItem>
-
-            <MudItem xs="12" md="4">
-                <MudNumericField T="decimal" Label="Step" Margin="Margin.Dense" Immediate="true" @bind-Value="_step" />
+                </MudGrid>
             </MudItem>
 
             <MudItem xs="12">
-                <MudSelect T="Margin" @bind-Value="_margin" Label="Margin" Dense="true">
-                    <MudSelectItem Value="Margin.None">None</MudSelectItem>
-                    <MudSelectItem Value="Margin.Dense">Dense</MudSelectItem>
-                    <MudSelectItem Value="Margin.Normal">Normal</MudSelectItem>
-                </MudSelect>
+                <MudText Typo="Typo.subtitle2" Style="font-weight: 600" Class="mt-2 mb-3">Formatting</MudText>
+                <MudGrid Spacing="4">
+                    <MudItem xs="12" md="6">
+                        <MudSelect T="string" @bind-Value="_cultureName" Label="Number format"
+                                   HelperText="Controls decimal and thousands separators" Dense="true">
+                            <MudSelectItem Value="@("Invariant")">Default — 1234.56</MudSelectItem>
+                            <MudSelectItem Value="@("en-US")">English (US) — 1,234.56</MudSelectItem>
+                            <MudSelectItem Value="@("de-DE")">German (Germany) — 1.234,56</MudSelectItem>
+                        </MudSelect>
+                    </MudItem>
+
+                    <MudItem xs="12" md="6">
+                        <MudSelect T="string" @bind-Value="_format" Label="Display format"
+                                   HelperText="Controls decimal places and currency display" Dense="true">
+                            <MudSelectItem Value="@("Default")">Default — as entered</MudSelectItem>
+                            <MudSelectItem Value="@("N2")">2 decimals — 1,234.50</MudSelectItem>
+                            <MudSelectItem Value="@("F1")">1 decimal — 1234.5</MudSelectItem>
+                            <MudSelectItem Value="@("C2")">Currency — $1,234.50</MudSelectItem>
+                        </MudSelect>
+                    </MudItem>
+
+                    <MudItem xs="12" md="6">
+                        <MudNumericField T="double" Label="Debounce interval (ms)" HelperText="Wait before processing stops" Margin="Margin.Dense" Immediate="true" @bind-Value="_debounceInterval" Min="0" />
+                        <MudText Typo="Typo.caption">Last debounced input: @_lastDebouncedText</MudText>
+                    </MudItem>
+
+                    <MudItem xs="12" md="6">
+                        <MudSelect T="Margin" @bind-Value="_margin" Label="Margin" Dense="true">
+                            <MudSelectItem Value="Margin.None">None</MudSelectItem>
+                            <MudSelectItem Value="Margin.Dense">Dense</MudSelectItem>
+                            <MudSelectItem Value="Margin.Normal">Normal</MudSelectItem>
+                        </MudSelect>
+                    </MudItem>
+                </MudGrid>
             </MudItem>
 
             <MudItem xs="12">
+                <MudText Typo="Typo.subtitle2" Style="font-weight: 600" Class="mt-2 mb-1">Behavior</MudText>
                 <div class="d-flex flex-wrap align-center justify-start" style="column-gap: 12px; row-gap: 0;">
-                    <MudSwitch @bind-Value="_dense" Label="Dense" Color="Color.Primary" />
-                    <MudSwitch @bind-Value="_readOnly" Label="Read only" Color="Color.Primary" />
-                    <MudSwitch @bind-Value="_disabled" Label="Disabled" Color="Color.Primary" />
-                    <MudSwitch @bind-Value="_placeholder" Label="Placeholder" Color="Color.Primary" />
-                    <MudSwitch @bind-Value="_helperText" Label="Helper text" Color="Color.Primary" />
-                    <MudSwitch @bind-Value="_helperOnFocus" Label="Helper text on focus" Color="Color.Primary" />
-                    <MudSwitch @bind-Value="_clearable" Label="Clearable" Color="Color.Primary" />
-                    <MudSwitch @bind-Value="_hasError" Label="Show error" Color="Color.Error" />
-                    <MudSwitch @bind-Value="_shrinkLabel" Label="Shrink label" Color="Color.Primary" />
+                    <MudCheckBox @bind-Value="_dense" Label="Dense" Color="Color.Primary" />
+                    <MudCheckBox @bind-Value="_readOnly" Label="Read only" Color="Color.Primary" />
+                    <MudCheckBox @bind-Value="_disabled" Label="Disabled" Color="Color.Primary" />
+                    <MudCheckBox @bind-Value="_placeholder" Label="Placeholder" Color="Color.Primary" />
+                    <MudCheckBox @bind-Value="_helperText" Label="Helper text" Color="Color.Primary" />
+                    <MudCheckBox @bind-Value="_helperOnFocus" Label="Helper text on focus" Color="Color.Primary" />
+                    <MudCheckBox @bind-Value="_clearable" Label="Clearable" Color="Color.Primary" />
+                    <MudCheckBox @bind-Value="_hasError" Label="Show error" Color="Color.Error" />
+                    <MudCheckBox @bind-Value="_shrinkLabel" Label="Shrink label" Color="Color.Primary" />
+                    <MudCheckBox @bind-Value="_hideSpinButtons" Label="Hide spin buttons" Color="Color.Primary" />
+                    <MudCheckBox @bind-Value="_required" Label="Required" Color="Color.Primary" />
+                    <MudCheckBox @bind-Value="_onlyValidateIfDirty" Label="Only validate if dirty" Color="Color.Primary" />
                 </div>
             </MudItem>
         </MudGrid>
@@ -131,11 +157,10 @@
 </DemoPageLayout>
 
 @code {
-    private decimal _numStart;
-    private decimal _numEnd;
-    private decimal _numCurrency = 123.45m;
-    private decimal _numPercent = 15m;
-    private decimal _numLimited = 10m;
+    private int _intValue;
+    private double _doubleValue;
+    private int? _nullableIntValue;
+    private double? _nullableDoubleValue;
 
     private bool _dense;
     private bool _readOnly;
@@ -146,11 +171,55 @@
     private bool _clearable = true;
     private bool _hasError;
     private bool _shrinkLabel;
+    private bool _required;
+    private bool _onlyValidateIfDirty;
+    private bool _hideSpinButtons;
+    private bool _immediate = true;
 
     private Margin _margin = Margin.None;
     private Margin ComputedMargin => _dense ? Margin.Dense : _margin;
 
-    private decimal _min;
+    private decimal? _min;
     private decimal _max = 100m;
     private decimal _step = 1m;
+    private int? _maxLength;
+    private double _debounceInterval;
+    private string _lastDebouncedText = "None yet";
+    private string _cultureName = "Invariant";
+    private string _format = "Default";
+
+    private static readonly Variant[] Variants = [Variant.Text, Variant.Outlined, Variant.Filled];
+    private NumericBindingType _bindingType = NumericBindingType.NullableInt;
+    private string? FormatValue => _format == "Default" ? null : _format;
+    private string BindingTypeLabel => _bindingType switch
+    {
+        NumericBindingType.Int => "Whole number (int)",
+        NumericBindingType.Double => "Decimal number (double)",
+        NumericBindingType.NullableInt => "Optional whole number (int?)",
+        NumericBindingType.NullableDouble => "Optional decimal number (double?)",
+        _ => string.Empty
+    };
+    private int IntMin => _min.HasValue ? (int)Math.Clamp(decimal.Truncate(_min.Value), int.MinValue, int.MaxValue) : int.MinValue;
+    private int IntMax => (int)Math.Clamp(decimal.Truncate(_max), int.MinValue, int.MaxValue);
+    private int IntStep => (int)Math.Clamp(decimal.Truncate(_step), int.MinValue, int.MaxValue);
+    private double DoubleMin => _min.HasValue ? (double)_min.Value : double.MinValue;
+    private double DoubleMax => (double)_max;
+    private double DoubleStep => (double)_step;
+    private int MaxLengthValue => _maxLength ?? 524288;
+    private CultureInfo SelectedCulture => _cultureName switch
+    {
+        "en-US" => CultureInfo.GetCultureInfo("en-US"),
+        "de-DE" => CultureInfo.GetCultureInfo("de-DE"),
+        _ => CultureInfo.InvariantCulture
+    };
+
+    private void HandleDebounceIntervalElapsed(string text) => _lastDebouncedText = string.IsNullOrWhiteSpace(text) ? "Empty" : text;
+
+    private enum NumericBindingType
+    {
+        Int,
+        Double,
+        NullableInt,
+        NullableDouble
+    }
 }
