@@ -13,7 +13,7 @@
                         <MudRadioGroup T="string" @bind-Value="_choice1" Disabled="@_disableGroup" ReadOnly="@_readOnly"
                                        Required="@_required" RequiredError="@_requiredError"
                                        Error="@_error" ErrorText="@_errorText">
-                            <MudRadio T="string" Value="@("Default")" Label="Default" Color="@_color" UncheckedColor="@_uncheckedColor" CheckedIcon="@CheckedIcon" UncheckedIcon="@UncheckedIcon" Size="@_size" Dense="@_dense" Ripple="@_ripple" LabelPlacement="@_placement" />
+                            <MudRadio T="string" Value="@("Default")" Label="@_label" Color="@_color" UncheckedColor="@_uncheckedColor" CheckedIcon="@CheckedIcon" UncheckedIcon="@UncheckedIcon" Size="@_size" Dense="@_dense" Ripple="@_ripple" LabelPlacement="@_placement" />
                             <MudRadio T="string" Value="@("Primary")" Label="Primary" Color="@_color" UncheckedColor="@_uncheckedColor" CheckedIcon="@CheckedIcon" UncheckedIcon="@UncheckedIcon" Size="@_size" Dense="@_dense" Ripple="@_ripple" LabelPlacement="@_placement" />
                             <MudRadio T="string" Value="@("Secondary")" Label="Secondary" Color="@_color" UncheckedColor="@_uncheckedColor" CheckedIcon="@CheckedIcon" UncheckedIcon="@UncheckedIcon" Size="@_size" Dense="@_dense" Ripple="@_ripple" LabelPlacement="@_placement" />
                             <MudRadio T="string" Value="@("Tertiary")" Label="Tertiary" Color="@_color" UncheckedColor="@_uncheckedColor" CheckedIcon="@CheckedIcon" UncheckedIcon="@UncheckedIcon" Size="@_size" Dense="@_dense" Ripple="@_ripple" LabelPlacement="@_placement" />
@@ -37,6 +37,10 @@
 
     <Options>
         <MudGrid Spacing="4" Class="w-100">
+            <MudItem xs="12">
+                <MudTextField Label="Label" @bind-Value="_label" ShrinkLabel="true" Placeholder="Enter label" Clearable="true" />
+            </MudItem>
+
             <MudItem xs="12" sm="6">
                 <MudSelect T="Color" Label="Checked color" @bind-Value="_color" Dense="true">
                     @foreach (Color color in Enum.GetValues(typeof(Color)))
@@ -102,7 +106,7 @@
             </MudItem>
 
             <MudItem xs="12">
-                <MudText Typo="Typo.subtitle2">Behavior</MudText>
+                <MudText Typo="Typo.subtitle2" Style="font-weight: 600" Class="mb-1">Behavior</MudText>
                 <div class="d-flex flex-wrap align-center justify-start" style="column-gap: 12px; row-gap: 0;">
                     <MudCheckBox Color="Color.Primary" @bind-Value="_dense" Label="Dense" />
                     <MudCheckBox Color="Color.Primary" @bind-Value="_readOnly" Label="Read only" />
@@ -119,6 +123,7 @@
 </DemoPageLayout>
 
 @code {
+    private string _label = "Default";
     private Color _color = Color.Default;
     private Size _size = Size.Medium;
     private bool _dense;

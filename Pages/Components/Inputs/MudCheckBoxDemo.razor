@@ -7,8 +7,9 @@
     <Preview>
         <MudPaper Class="w-100 pa-4 d-flex flex-column align-start gap-3" Outlined="true">
             <MudForm @ref="_validationForm">
+                <MudText Typo="Typo.subtitle2">Choose one</MudText>
                 <div class="d-flex flex-wrap justify-start" style="column-gap: 12px; row-gap: 0;">
-                <MudCheckBox T="bool" @bind-Value="Label_CheckBox1" Label="Default" Color="_color" Size="_size"
+                <MudCheckBox T="bool" @bind-Value="Label_CheckBox1" Label="@_label" Color="_color" Size="_size"
                              UncheckedColor="_uncheckedColor" CheckedIcon="@CheckedIcon" UncheckedIcon="@UncheckedIcon"
                              Dense="_dense" ReadOnly="_readOnly" Disabled="_disabled" KeyboardEnabled="_keyboardEnabled"
                              Required="@_required" RequiredError="@_requiredError"
@@ -61,6 +62,10 @@
 
     <Options>
         <MudGrid Spacing="4" Class="w-100">
+            <MudItem xs="12">
+                <MudTextField T="string" Label="Label" @bind-Value="_label" ShrinkLabel="true" Clearable Class="w-100" />
+            </MudItem>
+
             <MudItem xs="12" sm="6">
                 <MudSelect T="Color" Label="Checked color" @bind-Value="_color" Class="w-100">
                     @foreach (Color color in Enum.GetValues(typeof(Color)))
@@ -136,7 +141,7 @@
             </MudItem>
 
             <MudItem xs="12">
-                <MudText Typo="Typo.subtitle2">Behavior</MudText>
+                <MudText Typo="Typo.subtitle2" Style="font-weight: 600" Class="mb-1">Behavior</MudText>
                 <div class="d-flex flex-wrap align-center justify-start" style="column-gap: 12px; row-gap: 0;">
                     <MudCheckBox Color="Color.Primary" @bind-Value="_triState" Label="Tri-state" />
                     <MudCheckBox Color="Color.Primary" @bind-Value="_dense" Label="Dense" />
@@ -154,6 +159,7 @@
 
 @code {
     private bool Label_CheckBox1 = true;
+    private string _label = "Default";
     private bool Label_CheckBox2;
     private bool Label_CheckBox3;
     private bool Label_CheckBox4;
