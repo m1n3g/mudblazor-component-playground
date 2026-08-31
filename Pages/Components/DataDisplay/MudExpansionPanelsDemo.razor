@@ -184,17 +184,51 @@
 
     private RenderFragment? HeaderContent => _headerIconMode switch
     {
-        HeaderIconMode.Custom => @<div class="d-flex align-center">
-            <MudIcon Icon="@Icons.Material.Filled.Info" Class="mr-3" />
-            <MudText>Panel header as <strong>RenderFragment</strong></MudText>
-        </div>,
-        HeaderIconMode.Badge => @<div class="d-flex align-center">
-            <MudBadge Content="3" Color="Color.Primary" Overlap="true">
-                <MudIcon Icon="@Icons.Material.Filled.Info" />
-            </MudBadge>
-            <MudText Class="ml-4">Panel header with a badge icon</MudText>
-        </div>,
+        HeaderIconMode.Custom => CustomHeaderContent,
+        HeaderIconMode.Badge => BadgeHeaderContent,
         _ => null
+    };
+
+    private RenderFragment CustomHeaderContent => builder =>
+    {
+        builder.OpenElement(0, "div");
+        builder.AddAttribute(1, "class", "d-flex align-center");
+        builder.OpenComponent<MudIcon>(2);
+        builder.AddAttribute(3, "Icon", Icons.Material.Filled.Info);
+        builder.AddAttribute(4, "Class", "mr-3");
+        builder.CloseComponent();
+        builder.OpenComponent<MudText>(5);
+        builder.AddAttribute(6, "ChildContent", (RenderFragment)(textBuilder =>
+        {
+            textBuilder.AddContent(0, "Jedi Council");
+        }));
+        builder.CloseComponent();
+        builder.CloseElement();
+    };
+
+    private RenderFragment BadgeHeaderContent => builder =>
+    {
+        builder.OpenElement(0, "div");
+        builder.AddAttribute(1, "class", "d-flex align-center");
+        builder.OpenComponent<MudBadge>(2);
+        builder.AddAttribute(3, "Content", "3");
+        builder.AddAttribute(4, "Color", Color.Primary);
+        builder.AddAttribute(5, "Overlap", true);
+        builder.AddAttribute(6, "ChildContent", (RenderFragment)(badgeBuilder =>
+        {
+            badgeBuilder.OpenComponent<MudIcon>(0);
+            badgeBuilder.AddAttribute(1, "Icon", Icons.Material.Filled.Info);
+            badgeBuilder.CloseComponent();
+        }));
+        builder.CloseComponent();
+        builder.OpenComponent<MudText>(7);
+        builder.AddAttribute(8, "Class", "ml-4");
+        builder.AddAttribute(9, "ChildContent", (RenderFragment)(textBuilder =>
+        {
+            textBuilder.AddContent(0, "Jedi Council");
+        }));
+        builder.CloseComponent();
+        builder.CloseElement();
     };
 
     private string? ExpansionIcon => _expansionIconPreset switch
