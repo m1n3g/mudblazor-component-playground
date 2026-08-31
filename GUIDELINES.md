@@ -31,7 +31,8 @@
 - If the API documentation does not explicitly state a default, prefer the component's natural default value and note that assumption in code comments or changelog only when it affects behavior.
 - When a demo displays all `Variant` options, use `Text, Outlined, Filled` when `Text` is the API-default variant; otherwise use `Filled, Outlined, Text`. Determine the primary sequence from the API documentation first, and follow an explicit user-requested sequence second.
 - When a demo displays all `Size` options, list them in the order `Small, Medium, Large`.
-- Use `<MudText Typo="Typo.subtitle2" Style="font-weight: 600" Class="mb-3 >Label</MudText>` for grouped section labels, replacing `Label` with the section name.
+- For similar input option lists, prefer this sequence when the API supports the option: `Dense`, `Read only`, `Disabled`, `Drop Shadow`, `Ripple`, `Placeholder`, `Helper text`, `Helper text on focus`, `Clearable`, `Shrink label`, `Required`, `Error`. Skip options that are not supported by the component, then place component-specific options after this shared sequence.
+- Use `<MudText Typo="Typo.subtitle2" Class="mb-3 >Label</MudText>` for grouped section labels, replacing `Label` with the section name.
 - Never use `MudPaper` in an options panel; use the panel's existing layout and grouping labels instead.
 
 ## Demo-Specific Styling
