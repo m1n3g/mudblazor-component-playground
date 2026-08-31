@@ -6,7 +6,8 @@
                 Description="Numeric fields accept numbers with optional adornments, limits, and validation states."
                 Variant="DemoPageLayoutVariant.Vertical">
     <Preview>
-        <MudStack Spacing="4" Class="w-100">
+        <MudPaper Outlined="true" Class="pa-4 w-100">
+            <MudStack Spacing="4" Class="w-100">
             @switch (_bindingType)
             {
                 case NumericBindingType.Int:
@@ -66,13 +67,13 @@
                     }
                     break;
             }
-        </MudStack>
+            </MudStack>
+        </MudPaper>
     </Preview>
 
     <Options>
         <MudGrid Spacing="4" Justify="Justify.Center" Class="w-100">
             <MudItem xs="12">
-                <MudText Typo="Typo.subtitle2" Style="font-weight: 600" Class="mb-3">Value and limits</MudText>
                 <MudGrid Spacing="4">
                     <MudItem xs="12">
                         <MudSelect T="NumericBindingType" @bind-Value="_bindingType" Label="Data binding type" HelperText="Nullable values may start empty. Min, Max, and Step always use non-null defaults." Dense="true">
@@ -145,10 +146,10 @@
                     <MudCheckBox @bind-Value="_helperText" Label="Helper text" Color="Color.Primary" />
                     <MudCheckBox @bind-Value="_helperOnFocus" Label="Helper text on focus" Color="Color.Primary" />
                     <MudCheckBox @bind-Value="_clearable" Label="Clearable" Color="Color.Primary" />
-                    <MudCheckBox @bind-Value="_hasError" Label="Show error" Color="Color.Error" />
                     <MudCheckBox @bind-Value="_shrinkLabel" Label="Shrink label" Color="Color.Primary" />
-                    <MudCheckBox @bind-Value="_hideSpinButtons" Label="Hide spin buttons" Color="Color.Primary" />
                     <MudCheckBox @bind-Value="_required" Label="Required" Color="Color.Primary" />
+                    <MudCheckBox @bind-Value="_hasError" Label="Show error" Color="Color.Primary" />
+                    <MudCheckBox @bind-Value="_hideSpinButtons" Label="Hide spin buttons" Color="Color.Primary" />
                     <MudCheckBox @bind-Value="_onlyValidateIfDirty" Label="Only validate if dirty" Color="Color.Primary" />
                 </div>
             </MudItem>
