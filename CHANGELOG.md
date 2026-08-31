@@ -657,3 +657,67 @@ Updated [`Pages/Components/Feedback/MudSkeletonDemo.razor`](./Pages/Components/F
 - Set the default skeleton type to `Text` and animation to `Pulse`
 - Added a paragraph-style Text preview and moved the card-style preview to Rectangle
 - Refined the Circle preview with a centered profile circle, normal background blocks, and constrained custom dimensions
+
+### Shared Demo Layout Migrations
+
+Migrated the following demos to the shared `DemoPageLayout` structure:
+
+- [`MudFormDemo.razor`](./Pages/Components/Inputs/MudFormDemo.razor)
+- [`MudNumericFieldDemo.razor`](./Pages/Components/Inputs/MudNumericFieldDemo.razor)
+- [`MudSkeletonDemo.razor`](./Pages/Components/Feedback/MudSkeletonDemo.razor)
+
+## 2026-08-29
+
+### Form Demo and Option Ordering Improvements
+
+Updated [`MudFormDemo.razor`](./Pages/Components/Inputs/MudFormDemo.razor):
+
+- Improved the registration fields and credit-card validation example
+- Standardized the form options and validation actions
+- Reordered options for clearer scanning and consistent control behavior
+
+### Demo Guidelines
+
+Updated [`GUIDELINES.md`](./GUIDELINES.md) with shared rules for demo layout, labels, option ordering, and component review workflow.
+
+## 2026-08-30
+
+### NumericField Demo Completion
+
+Updated [`MudNumericFieldDemo.razor`](./Pages/Components/Inputs/MudNumericFieldDemo.razor):
+
+- Added int, double, nullable int, and nullable double data-binding examples
+- Added clearer minimum, maximum, step, and maximum-length controls with helper text
+- Added culture, number-format, display-format, debounce, clearable, and hide-spin-button options
+- Added binding guidance for value types versus nullable types
+- Connected the selected binding type and shared options to all preview fields
+
+## 2026-08-31
+
+### Radio Demo Migration and UX Refinement
+
+Updated [`MudRadioDemo.razor`](./Pages/Components/Inputs/MudRadioDemo.razor):
+
+- Migrated the page to the shared demo layout
+- Consolidated the preview into a single Choose one example
+- Added independent checked-color, unchecked-color, checked-icon, unchecked-icon, and size controls
+- Added Required, configurable error messages, validation actions, and colored validation status
+- Fixed default color handling so unchecked colors do not inherit the checked color
+- Standardized left alignment and validation spacing
+
+### Checkbox Demo UX Refinement
+
+Updated [`MudCheckBoxDemo.razor`](./Pages/Components/Inputs/MudCheckBoxDemo.razor):
+
+- Bound all four preview items, including Tertiary, to the shared options
+- Removed duplicate Default color values and nullable color bindings
+- Added Ripple and outlined Star support for unchecked icons
+- Made the Default sample the validation target and removed the separate validation example
+- Standardized left-aligned validation actions and moved validation status to its own row
+- Removed redundant validation messages rendered both by the component and the preview
+
+### Option Ordering Guidelines
+
+Updated [`GUIDELINES.md`](./GUIDELINES.md) with the preferred input option sequence:
+
+`Dense`, `Read only`, `Disabled`, `Drop Shadow`, `Ripple`, `Placeholder`, `Helper text`, `Helper text on focus`, `Clearable`, `Shrink label`, `Required`, `Error`
