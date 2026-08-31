@@ -721,3 +721,22 @@ Updated [`MudCheckBoxDemo.razor`](./Pages/Components/Inputs/MudCheckBoxDemo.razo
 Updated [`GUIDELINES.md`](./GUIDELINES.md) with the preferred input option sequence:
 
 `Dense`, `Read only`, `Disabled`, `Drop Shadow`, `Ripple`, `Placeholder`, `Helper text`, `Helper text on focus`, `Clearable`, `Shrink label`, `Required`, `Error`
+
+## 2026-09-01
+
+### Select Demo Enhancements
+
+Updated [`MudSelectDemo.razor`](./Pages/Components/Inputs/MudSelectDemo.razor):
+
+- Added full-width selection, custom multi-selection text, and Select All controls
+- Added configurable selection text with `{count}` and `{values}` tokens
+- Added open and close icon presets with MudSelect’s default dropdown icons
+- Added autocomplete examples for empty-text reset, keyboard Tab selection, and async progress
+- Standardized adornment placement and helper-text behavior across single and multi-selection previews
+
+### Expansion Panels Header Fix
+
+Updated [`MudExpansionPanelsDemo.razor`](./Pages/Components/DataDisplay/MudExpansionPanelsDemo.razor):
+
+- Fixed custom header fragments that caused Razor parser errors
+- Restored the `Jedi Council` title for custom icon and badge header modes
