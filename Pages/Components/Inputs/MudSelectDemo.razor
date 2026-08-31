@@ -1,139 +1,376 @@
 @page "/components/select"
-@using System.Linq
 @using MudBlazor
+@using System.Threading
 
-<MudGrid>
-    <!-- Left: all variants — Start adornment -->
-    <MudItem xs="12" md="4">
-        <MudText Typo="Typo.subtitle1" Class="mb-2">Start adornment</MudText>
-        <MudStack Spacing="4">
-            @foreach (var variant in Enum.GetValues(typeof(Variant)).Cast<Variant>())
-            {
-                <MudSelect @bind-Value="_value" Variant="variant" Label="@variant.ToString()" Margin="_margin"
-                    Dense="_dense" FitContent="_fitContent" Disabled="_disabled" ReadOnly="_readonly"
-                    Placeholder="@(_placeholder ? "Placeholder" : null)" HelperText="@(_helperText ? "Helper Text" : null)"
-                    HelperTextOnFocus="_helperTextOnFocus" Clearable="_clearable" Modal="_modal" Error="_hasError"
-                    ErrorText="Please select a value" Adornment="Adornment.Start"
-                    AdornmentIcon="@Icons.Material.Filled.Search">
-                    @foreach (var state in _states)
-                    {
-                        <MudSelectItem Value="@state">@state</MudSelectItem>
-                    }
+<DemoPageLayout Title="Select"
+                Description="A dropdown input for selecting an item from a list of options."
+                Variant="DemoPageLayoutVariant.Horizontal">
+    <Preview>
+        <MudPaper Outlined="true" Class="pa-4 w-100">
+            <MudStack Spacing="3" Class="w-100">
+                <MudGrid Spacing="3" Class="w-100">
+                    <MudItem xs="12">
+                        <MudStack Spacing="3">
+                        @foreach (var variant in Variants)
+                        {
+                            @if (_multiSelection)
+                            {
+                                <MudSelect T="string" @key="variant" Variant="@variant"
+                                           Label="@(variant == Variants[0] ? _label : $"{variant} — Select a state")" Margin="@ComputedMargin"
+                                           Dense="@_dense" Disabled="@_disabled" ReadOnly="@_readOnly"
+                                           Placeholder="@(_placeholder ? "Select a state" : null)"
+                                           HelperText="@(_helperText ? SelectedSummary : null)"
+                                           HelperTextOnFocus="@_helperTextOnFocus" Clearable="@_clearable"
+                                           ShrinkLabel="@_shrinkLabel"
+                                           Adornment="@_adornment" AdornmentIcon="@AdornmentIcon" AdornmentText="@_adornmentText"
+                                           AdornmentColor="@_adornmentColor" ClearIcon="@ClearIcon" OpenIcon="@OpenIcon" CloseIcon="@CloseIcon"
+                                           MultiSelection="true" SelectAll="@_selectAll" SelectAllText="Select all states"
+                                           MultiSelectionTextFunc="@SelectionTextFunc" SelectedValues="@_selectedStates"
+                                           SelectedValuesChanged="OnSelectedStatesChanged"
+                                           FullWidth="@_fullWidth" FitContent="@_fitContent" Modal="@_modal" MaxHeight="@_maxHeight"
+                                           Error="@(_hasError || (_required && _selectedStates.Count == 0))"
+                                           ErrorText="@(_hasError ? _errorText : _requiredError)"
+                                           Required="@_required" RequiredError="@_requiredError">
+                                    @foreach (var state in _states)
+                                    {
+                                        <MudSelectItem Value="@state">@state</MudSelectItem>
+                                    }
+                                </MudSelect>
+                            }
+                            else
+                            {
+                                <MudSelect T="string" @key="variant" @bind-Value="_value" Variant="@variant"
+                                           Label="@(variant == Variants[0] ? _label : $"{variant} — Select a state")" Margin="@ComputedMargin"
+                                           Dense="@_dense" Disabled="@_disabled" ReadOnly="@_readOnly"
+                                           Placeholder="@(_placeholder ? "Select a state" : null)"
+                                           HelperText="@(_helperText ? (_multiSelection ? SelectedSummary : "Choose one option") : null)"
+                                           HelperTextOnFocus="@_helperTextOnFocus" Clearable="@_clearable"
+                                           ShrinkLabel="@_shrinkLabel"
+                                           Adornment="@_adornment" AdornmentIcon="@AdornmentIcon" AdornmentText="@_adornmentText"
+                                           AdornmentColor="@_adornmentColor" ClearIcon="@ClearIcon" OpenIcon="@OpenIcon" CloseIcon="@CloseIcon"
+                                           FullWidth="@_fullWidth" FitContent="@_fitContent" Modal="@_modal" MaxHeight="@_maxHeight"
+                                           Error="@(_hasError || (_required && string.IsNullOrWhiteSpace(_value)))"
+                                           ErrorText="@(_hasError ? _errorText : _requiredError)"
+                                           Required="@_required" RequiredError="@_requiredError">
+                                    @foreach (var state in _states)
+                                    {
+                                        <MudSelectItem Value="@state">@state</MudSelectItem>
+                                    }
+                                </MudSelect>
+                            }
+                        }
+                        </MudStack>
+                    </MudItem>
+
+                    <MudDivider Class="w-100 mt-6" />
+
+                    <MudItem xs="12">
+                        <MudText Typo="Typo.subtitle2">Autocomplete</MudText>
+                        <MudGrid Spacing="3">
+                            <MudItem xs="12">
+                                <MudAutocomplete T="string" Label="Search a state"
+                                                 @bind-Value="_autocompleteValue"
+                                                 SearchFunc="SearchStates"
+                                                 ResetValueOnEmptyText="@_resetAutocompleteOnEmptyText"
+                                                 Clearable="true"
+                                                 HelperText="Search and select a state" />
+                            </MudItem>
+                            <MudItem xs="12">
+                                <MudAutocomplete T="string" Label="Keyboard navigation"
+                                                 @bind-Value="_keyboardAutocompleteValue"
+                                                 SearchFunc="SearchStates"
+                                                 SelectValueOnTab="@_selectAutocompleteOnTab"
+                                                 Clearable="true"
+                                                 HelperText="Use Arrow keys, Enter, or Escape" />
+                            </MudItem>
+                            <MudItem xs="12">
+                                <MudAutocomplete T="string" Label="Async search"
+                                                 @bind-Value="_asyncAutocompleteValue"
+                                                 SearchFunc="SearchStatesWithDelay"
+                                                 ShowProgressIndicator="@_showAutocompleteProgress"
+                                                 ProgressIndicatorColor="Color.Primary"
+                                                 Clearable="true"
+                                                 HelperText="Displays progress while searching" />
+                            </MudItem>
+                        </MudGrid>
+                    </MudItem>
+
+                </MudGrid>
+            </MudStack>
+        </MudPaper>
+    </Preview>
+
+    <Options>
+        <MudGrid Spacing="4" Class="w-100">
+            <MudItem xs="12" sm="6">
+                <MudTextField Label="Label" @bind-Value="_label" ShrinkLabel="true" Placeholder="Enter label" Clearable="true" />
+            </MudItem>
+
+            <MudItem xs="12" sm="6">
+                <MudTextField Label="Selection text" @bind-Value="_selectionText" ShrinkLabel="true"
+                              Placeholder="{count} states selected" HelperText="Use {count} or {values}" Clearable="true"
+                              Disabled="@(!_multiSelection || !_customSelectionText)" />
+            </MudItem>
+
+            <MudItem xs="12" sm="6">
+                <MudSelect T="Margin" Label="Margin" @bind-Value="_margin" Dense="true">
+                    <MudSelectItem Value="Margin.None">None</MudSelectItem>
+                    <MudSelectItem Value="Margin.Dense">Dense</MudSelectItem>
+                    <MudSelectItem Value="Margin.Normal">Normal</MudSelectItem>
                 </MudSelect>
-            }
-        </MudStack>
-    </MudItem>
+            </MudItem>
 
-    <!-- Middle: all variants — End adornment -->
-    <MudItem xs="12" md="4">
-        <MudText Typo="Typo.subtitle1" Class="mb-2">End adornment</MudText>
-        <MudStack Spacing="4">
-            @foreach (var variant in Enum.GetValues(typeof(Variant)).Cast<Variant>())
-            {
-                <MudSelect @bind-Value="_valueEnd" Variant="variant" Label="@($"{variant} (End)")" Margin="_margin"
-                    Dense="_dense" FitContent="_fitContent" Disabled="_disabled" ReadOnly="_readonly"
-                    Placeholder="@(_placeholder ? "Placeholder" : null)" HelperText="@(_helperText ? "Helper Text" : null)"
-                    HelperTextOnFocus="_helperTextOnFocus" Clearable="_clearable" Modal="_modal" Error="_hasError"
-                    ErrorText="Please select a value" Adornment="Adornment.End"
-                    AdornmentIcon="@Icons.Material.Filled.ArrowDropDown">
-                    @foreach (var state in _states)
-                    {
-                        <MudSelectItem Value="@state">@state</MudSelectItem>
-                    }
-                </MudSelect>
-            }
-        </MudStack>
-    </MudItem>
+            <MudItem xs="12" sm="6">
+                <MudNumericField T="int" Label="Maximum menu height" @bind-Value="_maxHeight" Min="100" Max="600" Step="50" Margin="Margin.Dense" />
+            </MudItem>
 
-    <!-- Right: MultiSelect — Start & End samples -->
-    <MudItem xs="12" md="4">
-        <MudStack Spacing="3">
-            <MudText Typo="Typo.subtitle1">MultiSelect (Start adornment)</MudText>
-            <MudSelect T="string" Label="States (MultiSelect)" MultiSelection="true"
-                SelectedValues="_selectedStatesStart" SelectedValuesChanged="OnSelectedStatesStartChanged"
-                Dense="@_dense" FitContent="@_fitContent" Disabled="@_disabled" ReadOnly="@_readonly"
-                Placeholder="@(_placeholder ? "Choose states..." : null)"
-                HelperText="@(_helperText ? "Pick one or more states" : null)" HelperTextOnFocus="@_helperTextOnFocus"
-                Clearable="@_clearable" Modal="@_modal" Error="@_hasError" ErrorText="Please pick at least one"
-                Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Public" MaxHeight="300"
-                Class="mud-width-full">
-                @foreach (var s in _states)
-                {
-                    <MudSelectItem Value="@s">@s</MudSelectItem>
-                }
-            </MudSelect>
-            <MudText Typo="Typo.caption">Selected (@_selectedStatesStart.Count): @string.Join(", ",
-                                _selectedStatesStart)</MudText>
+            <MudItem xs="12" sm="6">
+                <MudTextField Label="Error text" @bind-Value="_errorText" ShrinkLabel="true" Placeholder="Enter error text" Clearable="true" />
+            </MudItem>
 
-            <MudText Typo="Typo.subtitle1" Class="mt-4">MultiSelect (End adornment)</MudText>
-            <MudSelect T="string" Label="States (MultiSelect)" MultiSelection="true"
-                SelectedValues="_selectedStatesEnd" SelectedValuesChanged="OnSelectedStatesEndChanged"
-                Dense="@_dense" FitContent="@_fitContent" Disabled="@_disabled" ReadOnly="@_readonly"
-                Placeholder="@(_placeholder ? "Choose states..." : null)"
-                HelperText="@(_helperText ? "Pick one or more states" : null)" HelperTextOnFocus="@_helperTextOnFocus"
-                Clearable="@_clearable" Modal="@_modal" Error="@_hasError" ErrorText="Please pick at least one"
-                Adornment="Adornment.End" AdornmentIcon="@Icons.Material.Filled.FilterList" MaxHeight="300"
-                Class="mud-width-full">
-                @foreach (var s in _states)
-                {
-                    <MudSelectItem Value="@s">@s</MudSelectItem>
-                }
-            </MudSelect>
-            <MudText Typo="Typo.caption">Selected (@_selectedStatesEnd.Count): @string.Join(", ", _selectedStatesEnd)
-            </MudText>
+            <MudItem xs="12" sm="6">
+                <MudTextField Label="Required error" @bind-Value="_requiredError" ShrinkLabel="true" Placeholder="Enter required error" Clearable="true" />
+            </MudItem>
 
-            <!-- Controls -->
-            <MudSelect @bind-Value="_margin" Label="Margin">
-                @foreach (var margin in Enum.GetValues(typeof(Margin)).Cast<Margin>())
-                {
-                    <MudSelectItem Value="margin">@margin</MudSelectItem>
-                }
-            </MudSelect>
-        </MudStack>
-    </MudItem>
-</MudGrid>
+            <MudItem xs="12">
+                <MudText Typo="Typo.subtitle2" Style="font-weight: 600" Class="my-2">Adornment</MudText>
+                <MudGrid Spacing="4">
+                    <MudItem xs="12" md="6">
+                        <MudSelect T="Adornment" Label="Adornment" @bind-Value="_adornment" Dense="true">
+                            <MudSelectItem Value="Adornment.None">None</MudSelectItem>
+                            <MudSelectItem Value="Adornment.Start">Start</MudSelectItem>
+                            <MudSelectItem Value="Adornment.End">End</MudSelectItem>
+                        </MudSelect>
+                    </MudItem>
+                    <MudItem xs="12" md="6">
+                        <MudSelect T="AdornmentIconPreset" Label="Adornment icon" @bind-Value="_adornmentIconPreset" Dense="true">
+                            <MudSelectItem Value="AdornmentIconPreset.Default">Default</MudSelectItem>
+                            <MudSelectItem Value="AdornmentIconPreset.Search">Search</MudSelectItem>
+                            <MudSelectItem Value="AdornmentIconPreset.Filter">Filter</MudSelectItem>
+                            <MudSelectItem Value="AdornmentIconPreset.Public">Public</MudSelectItem>
+                            <MudSelectItem Value="AdornmentIconPreset.Info">Info</MudSelectItem>
+                        </MudSelect>
+                    </MudItem>
 
-<MudStack Class="mt-5" Row="true" Spacing="3">
-    <MudSwitch @bind-Value="_dense" Label="Dense" Color="Color.Primary" />
-    <MudSwitch @bind-Value="_readonly" Label="ReadOnly" Color="Color.Primary" />
-    <MudSwitch @bind-Value="_disabled" Label="Disabled" Color="Color.Primary" />
-    <MudSwitch @bind-Value="_placeholder" Label="Placeholder" Color="Color.Primary" />
-    <MudSwitch @bind-Value="_helperText" Label="HelperText" Color="Color.Primary" />
-    <MudSwitch @bind-Value="_helperTextOnFocus" Label="HelperTextOnFocus" Color="Color.Primary" />
-    <MudSwitch @bind-Value="_clearable" Label="Clearable" Color="Color.Primary" />
-    <MudSwitch @bind-Value="_fitContent" Label="FitContent" Color="Color.Primary" />
-    <MudSwitch @bind-Value="_modal" Label="Modal" Color="Color.Primary" />
-    <MudSwitch @bind-Value="_hasError" Label="Show Error" Color="Color.Error" />
-</MudStack>
+                    <MudItem xs="12" md="6">
+                        <MudTextField T="string" Label="Adornment text" @bind-Value="_adornmentText" Placeholder="Enter adornment text" HelperText="The AdornmentIcon will be ignored if this property is set." Clearable />
+                    </MudItem>
+
+                    <MudItem xs="12" md="6">
+                        <MudSelect T="ClearIconPreset" Label="Clear icon" @bind-Value="_clearIconPreset" Dense="true">
+                            <MudSelectItem Value="ClearIconPreset.Default">Default</MudSelectItem>
+                            <MudSelectItem Value="ClearIconPreset.Cancel">Cancel</MudSelectItem>
+                        </MudSelect>
+                    </MudItem>
+
+                    <MudItem xs="12" md="6">
+                        <MudSelect T="OpenIconPreset" Label="Open icon" @bind-Value="_openIconPreset" Dense="true">
+                            <MudSelectItem Value="OpenIconPreset.Default">Default</MudSelectItem>
+                            <MudSelectItem Value="OpenIconPreset.KeyboardArrowDown">Keyboard arrow down</MudSelectItem>
+                            <MudSelectItem Value="OpenIconPreset.ArrowDropDown">Arrow drop down</MudSelectItem>
+                            <MudSelectItem Value="OpenIconPreset.ExpandMore">Expand more</MudSelectItem>
+                        </MudSelect>
+                    </MudItem>
+
+                    <MudItem xs="12" md="6">
+                        <MudSelect T="CloseIconPreset" Label="Close icon" @bind-Value="_closeIconPreset" Dense="true">
+                            <MudSelectItem Value="CloseIconPreset.Default">Default</MudSelectItem>
+                            <MudSelectItem Value="CloseIconPreset.KeyboardArrowUp">Keyboard arrow up</MudSelectItem>
+                            <MudSelectItem Value="CloseIconPreset.ArrowDropUp">Arrow drop up</MudSelectItem>
+                            <MudSelectItem Value="CloseIconPreset.ExpandLess">Expand less</MudSelectItem>
+                        </MudSelect>
+                    </MudItem>
+
+                    <MudItem xs="12">
+                        <MudSelect T="Color" Label="Adornment color" @bind-Value="_adornmentColor" Dense="true">
+                            @foreach (Color color in Enum.GetValues(typeof(Color)))
+                            {
+                                <MudSelectItem Value="@color">@color</MudSelectItem>
+                            }
+                        </MudSelect>
+                    </MudItem>
+                </MudGrid>
+            </MudItem>
+
+            <MudItem xs="12">
+                <MudText Typo="Typo.subtitle2" Style="font-weight: 600" Class="mt-2 mb-1">Behavior</MudText>
+                <div class="d-flex flex-wrap align-center justify-start" style="column-gap: 12px; row-gap: 0;">
+                    <MudCheckBox @bind-Value="_dense" Label="Dense" Color="Color.Primary" />
+                    <MudCheckBox @bind-Value="_readOnly" Label="Read only" Color="Color.Primary" />
+                    <MudCheckBox @bind-Value="_disabled" Label="Disabled" Color="Color.Primary" />
+                    <MudCheckBox @bind-Value="_placeholder" Label="Placeholder" Color="Color.Primary" />
+                    <MudCheckBox @bind-Value="_helperText" Label="Helper text" Color="Color.Primary" />
+                    <MudCheckBox @bind-Value="_helperTextOnFocus" Label="Helper text on focus" Color="Color.Primary" />
+                    <MudCheckBox @bind-Value="_clearable" Label="Clearable" Color="Color.Primary" />
+                    <MudCheckBox @bind-Value="_shrinkLabel" Label="Shrink label" Color="Color.Primary" />
+                    <MudCheckBox @bind-Value="_required" Label="Required" Color="Color.Primary" />
+                    <MudCheckBox @bind-Value="_hasError" Label="Show error" Color="Color.Primary" />
+                    <MudCheckBox @bind-Value="_fullWidth" Label="Full width" Color="Color.Primary" />
+                    <MudCheckBox @bind-Value="_fitContent" Label="Fit content" Color="Color.Primary" />
+                    <MudCheckBox @bind-Value="_modal" Label="Modal menu" Color="Color.Primary" />
+                    <MudCheckBox @bind-Value="_multiSelection" Label="Multi-selection" Color="Color.Primary" />
+                    <MudCheckBox @bind-Value="_customSelectionText" Label="Custom selection text" Color="Color.Primary" Disabled="@(!_multiSelection)" />
+                    <MudCheckBox @bind-Value="_selectAll" Label="Select all" Color="Color.Primary" Disabled="@(!_multiSelection)" />
+                </div>
+            </MudItem>
+
+            <MudItem xs="12">
+                <MudText Typo="Typo.subtitle2" Style="font-weight: 600" Class="mt-2 mb-1">Autocomplete</MudText>
+                <div class="d-flex flex-wrap align-center justify-start" style="column-gap: 12px; row-gap: 0;">
+                    <MudCheckBox @bind-Value="_resetAutocompleteOnEmptyText" Label="Reset value on empty text" Color="Color.Primary" />
+                    <MudCheckBox @bind-Value="_selectAutocompleteOnTab" Label="Select value on Tab" Color="Color.Primary" />
+                    <MudCheckBox @bind-Value="_showAutocompleteProgress" Label="Show progress" Color="Color.Primary" />
+                </div>
+            </MudItem>
+        </MudGrid>
+    </Options>
+</DemoPageLayout>
 
 @code {
-    private string? _value; // for start-adornment singles
-    private string? _valueEnd; // for end-adornment singles
-    private Margin _margin;
-    private bool _dense, _disabled, _readonly, _placeholder, _helperText, _helperTextOnFocus, _clearable, _fitContent;
-    private bool _modal = true, _hasError;
+    private static readonly Variant[] Variants = { Variant.Text, Variant.Outlined, Variant.Filled };
 
-    private IReadOnlyCollection<string> _selectedStatesStart = Array.Empty<string>();
-    private IReadOnlyCollection<string> _selectedStatesEnd = Array.Empty<string>();
+    private string _label = "Text — Select a state";
+    private string? _value = "California";
+    private Margin _margin = Margin.None;
+    private bool _dense;
+    private bool _readOnly;
+    private bool _disabled;
+    private bool _placeholder = true;
+    private bool _helperText;
+    private bool _helperTextOnFocus;
+    private bool _clearable = true;
+    private bool _shrinkLabel;
+    private bool _fullWidth;
+    private bool _fitContent;
+    private bool _modal = true;
+    private bool _required;
+    private bool _hasError;
+    private Adornment _adornment = Adornment.End;
+    private Color _adornmentColor = Color.Default;
+    private string? _adornmentText;
+    private AdornmentIconPreset _adornmentIconPreset;
+    private ClearIconPreset _clearIconPreset;
+    private OpenIconPreset _openIconPreset;
+    private CloseIconPreset _closeIconPreset;
+    private bool _multiSelection;
+    private bool _customSelectionText;
+    private bool _selectAll;
+    private string _selectionText = "{count} states selected";
+    private string? _autocompleteValue;
+    private string? _keyboardAutocompleteValue;
+    private string? _asyncAutocompleteValue;
+    private bool _resetAutocompleteOnEmptyText = true;
+    private bool _selectAutocompleteOnTab = true;
+    private bool _showAutocompleteProgress = true;
+    private int _maxHeight = 300;
+    private string _errorText = "There is a problem with this selection.";
+    private string _requiredError = "Please select a value.";
+    private IReadOnlyCollection<string> _selectedStates = Array.Empty<string>();
+
+    private Margin ComputedMargin => _dense ? Margin.Dense : _margin;
+
+    private string SelectedSummary => _selectedStates.Count == 0
+        ? "Selected (0): None"
+        : $"Selected ({_selectedStates.Count}): {string.Join(", ", _selectedStates)}";
+
+    private Func<IReadOnlyList<string>, string>? SelectionTextFunc
+        => _customSelectionText ? GetMultiSelectionText : null;
+
+    private string GetMultiSelectionText(IReadOnlyList<string> selectedValues)
+        => (_selectionText ?? string.Empty)
+            .Replace("{count}", selectedValues.Count.ToString())
+            .Replace("{values}", string.Join(", ", selectedValues));
+
+    private string? AdornmentIcon => _adornmentIconPreset switch
+    {
+        AdornmentIconPreset.Search => Icons.Material.Filled.Search,
+        AdornmentIconPreset.Filter => Icons.Material.Filled.FilterList,
+        AdornmentIconPreset.Public => Icons.Material.Filled.Public,
+        AdornmentIconPreset.Info => Icons.Material.Filled.Info,
+        _ => null
+    };
+
+    private string ClearIcon => _clearIconPreset switch
+    {
+        ClearIconPreset.Cancel => Icons.Material.Filled.Cancel,
+        _ => Icons.Material.Filled.Clear
+    };
+
+    private string OpenIcon => _openIconPreset switch
+    {
+        OpenIconPreset.KeyboardArrowDown => Icons.Material.Filled.KeyboardArrowDown,
+        OpenIconPreset.ArrowDropDown => Icons.Material.Filled.ArrowDropDown,
+        OpenIconPreset.ExpandMore => Icons.Material.Filled.ExpandMore,
+        _ => Icons.Material.Filled.ArrowDropDown
+    };
+
+    private string CloseIcon => _closeIconPreset switch
+    {
+        CloseIconPreset.KeyboardArrowUp => Icons.Material.Filled.KeyboardArrowUp,
+        CloseIconPreset.ArrowDropUp => Icons.Material.Filled.ArrowDropUp,
+        CloseIconPreset.ExpandLess => Icons.Material.Filled.ExpandLess,
+        _ => Icons.Material.Filled.ArrowDropUp
+    };
+
+    private Task<IEnumerable<string>> SearchStates(string? value, CancellationToken token)
+        => Task.FromResult<IEnumerable<string>>(FilterStates(value));
+
+    private async Task<IEnumerable<string>> SearchStatesWithDelay(string? value, CancellationToken token)
+    {
+        await Task.Delay(500, token);
+        return FilterStates(value);
+    }
+
+    private IEnumerable<string> FilterStates(string? value)
+        => string.IsNullOrWhiteSpace(value)
+            ? _states
+            : _states.Where(state => state.Contains(value, StringComparison.OrdinalIgnoreCase));
 
     private readonly string[] _states =
     {
-    "fdbvebddddddddddddddddddddddddddddddddddddddddddddddddddddd",
-    "Alabama","Alaska","Arizona","Arkansas","California",
-    "Colorado","Connecticut","Delaware","Florida","Georgia",
-    "Hawaii","Idaho","Illinois","Indiana","Iowa","Kansas",
-    "Kentucky","Louisiana","Maine","Maryland","Massachusetts",
-    "Michigan","Minnesota","Mississippi","Missouri","Montana",
-    "Nebraska","Nevada","New Hampshire","New Jersey","New Mexico",
-    "New York","North Carolina","North Dakota","Ohio","Oklahoma",
-    "Oregon","Pennsylvania","Rhode Island","South Carolina","South Dakota",
-    "Tennessee","Texas","Utah","Vermont","Virginia",
-    "Washington","West Virginia","Wisconsin","Wyoming"
-};
+        "Alabama", "Alaska", "Arizona", "Arkansas", "California", "Colorado",
+        "Connecticut", "Delaware", "Florida", "Georgia", "Hawaii", "Idaho",
+        "Illinois", "Indiana", "Iowa", "Kansas", "Kentucky", "Louisiana",
+        "Maine", "Maryland", "Massachusetts", "Michigan", "Minnesota",
+        "Mississippi", "Missouri", "Montana", "Nebraska", "Nevada",
+        "New Hampshire", "New Jersey", "New Mexico", "New York", "North Carolina",
+        "North Dakota", "Ohio", "Oklahoma", "Oregon", "Pennsylvania",
+        "Rhode Island", "South Carolina", "South Dakota", "Tennessee", "Texas",
+        "Utah", "Vermont", "Virginia", "Washington", "West Virginia", "Wisconsin",
+        "Wyoming"
+    };
 
-    private void OnSelectedStatesStartChanged(IEnumerable<string>? values)
-        => _selectedStatesStart = values?.ToArray() ?? Array.Empty<string>();
+    private void OnSelectedStatesChanged(IEnumerable<string>? values)
+        => _selectedStates = values?.ToArray() ?? Array.Empty<string>();
 
-    private void OnSelectedStatesEndChanged(IEnumerable<string>? values)
-        => _selectedStatesEnd = values?.ToArray() ?? Array.Empty<string>();
+    private enum AdornmentIconPreset
+    {
+        Default,
+        Search,
+        Filter,
+        Public,
+        Info
+    }
+
+    private enum ClearIconPreset
+    {
+        Default,
+        Cancel
+    }
+
+    private enum OpenIconPreset
+    {
+        Default,
+        KeyboardArrowDown,
+        ArrowDropDown,
+        ExpandMore
+    }
+
+    private enum CloseIconPreset
+    {
+        Default,
+        KeyboardArrowUp,
+        ArrowDropUp,
+        ExpandLess
+    }
 }
