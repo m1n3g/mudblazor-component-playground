@@ -1,119 +1,188 @@
 @page "/components/radio"
 @using MudBlazor
 
-<!-- Controls -->
-<MudPaper Class="pa-3 mb-3" Elevation="25">
-    <MudStack Spacing="2">
+<DemoPageLayout Title="Radio"
+                Description="Allows the user to select a single choice from a group of options. Use radio buttons (not switches) when only one item can be selected from a list."
+                Variant="DemoPageLayoutVariant.Horizontal">
+    <Preview>
+        <MudPaper Class="w-100 pa-4 d-flex flex-column align-center gap-4" Outlined="true">
+            <MudStack Spacing="3" Class="w-100">
+                <div>
+                    <MudText Typo="Typo.subtitle2">Choose one</MudText>
+                    <MudForm @ref="_validationForm">
+                        <MudRadioGroup T="string" @bind-Value="_choice1" Disabled="@_disableGroup" ReadOnly="@_readOnly"
+                                       Required="@_required" RequiredError="@_requiredError"
+                                       Error="@_error" ErrorText="@_errorText">
+                            <MudRadio T="string" Value="@("Default")" Label="Default" Color="@_color" UncheckedColor="@_uncheckedColor" CheckedIcon="@CheckedIcon" UncheckedIcon="@UncheckedIcon" Size="@_size" Dense="@_dense" Ripple="@_ripple" LabelPlacement="@_placement" />
+                            <MudRadio T="string" Value="@("Primary")" Label="Primary" Color="@_color" UncheckedColor="@_uncheckedColor" CheckedIcon="@CheckedIcon" UncheckedIcon="@UncheckedIcon" Size="@_size" Dense="@_dense" Ripple="@_ripple" LabelPlacement="@_placement" />
+                            <MudRadio T="string" Value="@("Secondary")" Label="Secondary" Color="@_color" UncheckedColor="@_uncheckedColor" CheckedIcon="@CheckedIcon" UncheckedIcon="@UncheckedIcon" Size="@_size" Dense="@_dense" Ripple="@_ripple" LabelPlacement="@_placement" />
+                            <MudRadio T="string" Value="@("Tertiary")" Label="Tertiary" Color="@_color" UncheckedColor="@_uncheckedColor" CheckedIcon="@CheckedIcon" UncheckedIcon="@UncheckedIcon" Size="@_size" Dense="@_dense" Ripple="@_ripple" LabelPlacement="@_placement" />
+                        </MudRadioGroup>
+                        @if (_helperText)
+                        {
+                            <MudText Typo="Typo.caption">Choose one option.</MudText>
+                        }
+                        <MudText Typo="Typo.body2" Class="mt-2">Selected: @(_choice1 ?? "None")</MudText>
+                        <div class="d-flex justify-start align-center mt-5" style="column-gap: 12px;">
+                            <MudButton Variant="Variant.Outlined" OnClick="ValidateRadioGroup">Validate</MudButton>
+                            <MudButton Variant="Variant.Text" OnClick="ResetRadioValidation">Reset</MudButton>
+                        </div>
+                        <MudText Typo="Typo.caption" Color="@ValidationStateColor" Class="mt-2">@_validationState</MudText>
+                    </MudForm>
+                </div>
 
-        <MudGrid>
+            </MudStack>
+        </MudPaper>
+    </Preview>
+
+    <Options>
+        <MudGrid Spacing="4" Class="w-100">
             <MudItem xs="12" sm="6">
-                <MudSelect T="Color" Label="Color" @bind-Value="_color" Dense="true">
-                    @foreach (Color c in Enum.GetValues(typeof(Color)))
+                <MudSelect T="Color" Label="Checked color" @bind-Value="_color" Dense="true">
+                    @foreach (Color color in Enum.GetValues(typeof(Color)))
                     {
-                        <MudSelectItem Value="@c">@c</MudSelectItem>
+                        <MudSelectItem Value="@color">@color</MudSelectItem>
                     }
                 </MudSelect>
             </MudItem>
 
             <MudItem xs="12" sm="6">
+                <MudSelect T="Color" Label="Unchecked color" @bind-Value="_uncheckedColor" Dense="true">
+                    <MudSelectItem Value="@Color.Default">Default</MudSelectItem>
+                    @foreach (Color color in Enum.GetValues(typeof(Color)))
+                    {
+                        if (color == Color.Default)
+                            continue;
+
+                        <MudSelectItem Value="@color">@color</MudSelectItem>
+                    }
+                </MudSelect>
+            </MudItem>
+
+            <MudItem xs="12" sm="6">
+                <MudSelect T="RadioIconPreset" Label="Checked icon" @bind-Value="_checkedIconPreset" Dense="true">
+                    <MudSelectItem Value="RadioIconPreset.Circle">Circle</MudSelectItem>
+                    <MudSelectItem Value="RadioIconPreset.Star">Star</MudSelectItem>
+                </MudSelect>
+            </MudItem>
+
+            <MudItem xs="12" sm="6">
+                <MudSelect T="RadioIconPreset" Label="Unchecked icon" @bind-Value="_uncheckedIconPreset" Dense="true">
+                    <MudSelectItem Value="RadioIconPreset.Circle">Circle</MudSelectItem>
+                    <MudSelectItem Value="RadioIconPreset.Star">Star</MudSelectItem>
+                </MudSelect>
+            </MudItem>
+
+            <MudItem xs="12">
                 <MudSelect T="Size" Label="Size" @bind-Value="_size" Dense="true">
                     <MudSelectItem Value="@Size.Small">Small</MudSelectItem>
                     <MudSelectItem Value="@Size.Medium">Medium</MudSelectItem>
                     <MudSelectItem Value="@Size.Large">Large</MudSelectItem>
                 </MudSelect>
             </MudItem>
+
+            <MudItem xs="12" sm="6">
+                <MudTextField Label="Error text" @bind-Value="_errorText" ShrinkLabel="true" Placeholder="Enter error text" Clearable="true" />
+            </MudItem>
+
+            <MudItem xs="12" sm="6">
+                <MudTextField Label="Required error" @bind-Value="_requiredError" ShrinkLabel="true" Placeholder="Enter required error" Clearable="true" />
+            </MudItem>
+
+            <MudItem xs="12">
+                <MudText Typo="Typo.subtitle2">Label placement</MudText>
+                <MudRadioGroup T="Placement" @bind-Value="_placement">
+                    <div class="d-flex flex-wrap align-center" style="column-gap: 12px; row-gap: 0;">
+                        <MudRadio T="Placement" Value="Placement.Top">Top</MudRadio>
+                        <MudRadio T="Placement" Value="Placement.Bottom">Bottom</MudRadio>
+                        <MudRadio T="Placement" Value="Placement.Start">Start (Left)</MudRadio>
+                        <MudRadio T="Placement" Value="Placement.End">End (Right)</MudRadio>
+                    </div>
+                </MudRadioGroup>
+            </MudItem>
+
+            <MudItem xs="12">
+                <MudText Typo="Typo.subtitle2">Behavior</MudText>
+                <div class="d-flex flex-wrap align-center justify-start" style="column-gap: 12px; row-gap: 0;">
+                    <MudCheckBox Color="Color.Primary" @bind-Value="_dense" Label="Dense" />
+                    <MudCheckBox Color="Color.Primary" @bind-Value="_readOnly" Label="Read only" />
+                    <MudCheckBox Color="Color.Primary" @bind-Value="_disableGroup" Label="Disabled" />
+                    <MudCheckBox Color="Color.Primary" @bind-Value="_ripple" Label="Ripple" />
+                    <MudCheckBox Color="Color.Primary" @bind-Value="_helperText" Label="Helper text" />
+                    <MudCheckBox Color="Color.Primary" @bind-Value="_required" Label="Required" />
+                    <MudCheckBox Color="Color.Primary" @bind-Value="_error" Label="Error" />
+                </div>
+            </MudItem>
+
         </MudGrid>
-
-        <MudStack Row Spacing="2" Class="align-center">
-            <MudSwitch Color="Color.Primary" @bind-Value="_dense" Label="Dense" />
-            <MudSwitch Color="Color.Primary" @bind-Value="_disableGroup" Label="Disable group" />
-        </MudStack>
-
-        <!-- Content (label) placement -->
-        <MudText Typo="Typo.subtitle2">Content (Label) placement</MudText>
-        <MudRadioGroup T="Placement" @bind-Value="_placement">
-            <MudRadio T="Placement" Value="Placement.Top">Top</MudRadio>
-            <MudRadio T="Placement" Value="Placement.Bottom">Bottom</MudRadio>
-            <MudRadio T="Placement" Value="Placement.Start">Start (Left)</MudRadio>
-            <MudRadio T="Placement" Value="Placement.End">End (Right)</MudRadio>
-        </MudRadioGroup>
-
-    </MudStack>
-</MudPaper>
-
-<!-- Preview -->
-<MudPaper Class="pa-3 mb-3" Elevation="25">
-    <MudText Typo="Typo.subtitle1" Class="mb-2" Style="font-weight:600;">Preview</MudText>
-
-    <MudStack Spacing="2">
-
-        <!-- Group 1 -->
-        <MudText Typo="Typo.subtitle2">Choose one</MudText>
-        <MudRadioGroup T="string" @bind-Value="_choice1">
-            <MudRadio T="string"
-                      Value="@("Default")"
-                      Label="Default"
-                      Color="_color"
-                      Size="_size"
-                      Dense="_dense"
-                      Disabled="_disableGroup"
-                      LabelPlacement="_placement" />
-
-            <MudRadio T="string"
-                      Value="@("Primary")"
-                      Label="Primary"
-                      Color="Color.Primary"
-                      Size="_size"
-                      Dense="_dense"
-                      Disabled="_disableGroup"
-                      LabelPlacement="_placement" />
-
-            <MudRadio T="string"
-                      Value="@("Secondary")"
-                      Label="Secondary (Start/Left)"
-                      Color="Color.Secondary"
-                      Size="_size"
-                      Dense="_dense"
-                      Disabled="_disableGroup"
-                      LabelPlacement="Placement.Start" />
-
-            <MudRadio T="string"
-                      Value="@("DisabledItem")"
-                      Label="Disabled item"
-                      Color="_color"
-                      Size="_size"
-                      Dense="_dense"
-                      Disabled="true"
-                      LabelPlacement="_placement" />
-        </MudRadioGroup>
-
-        <MudText Typo="Typo.body2">Selected: @_choice1</MudText>
-
-        <MudDivider Class="my-2" />
-
-        <!-- Group 2 (horizontal) -->
-        <MudText Typo="Typo.subtitle2">Horizontal group</MudText>
-        <MudRadioGroup T="string" @bind-Value="_choice2">
-            <MudStack Row="true" Spacing="2">
-                <MudRadio T="string" Value="@("A")" Label="Option A" Color="_color" Size="_size" Dense="_dense" Disabled="_disableGroup" LabelPlacement="_placement" />
-                <MudRadio T="string" Value="@("B")" Label="Option B" Color="_color" Size="_size" Dense="_dense" Disabled="_disableGroup" LabelPlacement="_placement" />
-                <MudRadio T="string" Value="@("C")" Label="Option C" Color="_color" Size="_size" Dense="_dense" Disabled="_disableGroup" LabelPlacement="_placement" />
-            </MudStack>
-        </MudRadioGroup>
-        <MudText Typo="Typo.body2">Selected: @_choice2</MudText>
-
-    </MudStack>
-</MudPaper>
+    </Options>
+</DemoPageLayout>
 
 @code {
-    // Controls
     private Color _color = Color.Default;
     private Size _size = Size.Medium;
-    private bool _dense = false;
-    private bool _disableGroup = false;
-    private Placement _placement = Placement.End; // default Right
+    private bool _dense;
+    private bool _disableGroup;
+    private bool _readOnly;
+    private bool _ripple = true;
+    private bool _helperText;
+    private bool _required;
+    private bool _error;
+    private string _errorText = "There is a problem with this selection.";
+    private string _requiredError = "Please select an option.";
+    private Color _uncheckedColor = Color.Default;
+    private RadioIconPreset _checkedIconPreset = RadioIconPreset.Circle;
+    private RadioIconPreset _uncheckedIconPreset = RadioIconPreset.Circle;
+    private Placement _placement = Placement.End;
 
-    // Selections
-    private string _choice1 = "Default";
-    private string _choice2 = "A";
+    private string? _choice1 = "Default";
+    private MudForm? _validationForm;
+    private string _validationState = "Not validated";
+
+    private Color ValidationStateColor => _validationState switch
+    {
+        "Valid" => Color.Success,
+        "Invalid" => Color.Error,
+        _ => Color.Default
+    };
+
+    private string? CheckedIcon => _checkedIconPreset switch
+    {
+        RadioIconPreset.Circle => Icons.Material.Filled.RadioButtonChecked,
+        RadioIconPreset.Star => Icons.Material.Filled.Star,
+        _ => null
+    };
+
+    private string? UncheckedIcon => _uncheckedIconPreset switch
+    {
+        RadioIconPreset.Circle => Icons.Material.Outlined.RadioButtonUnchecked,
+        RadioIconPreset.Star => Icons.Material.Outlined.StarOutline,
+        _ => null
+    };
+
+    private async Task ValidateRadioGroup()
+    {
+        if (_validationForm is null)
+            return;
+
+        await _validationForm.ValidateAsync();
+        _validationState = !_error && _validationForm.IsValid ? "Valid" : "Invalid";
+    }
+
+    private async Task ResetRadioValidation()
+    {
+        if (_validationForm is null)
+            return;
+
+        _choice1 = null;
+        await _validationForm.ResetValidationAsync();
+        _validationState = "Not validated";
+    }
+
+    private enum RadioIconPreset
+    {
+        Default,
+        Circle,
+        Star
+    }
 }
