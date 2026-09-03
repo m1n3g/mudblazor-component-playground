@@ -19,7 +19,7 @@
                                          OnDebounceIntervalElapsed="HandleDebounceIntervalElapsed"
                                          HelperText="@(_helperText ? $"Range: {_min?.ToString() ?? "any"} - {_max}, step {_step}" : null)"
                                          HelperTextOnFocus="@_helperOnFocus" Error="@_hasError" ErrorText="@_errorText"
-                                         Required="@_required" RequiredError="@_requiredError" FullWidth="@_fullWidth" OnlyValidateIfDirty="@_onlyValidateIfDirty"
+                                         Required="@_required" RequiredError="@_requiredError" FullWidth="@_fullWidth" Underline="@_underline" OnlyValidateIfDirty="@_onlyValidateIfDirty"
                                          ShrinkLabel="@_shrinkLabel" Min="@IntMin" Max="@IntMax" Step="@IntStep"
                                          MaxLength="@MaxLengthValue" Format="@FormatValue" Culture="@SelectedCulture" HideSpinButtons="@_hideSpinButtons"
                                          Adornment="@_adornment" AdornmentIcon="@AdornmentIcon" AdornmentText="@_adornmentText"
@@ -35,7 +35,7 @@
                                          OnDebounceIntervalElapsed="HandleDebounceIntervalElapsed"
                                          HelperText="@(_helperText ? $"Range: {_min?.ToString() ?? "any"} - {_max}, step {_step}" : null)"
                                          HelperTextOnFocus="@_helperOnFocus" Error="@_hasError" ErrorText="@_errorText"
-                                         Required="@_required" RequiredError="@_requiredError" FullWidth="@_fullWidth" OnlyValidateIfDirty="@_onlyValidateIfDirty"
+                                         Required="@_required" RequiredError="@_requiredError" FullWidth="@_fullWidth" Underline="@_underline" OnlyValidateIfDirty="@_onlyValidateIfDirty"
                                          ShrinkLabel="@_shrinkLabel" Min="@DoubleMin" Max="@DoubleMax" Step="@DoubleStep"
                                          MaxLength="@MaxLengthValue" Format="@FormatValue" Culture="@SelectedCulture" HideSpinButtons="@_hideSpinButtons"
                                          Adornment="@_adornment" AdornmentIcon="@AdornmentIcon" AdornmentText="@_adornmentText"
@@ -51,7 +51,7 @@
                                          OnDebounceIntervalElapsed="HandleDebounceIntervalElapsed"
                                          HelperText="@(_helperText ? $"Range: {_min?.ToString() ?? "any"} - {_max}, step {_step}" : null)"
                                          HelperTextOnFocus="@_helperOnFocus" Error="@_hasError" ErrorText="@_errorText"
-                                         Required="@_required" RequiredError="@_requiredError" FullWidth="@_fullWidth" OnlyValidateIfDirty="@_onlyValidateIfDirty"
+                                         Required="@_required" RequiredError="@_requiredError" FullWidth="@_fullWidth" Underline="@_underline" OnlyValidateIfDirty="@_onlyValidateIfDirty"
                                          ShrinkLabel="@_shrinkLabel" Min="@IntMin" Max="@IntMax" Step="@IntStep"
                                          MaxLength="@MaxLengthValue" Format="@FormatValue" Culture="@SelectedCulture" HideSpinButtons="@_hideSpinButtons"
                                          Adornment="@_adornment" AdornmentIcon="@AdornmentIcon" AdornmentText="@_adornmentText"
@@ -67,7 +67,7 @@
                                          OnDebounceIntervalElapsed="HandleDebounceIntervalElapsed"
                                          HelperText="@(_helperText ? $"Range: {_min?.ToString() ?? "any"} - {_max}, step {_step}" : null)"
                                          HelperTextOnFocus="@_helperOnFocus" Error="@_hasError" ErrorText="@_errorText"
-                                         Required="@_required" RequiredError="@_requiredError" FullWidth="@_fullWidth" OnlyValidateIfDirty="@_onlyValidateIfDirty"
+                                         Required="@_required" RequiredError="@_requiredError" FullWidth="@_fullWidth" Underline="@_underline" OnlyValidateIfDirty="@_onlyValidateIfDirty"
                                          ShrinkLabel="@_shrinkLabel" Min="@DoubleMin" Max="@DoubleMax" Step="@DoubleStep"
                                          MaxLength="@MaxLengthValue" Format="@FormatValue" Culture="@SelectedCulture" HideSpinButtons="@_hideSpinButtons"
                                          Adornment="@_adornment" AdornmentIcon="@AdornmentIcon" AdornmentText="@_adornmentText"
@@ -112,7 +112,6 @@
                         <MudTextField T="string" Label="Required error" @bind-Value="_requiredError"
                                       Placeholder="Enter required error" Clearable="true" />
                     </MudItem>
-
                 </MudGrid>
             </MudItem>
 
@@ -217,6 +216,7 @@
                     <MudCheckBox @bind-Value="_required" Label="Required" Color="Color.Primary" />
                     <MudCheckBox @bind-Value="_hasError" Label="Show error" Color="Color.Primary" />
                     <MudCheckBox @bind-Value="_fullWidth" Label="Full width" Color="Color.Primary" />
+                    <MudCheckBox @bind-Value="_underline" Label="Underline" Color="Color.Primary" />
                     <MudCheckBox @bind-Value="_immediate" Label="Immediate" Color="Color.Primary" />
                     <MudCheckBox @bind-Value="_hideSpinButtons" Label="Hide spin buttons" Color="Color.Primary" />
                     <MudCheckBox @bind-Value="_onlyValidateIfDirty" Label="Only validate if dirty" Color="Color.Primary" />
@@ -241,6 +241,7 @@
     private bool _clearable = true;
     private bool _hasError;
     private bool _fullWidth;
+    private bool _underline = true;
     private string _errorText = "Please enter a number";
     private string _requiredError = "A value is required";
     private bool _shrinkLabel;

@@ -27,7 +27,7 @@
                                            MultiSelection="true" SelectAll="@_selectAll" SelectAllText="Select all states"
                                            MultiSelectionTextFunc="@SelectionTextFunc" SelectedValues="@_selectedStates"
                                            SelectedValuesChanged="OnSelectedStatesChanged"
-                                           FullWidth="@_fullWidth" FitContent="@_fitContent" Modal="@_modal" MaxHeight="@_maxHeight"
+                                           FullWidth="@_fullWidth" Underline="@_underline" FitContent="@_fitContent" Modal="@_modal" MaxHeight="@_maxHeight"
                                            Error="@(_hasError || (_required && _selectedStates.Count == 0))"
                                            ErrorText="@(_hasError ? _errorText : _requiredError)"
                                            Required="@_required" RequiredError="@_requiredError">
@@ -48,7 +48,7 @@
                                            ShrinkLabel="@_shrinkLabel"
                                            Adornment="@_adornment" AdornmentIcon="@AdornmentIcon" AdornmentText="@_adornmentText"
                                            AdornmentColor="@_adornmentColor" ClearIcon="@ClearIcon" OpenIcon="@OpenIcon" CloseIcon="@CloseIcon"
-                                           FullWidth="@_fullWidth" FitContent="@_fitContent" Modal="@_modal" MaxHeight="@_maxHeight"
+                                           FullWidth="@_fullWidth" Underline="@_underline" FitContent="@_fitContent" Modal="@_modal" MaxHeight="@_maxHeight"
                                            Error="@(_hasError || (_required && string.IsNullOrWhiteSpace(_value)))"
                                            ErrorText="@(_hasError ? _errorText : _requiredError)"
                                            Required="@_required" RequiredError="@_requiredError">
@@ -206,6 +206,7 @@
                     <MudCheckBox @bind-Value="_required" Label="Required" Color="Color.Primary" />
                     <MudCheckBox @bind-Value="_hasError" Label="Show error" Color="Color.Primary" />
                     <MudCheckBox @bind-Value="_fullWidth" Label="Full width" Color="Color.Primary" />
+                    <MudCheckBox @bind-Value="_underline" Label="Underline" Color="Color.Primary" />
                     <MudCheckBox @bind-Value="_fitContent" Label="Fit content" Color="Color.Primary" />
                     <MudCheckBox @bind-Value="_modal" Label="Modal menu" Color="Color.Primary" />
                     <MudCheckBox @bind-Value="_multiSelection" Label="Multi-selection" Color="Color.Primary" />
@@ -241,6 +242,7 @@
     private bool _clearable = true;
     private bool _shrinkLabel;
     private bool _fullWidth;
+    private bool _underline = true;
     private bool _fitContent;
     private bool _modal = true;
     private bool _required;
