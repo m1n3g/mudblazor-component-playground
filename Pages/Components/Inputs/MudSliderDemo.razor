@@ -1,39 +1,173 @@
 @page "/components/slider"
 @using MudBlazor
+@using System.Globalization
 
-<MudText Class="my-4" Typo="Typo.h6">Basic Sliders</MudText>
-<MudSlider Color="Color.Primary" Size="Size.Small" Value="@value1">Small</MudSlider>
-<MudSlider Color="Color.Primary" Size="Size.Medium" Value="@value1">Medium</MudSlider>
-<MudSlider Color=" Color.Primary" Size="Size.Large" Value="@value1">Large</MudSlider>
-<MudSlider Color="Color.Primary" Disabled="true" Value="@(20)">Disabled Slider</MudSlider>
+<style>
+    .slider-preview-vertical {
+        height: clamp(220px, 40vh, 360px);
+    }
+</style>
 
-<MudText Class="my-4" Typo="Typo.h6">Variant</MudText>
-<MudSlider Color="Color.Primary" Value="50.0" Variant="Variant.Text">Text Default Variant</MudSlider>
-<MudSlider Color="Color.Primary" Value="50.0" Variant="Variant.Filled">Filled Variant</MudSlider>
-<MudSlider Color="Color.Primary" Disabled="true" Value="50.0" Variant="Variant.Filled">Filled Disabled</MudSlider>
+<DemoPageLayout Title="Slider"
+                Description="Allows users to select a value within a specified range. Sliders should present the full range of available values and the value should take effect immediately."
+                Variant="DemoPageLayoutVariant.Horizontal">
+    <Preview>
+        <MudPaper Outlined="true" Class="pa-4 w-100">
+            <MudStack Spacing="4" Class="w-100">
+                <div class="d-flex justify-center align-center w-100 @(_vertical ? "slider-preview-vertical" : null)">
+                    <MudSlider Class="@SliderClass"
+                               T="double"
+                               @bind-Value="_value"
+                               Color="@_color"
+                               Size="@_size"
+                               Variant="@_variant"
+                               Min="@_min"
+                               Max="@_max"
+                               Step="@_step"
+                               Disabled="@_disabled"
+                               Immediate="@_immediate"
+                               Vertical="@_vertical"
+                               TickMarks="@_tickMarks"
+                           TickMarkLabels="@TickMarkLabels"
+                           ValueLabel="@_valueLabel"
+                           ValueLabelFormat="@ValueLabelFormat"
+                           Culture="@ValueLabelCulture">
+                        @(_label + ": " + _value.ToString("0.##"))
+                    </MudSlider>
+                </div>
+            </MudStack>
+        </MudPaper>
+    </Preview>
 
-<MudText Class="my-4" Typo="Typo.h6">Step Sliders</MudText>
-<MudSlider Step="10" Value="70" Color="Color.Success" />
-<MudSlider Step="25" Value="50" Color="Color.Warning" />
+    <Options>
+        <MudGrid Spacing="4" Class="w-100">
+            <MudItem xs="12" sm="6">
+                <MudTextField Label="Label" @bind-Value="_label" ShrinkLabel="true"
+                              Placeholder="Enter label" Clearable="true" />
+            </MudItem>
 
-<MudText Class="my-4" Typo="Typo.h6">Min and Max Values</MudText>
-<MudSlider Value="50" Min="20" Max="80" Color="Color.Info">Value: @value1.ToString()</MudSlider>
-<MudSlider @bind-Value="value2" Min="0" Max="10" Step="1" Color="Color.Error">Value: @value2.ToString("F2")</MudSlider>
+            <MudItem xs="12" sm="6">
+                <MudSelect T="Variant" Label="Variant" @bind-Value="_variant" Dense="true">
+                    <MudSelectItem Value="Variant.Text">Text</MudSelectItem>
+                    <MudSelectItem Value="Variant.Outlined">Outlined</MudSelectItem>
+                    <MudSelectItem Value="Variant.Filled">Filled</MudSelectItem>
+                </MudSelect>
+            </MudItem>
 
-<MudText Class="my-4" Typo="Typo.h6">Tick Marks</MudText>
-<MudSlider TickMarks="true" Step="10" Value="10" />
-<MudSlider Variant="Variant.Filled" TickMarks="true" Step="10" Value="10" />
-<MudSlider Disabled="true" TickMarks="true" Step="10" Value="10" />
-<MudSlider Disabled="true" Variant="Variant.Filled" TickMarks="true" Step="10" Value="10" />
+            <MudItem xs="12" sm="6">
+                <MudSelect T="Color" Label="Color" @bind-Value="_color" Dense="true">
+                    @foreach (Color color in Enum.GetValues(typeof(Color)))
+                    {
+                        <MudSelectItem Value="@color">@color</MudSelectItem>
+                    }
+                </MudSelect>
+            </MudItem>
 
+            <MudItem xs="12" sm="6">
+                <MudSelect T="Size" Label="Size" @bind-Value="_size" Dense="true">
+                    <MudSelectItem Value="Size.Small">Small</MudSelectItem>
+                    <MudSelectItem Value="Size.Medium">Medium</MudSelectItem>
+                    <MudSelectItem Value="Size.Large">Large</MudSelectItem>
+                </MudSelect>
+            </MudItem>
 
-<MudText Class="my-4" Typo="Typo.h6">Labels</MudText>
-<MudSlider TickMarks="true" Color="Color.Dark" TickMarkLabels="@labels" Step="25" Value="50" />
+            <MudItem xs="12" sm="6">
+                <MudNumericField T="double" Label="Minimum" @bind-Value="_min" Step="1" />
+            </MudItem>
 
+            <MudItem xs="12" sm="6">
+                <MudNumericField T="double" Label="Maximum" @bind-Value="_max" Step="1" />
+            </MudItem>
+
+            <MudItem xs="12">
+                <MudNumericField T="double" Label="Step" @bind-Value="_step" Min="0.01" Step="1" HelperText="How much the value changes on each move."/>
+            </MudItem>
+
+            <MudItem xs="12">
+                <MudText Typo="Typo.subtitle2" Style="font-weight: 600" Class="my-2">Labels</MudText>
+                <MudGrid Spacing="4">
+                    <MudItem xs="12" sm="6">
+                        <MudTextField Label="Tick mark labels" @bind-Value="_tickLabelsText"
+                                      ShrinkLabel="true" Placeholder="Low, Medium, High"
+                                      HelperText="Comma-separated labels; used with tick marks"
+                                      Clearable="true" />
+                    </MudItem>
+                    <MudItem xs="12" sm="6">
+                        <MudSelect T="ValueLabelFormatPreset" Label="Value label format"
+                                   @bind-Value="_valueLabelFormatPreset" Dense="true"
+                                   Disabled="@(!_valueLabel)">
+                            <MudSelectItem Value="ValueLabelFormatPreset.Default">Default</MudSelectItem>
+                            <MudSelectItem Value="ValueLabelFormatPreset.CompactNumber">Compact number (0.##)</MudSelectItem>
+                            <MudSelectItem Value="ValueLabelFormatPreset.TwoDecimalPlaces">Two decimals (F2)</MudSelectItem>
+                            <MudSelectItem Value="ValueLabelFormatPreset.Currency">Currency (C2)</MudSelectItem>
+                            <MudSelectItem Value="ValueLabelFormatPreset.Percentage">Percentage (P0)</MudSelectItem>
+                        </MudSelect>
+                    </MudItem>
+                </MudGrid>
+            </MudItem>
+
+            <MudItem xs="12">
+                <MudText Typo="Typo.subtitle2" Style="font-weight: 600" Class="mt-2 mb-1">Behavior</MudText>
+                <div class="d-flex flex-wrap align-center justify-start" style="column-gap: 12px; row-gap: 0;">
+                    <MudCheckBox @bind-Value="_vertical" Label="Vertical" Color="Color.Primary" />
+                    <MudCheckBox @bind-Value="_disabled" Label="Disabled" Color="Color.Primary" />
+                    <MudCheckBox @bind-Value="_immediate" Label="Immediate" Color="Color.Primary" />
+                    <MudCheckBox @bind-Value="_tickMarks" Label="Tick marks" Color="Color.Primary" />
+                    <MudCheckBox @bind-Value="_valueLabel" Label="Value label" Color="Color.Primary" />
+                </div>
+            </MudItem>
+
+        </MudGrid>
+    </Options>
+</DemoPageLayout>
 
 @code {
-    public double value1 = 50;
-    public double value2 = -0.75;
-    public double value3 = 0;
-    string[] labels = new string[] { "Korv", "Fisk", "Äpple", "Groda", "Köttbullar"};
+    private string _label = "Value";
+    private Color _color = Color.Primary;
+    private Size _size = Size.Small;
+    private Variant _variant = Variant.Text;
+    private double _value = 50;
+    private double _min = 0;
+    private double _max = 100;
+    private double _step = 1;
+    private bool _disabled;
+    private bool _immediate = true;
+    private bool _vertical;
+    private bool _tickMarks;
+    private bool _valueLabel;
+    private ValueLabelFormatPreset _valueLabelFormatPreset;
+    private string? _tickLabelsText;
+
+    private string SliderClass => _tickMarks ? "mb-8" : string.Empty;
+
+    private string? ValueLabelFormat => _valueLabelFormatPreset switch
+    {
+        ValueLabelFormatPreset.CompactNumber => "0.##",
+        ValueLabelFormatPreset.TwoDecimalPlaces => "F2",
+        ValueLabelFormatPreset.Currency => "C2",
+        ValueLabelFormatPreset.Percentage => "P0",
+        _ => null
+    };
+
+    private CultureInfo ValueLabelCulture => CultureInfo.GetCultureInfo("en-US");
+
+    private string[]? TickMarkLabels
+    {
+        get
+        {
+            if (!_tickMarks || string.IsNullOrWhiteSpace(_tickLabelsText))
+                return null;
+
+            return _tickLabelsText.Split(',', StringSplitOptions.TrimEntries | StringSplitOptions.RemoveEmptyEntries);
+        }
+    }
+
+    private enum ValueLabelFormatPreset
+    {
+        Default,
+        CompactNumber,
+        TwoDecimalPlaces,
+        Currency,
+        Percentage
+    }
 }
