@@ -1,126 +1,340 @@
 @page "/components/textfield"
-@using System.Linq
 @using MudBlazor
+@using System.Text.RegularExpressions
 
-<MudGrid>
-    <!-- Left: all variants — Start adornment -->
-    <MudItem xs="12" md="4">
-        <MudText Typo="Typo.subtitle1" Class="mb-2">Start adornment</MudText>
-        <MudStack Spacing="4">
-            @foreach (var variant in Enum.GetValues(typeof(Variant)).Cast<Variant>())
-            {
-                <MudTextField T="string"
-                              @bind-Value="_valueStart"
-                              Variant="variant"
-                              Label="@variant.ToString()"
-                              Margin="@ComputedMargin"
-                              Disabled="@_disabled"
-                              ReadOnly="@_readonly"
-                              Placeholder="@(_placeholder ? "Placeholder" : null)"
-                              HelperText="@(_helperText ? "Helper Text" : null)"
-                              HelperTextOnFocus="@_helperTextOnFocus"
-                              Clearable="@_clearable"
-                              Error="@_hasError"
-                              ErrorText="Please enter a value"
-                              Immediate="true"
-                              ShrinkLabel="@_shrinkLabel"
-                              Adornment="Adornment.Start"
-                              AdornmentIcon="@Icons.Material.Filled.Search" />
-            }
-        </MudStack>
-    </MudItem>
+<DemoPageLayout Title="Text field"
+                Description="An input for collecting text values."
+                Variant="DemoPageLayoutVariant.Horizontal">
+    <Preview>
+        <MudPaper Outlined="true" Class="pa-4 w-100">
+            <MudStack Spacing="3" Class="w-100">
+                <MudGrid Spacing="3" Class="w-100">
+                    <MudItem xs="12">
+                        <MudStack Spacing="3">
+                            @foreach (var variant in Variants)
+                            {
+                                <MudTextField T="string" @key="@($"{variant}-{_inputType}")" @bind-Value="_value" Variant="@variant"
+                                              @ref="_textFieldReference"
+                                              Label="@($"{variant} — {_label}")"
+                                              Margin="@ComputedMargin" ReadOnly="@_readOnly" Disabled="@_disabled"
+                                              InputType="@_inputType" Lines="@LinesValue" MaxLines="@MaxLinesValue"
+                                              Sizing="@_sizing" Mask="@InputMask"
+                                              Placeholder="@(_placeholder ? "Enter text" : null)"
+                                              HelperText="@(_helperText ? "Enter a value" : null)"
+                                              HelperTextOnFocus="@_helperTextOnFocus" Clearable="@_clearable"
+                                              Error="@(_hasError || IsInvalidEmail)" ErrorText="@CurrentErrorText" Required="@_required"
+                                              RequiredError="@_requiredError" Immediate="@_immediate"
+                                              FullWidth="@_fullWidth" Underline="@_underline" Typo="@_typo"
+                                              Validation="@InputValidation"
+                                              ShrinkLabel="@_shrinkLabel" Counter="@CounterValue" MaxLength="@MaxLengthValue"
+                                              Adornment="@_adornment" AdornmentIcon="@AdornmentIcon"
+                                              AdornmentText="@_adornmentText" AdornmentColor="@_adornmentColor"
+                                              ClearIcon="@ClearIcon" />
+                            }
+                        </MudStack>
+                    </MudItem>
 
-    <!-- Middle: all variants — End adornment -->
-    <MudItem xs="12" md="4">
-        <MudText Typo="Typo.subtitle1" Class="mb-2">End adornment</MudText>
-        <MudStack Spacing="4">
-            @foreach (var variant in Enum.GetValues(typeof(Variant)).Cast<Variant>())
-            {
-                <MudTextField T="string"
-                              @bind-Value="_valueEnd"
-                              Variant="variant"
-                              Label="@($"{variant} (End)")"
-                              Margin="@ComputedMargin"
-                              Disabled="@_disabled"
-                              ReadOnly="@_readonly"
-                              Placeholder="@(_placeholder ? "Placeholder" : null)"
-                              HelperText="@(_helperText ? "Helper Text" : null)"
-                              HelperTextOnFocus="@_helperTextOnFocus"
-                              Clearable="@_clearable"
-                              Error="@_hasError"
-                              ErrorText="Please enter a value"
-                              Immediate="true"
-                              ShrinkLabel="@_shrinkLabel"
-                              Adornment="Adornment.End"
-                              AdornmentIcon="@Icons.Material.Filled.ArrowForward" />
-            }
-        </MudStack>
-    </MudItem>
+                    <MudDivider Class="w-100 mt-6" />
 
-    <!-- Right: extras + Margin picker -->
-    <MudItem xs="12" md="4">
-        <MudStack Spacing="3">
-            <MudText Typo="Typo.subtitle1">Extras</MudText>
+                    <MudItem xs="12">
+                        <MudText Typo="Typo.subtitle2" Class="mb-2">Programmatic control</MudText>
+                        <MudStack Row="true" Wrap="Wrap.Wrap" Spacing="2" Class="mb-2">
+                            <MudButton Variant="Variant.Outlined" OnClick="FocusTextFieldAsync">Focus</MudButton>
+                            <MudButton Variant="Variant.Outlined" OnClick="SelectAllAsync">Select all</MudButton>
+                            <MudButton Variant="Variant.Outlined" OnClick="SelectRangeAsync">Select 5-10</MudButton>
+                            <MudButton Variant="Variant.Outlined" OnClick="GetCaretPositionAsync">Get caret</MudButton>
+                            <MudButton Variant="Variant.Outlined" OnClick="InsertAtCaretAsync">Insert at caret</MudButton>
+                            <MudButton Variant="Variant.Outlined" OnClick="InsertAtPositionAsync">Insert at 56</MudButton>
+                        </MudStack>
+                        <MudText Typo="Typo.caption">Caret position: @_caretPosition</MudText>
+                    </MudItem>
 
-            <!-- Counter example -->
-            <MudTextField T="string"
-                          Label="With Counter"
-                          Variant="Variant.Outlined"
-                          Margin="@ComputedMargin"
-                          Counter="25"
-                          MaxLength="25"
-                          HelperText="Max 25 characters"
-                          Clearable="_clearable"
-                          Immediate="true"
-                          ShrinkLabel="@_shrinkLabel"
-                          Adornment="Adornment.End"
-                          AdornmentText="KG" />
+                </MudGrid>
+            </MudStack>
+        </MudPaper>
+    </Preview>
 
-            <!-- Password example -->
-            <MudTextField T="string"
-                          Label="Password"
-                          Variant="Variant.Filled"
-                          Margin="@ComputedMargin"
-                          InputType="InputType.Password"
-                          Clearable="_clearable"
-                          HelperText="@(_helperText ? "Keep it secret" : null)"
-                          Immediate="true"
-                          ShrinkLabel="@_shrinkLabel"
-                          Adornment="Adornment.Start"
-                          AdornmentIcon="@Icons.Material.Filled.Lock" />
+    <Options>
+        <MudGrid Spacing="4" Class="w-100">
+            <MudItem xs="12" sm="6">
+                <MudTextField Label="Label" @bind-Value="_label" ShrinkLabel="true"
+                              Placeholder="Enter label" Clearable="true" />
+            </MudItem>
 
-            <!-- Margin selector (like your select sample) -->
-            <MudSelect @bind-Value="_margin" Label="Margin">
-                @foreach (var m in Enum.GetValues(typeof(Margin)).Cast<Margin>())
-                {
-                    <MudSelectItem Value="m">@m</MudSelectItem>
-                }
-            </MudSelect>
-        </MudStack>
-    </MudItem>
-</MudGrid>
+            <MudItem xs="12" sm="6">
+                <MudSelect T="Typo" Label="Typography" @bind-Value="_typo" Dense="true">
+                    <MudSelectItem Value="Typo.body1">Body 1</MudSelectItem>
+                    <MudSelectItem Value="Typo.body2">Body 2</MudSelectItem>
+                    <MudSelectItem Value="Typo.subtitle1">Subtitle 1</MudSelectItem>
+                    <MudSelectItem Value="Typo.subtitle2">Subtitle 2</MudSelectItem>
+                    <MudSelectItem Value="Typo.h6">Heading 6</MudSelectItem>
+                    <MudSelectItem Value="Typo.caption">Caption</MudSelectItem>
+                </MudSelect>
+            </MudItem>
 
-<!-- Controls row (mirrors your switches) -->
-<MudStack Class="mt-5" Row="true" Spacing="3">
-    <MudSwitch @bind-Value="_dense" Label="Dense" Color="Color.Primary" />
-    <MudSwitch @bind-Value="_readonly" Label="ReadOnly" Color="Color.Primary" />
-    <MudSwitch @bind-Value="_disabled" Label="Disabled" Color="Color.Primary" />
-    <MudSwitch @bind-Value="_placeholder" Label="Placeholder" Color="Color.Primary" />
-    <MudSwitch @bind-Value="_helperText" Label="HelperText" Color="Color.Primary" />
-    <MudSwitch @bind-Value="_helperTextOnFocus" Label="HelperTextOnFocus" Color="Color.Primary" />
-    <MudSwitch @bind-Value="_clearable" Label="Clearable" Color="Color.Primary" />
-    <MudSwitch @bind-Value="_hasError" Label="Show Error" Color="Color.Error" />
-    <MudSwitch @bind-Value="_shrinkLabel" Label="ShrinkLabel" Color="Color.Primary" />
-</MudStack>
+            <MudItem xs="12" sm="6">
+                <MudSelect T="Margin" Label="Margin" @bind-Value="_margin" Dense="true">
+                    <MudSelectItem Value="Margin.None">None</MudSelectItem>
+                    <MudSelectItem Value="Margin.Dense">Dense</MudSelectItem>
+                    <MudSelectItem Value="Margin.Normal">Normal</MudSelectItem>
+                </MudSelect>
+            </MudItem>
+
+            <MudItem xs="12" sm="6">
+                <MudNumericField T="int" Label="Maximum text length" @bind-Value="_maxLength"
+                                 Min="1" Max="500" Step="1" Disabled="@(!_counter)" />
+            </MudItem>
+
+            <MudItem xs="12" sm="6">
+                <MudTextField Label="Error text" @bind-Value="_errorText" ShrinkLabel="true"
+                              Placeholder="Enter error text" Clearable="true" />
+            </MudItem>
+
+            <MudItem xs="12" sm="6">
+                <MudTextField Label="Required error" @bind-Value="_requiredError" ShrinkLabel="true"
+                              Placeholder="Enter required error" Clearable="true" />
+            </MudItem>
+
+            <MudItem xs="12" sm="6">
+                <MudSelect T="InputType" Label="Input type" Value="@_inputType" HelperText="Represents a valid HTML5 input type."
+                           ValueChanged="HandleInputTypeChanged" Dense="true">
+                    <MudSelectItem Value="InputType.Color">Color</MudSelectItem>
+                    <MudSelectItem Value="InputType.Date">Date</MudSelectItem>
+                    <MudSelectItem Value="InputType.DateTimeLocal">Date and time</MudSelectItem>
+                    <MudSelectItem Value="InputType.Email">Email</MudSelectItem>
+                    <MudSelectItem Value="InputType.Hidden">Hidden</MudSelectItem>
+                    <MudSelectItem Value="InputType.Month">Month</MudSelectItem>
+                    <MudSelectItem Value="InputType.Number">Number</MudSelectItem>
+                    <MudSelectItem Value="InputType.Password">Password</MudSelectItem>
+                    <MudSelectItem Value="InputType.Search">Search</MudSelectItem>
+                    <MudSelectItem Value="InputType.Telephone">Telephone</MudSelectItem>
+                    <MudSelectItem Value="InputType.Text">Text</MudSelectItem>
+                    <MudSelectItem Value="InputType.Time">Time</MudSelectItem>
+                    <MudSelectItem Value="InputType.Url">URL</MudSelectItem>
+                    <MudSelectItem Value="InputType.Week">Week</MudSelectItem>
+                </MudSelect>
+            </MudItem>
+
+            <MudItem xs="12" sm="6">
+                <MudSelect T="MaskPreset" Label="Input masking" @bind-Value="_maskPreset" Dense="true"
+                           Disabled="@IsMaskingDisabled">
+                    <MudSelectItem Value="MaskPreset.None">None</MudSelectItem>
+                    <MudSelectItem Value="MaskPreset.CreditCard">Credit card</MudSelectItem>
+                    <MudSelectItem Value="MaskPreset.Cvc">CVC</MudSelectItem>
+                    <MudSelectItem Value="MaskPreset.Digits">Digits only</MudSelectItem>
+                </MudSelect>
+            </MudItem>
+
+            <MudItem xs="12">
+                <MudNumericField T="int" Label="Lines" @bind-Value="_lines" Min="1" Max="10" Step="1"
+                                 Disabled="@IsMultilineDisabled" HelperText="Used when Multiline is enabled" />
+            </MudItem>
+
+            <MudItem xs="12" sm="6">
+                <MudNumericField T="int" Label="Max lines" @bind-Value="_maxLines" Min="0" Max="20" Step="1"
+                                 Disabled="@IsMultilineDisabled" HelperText="Used with auto sizing" />
+            </MudItem>
+
+            <MudItem xs="12" sm="6">
+                <MudSelect T="InputSizing" Label="Sizing" @bind-Value="_sizing" Dense="true"
+                           Disabled="@IsMultilineDisabled">
+                    <MudSelectItem Value="InputSizing.Fixed">Fixed</MudSelectItem>
+                    <MudSelectItem Value="InputSizing.Auto">Auto</MudSelectItem>
+                </MudSelect>
+            </MudItem>
+
+            <MudItem xs="12">
+                <MudText Typo="Typo.subtitle2" Style="font-weight: 600" Class="my-2">Adornment</MudText>
+                <MudGrid Spacing="4">
+                    <MudItem xs="12" sm="6">
+                        <MudSelect T="Adornment" Label="Adornment" @bind-Value="_adornment" Dense="true">
+                            <MudSelectItem Value="Adornment.None">None</MudSelectItem>
+                            <MudSelectItem Value="Adornment.Start">Start</MudSelectItem>
+                            <MudSelectItem Value="Adornment.End">End</MudSelectItem>
+                        </MudSelect>
+                    </MudItem>
+                    <MudItem xs="12" sm="6">
+                        <MudSelect T="AdornmentIconPreset" Label="Adornment icon" @bind-Value="_adornmentIconPreset" Dense="true">
+                            <MudSelectItem Value="AdornmentIconPreset.Default">Default</MudSelectItem>
+                            <MudSelectItem Value="AdornmentIconPreset.Search">Search</MudSelectItem>
+                            <MudSelectItem Value="AdornmentIconPreset.Lock">Lock</MudSelectItem>
+                            <MudSelectItem Value="AdornmentIconPreset.Info">Info</MudSelectItem>
+                        </MudSelect>
+                    </MudItem>
+                    <MudItem xs="12" sm="6">
+                        <MudTextField Label="Adornment text" @bind-Value="_adornmentText"
+                                      Placeholder="Enter adornment text" HelperText="The AdornmentIcon will be ignored if this property is set." Clearable="true" />
+                    </MudItem>
+                    <MudItem xs="12" sm="6">
+                        <MudSelect T="ClearIconPreset" Label="Clear icon" @bind-Value="_clearIconPreset" Dense="true">
+                            <MudSelectItem Value="ClearIconPreset.Default">Default</MudSelectItem>
+                            <MudSelectItem Value="ClearIconPreset.Cancel">Cancel</MudSelectItem>
+                        </MudSelect>
+                    </MudItem>
+                    <MudItem xs="12">
+                        <MudSelect T="Color" Label="Adornment color" @bind-Value="_adornmentColor" Dense="true">
+                            @foreach (Color color in Enum.GetValues(typeof(Color)))
+                            {
+                                <MudSelectItem Value="@color">@color</MudSelectItem>
+                            }
+                        </MudSelect>
+                    </MudItem>
+                </MudGrid>
+            </MudItem>
+
+            <MudItem xs="12">
+                <MudText Typo="Typo.subtitle2" Style="font-weight: 600" Class="mt-2 mb-1">Behavior</MudText>
+                <div class="d-flex flex-wrap align-center justify-start" style="column-gap: 12px; row-gap: 0;">
+                    <MudCheckBox @bind-Value="_dense" Label="Dense" Color="Color.Primary" />
+                    <MudCheckBox @bind-Value="_readOnly" Label="Read only" Color="Color.Primary" />
+                    <MudCheckBox @bind-Value="_disabled" Label="Disabled" Color="Color.Primary" />
+                    <MudCheckBox @bind-Value="_placeholder" Label="Placeholder" Color="Color.Primary" />
+                    <MudCheckBox @bind-Value="_helperText" Label="Helper text" Color="Color.Primary" />
+                    <MudCheckBox @bind-Value="_helperTextOnFocus" Label="Helper text on focus" Color="Color.Primary" />
+                    <MudCheckBox @bind-Value="_clearable" Label="Clearable" Color="Color.Primary" />
+                    <MudCheckBox @bind-Value="_shrinkLabel" Label="Shrink label" Color="Color.Primary" />
+                    <MudCheckBox @bind-Value="_required" Label="Required" Color="Color.Primary" />
+                    <MudCheckBox @bind-Value="_hasError" Label="Show error" Color="Color.Primary" />
+                    <MudCheckBox @bind-Value="_fullWidth" Label="Full width" Color="Color.Primary" />
+                    <MudCheckBox @bind-Value="_underline" Label="Underline" Color="Color.Primary" />
+                    <MudCheckBox @bind-Value="_immediate" Label="Immediate" Color="Color.Primary" />
+                    <MudCheckBox @bind-Value="_multiline" Label="Multiline" Color="Color.Primary"
+                                 Disabled="@(_inputType == InputType.Password)" />
+                    <MudCheckBox @bind-Value="_counter" Label="Counter" Color="Color.Primary" />
+                </div>
+            </MudItem>
+
+        </MudGrid>
+    </Options>
+</DemoPageLayout>
 
 @code {
-    private string? _valueStart;
-    private string? _valueEnd;
-
-    // switches
-    private bool _dense, _disabled, _readonly, _placeholder, _helperText, _helperTextOnFocus, _clearable, _hasError, _shrinkLabel;
-
-    // margin selection + computed margin honoring "Dense"
+    private static readonly Variant[] Variants = [Variant.Text, Variant.Outlined, Variant.Filled];
+    private string _label = "Enter text";
+    private string? _value;
+    private MudTextField<string>? _textFieldReference;
+    private int _caretPosition = -1;
     private Margin _margin = Margin.None;
+    private Adornment _adornment;
+    private Color _adornmentColor = Color.Default;
+    private string? _adornmentText;
+    private AdornmentIconPreset _adornmentIconPreset = AdornmentIconPreset.Search;
+    private ClearIconPreset _clearIconPreset = ClearIconPreset.Default;
+    private InputType _inputType = InputType.Text;
+    private MaskPreset _maskPreset = MaskPreset.None;
+    private bool _dense;
+    private bool _readOnly;
+    private bool _disabled;
+    private bool _placeholder = true;
+    private bool _helperText;
+    private bool _helperTextOnFocus;
+    private bool _clearable = true;
+    private bool _shrinkLabel;
+    private bool _required;
+    private bool _hasError;
+    private bool _underline = true;
+    private Typo _typo = Typo.body1;
+    private bool _fullWidth;
+    private bool _immediate = true;
+    private bool _counter;
+    private bool _multiline;
+    private int _lines = 3;
+    private int _maxLines = 6;
+    private InputSizing _sizing = InputSizing.Fixed;
+    private int _maxLength = 25;
+    private string _errorText = "Please enter a value";
+    private string _requiredError = "A value is required";
+
     private Margin ComputedMargin => _dense ? Margin.Dense : _margin;
+    private int CounterValue => _counter ? _maxLength : 0;
+    private int MaxLengthValue => _counter ? _maxLength : int.MaxValue;
+    private int LinesValue => _multiline ? _lines : 1;
+    private int MaxLinesValue => _multiline && _sizing == InputSizing.Auto ? _maxLines : 0;
+    private bool IsMultilineDisabled => !_multiline || _inputType == InputType.Password;
+    private bool IsMaskingDisabled => _inputType != InputType.Number;
+    private Func<string?, string?> InputValidation => ValidateInput;
+    private bool IsInvalidEmail => _inputType == InputType.Email
+                                   && !string.IsNullOrWhiteSpace(_value)
+                                   && !IsValidEmail(_value);
+    private string CurrentErrorText => IsInvalidEmail ? "Please enter a valid email" : _errorText;
+
+    private IMask? InputMask => _maskPreset switch
+    {
+        MaskPreset.CreditCard => new PatternMask("0000 0000 0000 0000"),
+        MaskPreset.Cvc => new PatternMask("000"),
+        MaskPreset.Digits => new PatternMask("0000000000"),
+        _ => null
+    };
+
+    private string? AdornmentIcon => _adornmentIconPreset switch
+    {
+        AdornmentIconPreset.Search => Icons.Material.Filled.Search,
+        AdornmentIconPreset.Lock => Icons.Material.Filled.Lock,
+        AdornmentIconPreset.Info => Icons.Material.Filled.Info,
+        _ => null
+    };
+
+    private string ClearIcon => _clearIconPreset switch
+    {
+        ClearIconPreset.Cancel => Icons.Material.Filled.Cancel,
+        _ => Icons.Material.Filled.Clear
+    };
+
+    private void HandleInputTypeChanged(InputType inputType)
+    {
+        _inputType = inputType;
+        _value = null;
+
+        if (IsMaskingDisabled)
+        {
+            _maskPreset = MaskPreset.None;
+        }
+
+        if (inputType == InputType.Password)
+        {
+            _multiline = false;
+            _lines = 1;
+            _maxLines = 0;
+            _sizing = InputSizing.Fixed;
+        }
+    }
+
+    private string? ValidateInput(string? value)
+    {
+        if (_inputType != InputType.Email || string.IsNullOrWhiteSpace(value))
+            return null;
+
+        return IsValidEmail(value) ? null : "Please enter a valid email";
+    }
+
+    private static bool IsValidEmail(string value) => Regex.IsMatch(value, @"^[^@\s]+@[^@\s]+\.[^@\s]+$");
+
+    private async Task FocusTextFieldAsync() => await _textFieldReference!.FocusAsync();
+    private async Task SelectAllAsync() => await _textFieldReference!.SelectAsync();
+    private async Task SelectRangeAsync() => await _textFieldReference!.SelectRangeAsync(5, 10);
+    private async Task GetCaretPositionAsync() => _caretPosition = await _textFieldReference!.GetCurrentCaretPositionAsync();
+    private async Task InsertAtCaretAsync() => await _textFieldReference!.InsertTextAtCurrentCaretPositionAsync(" [inserted] ");
+    private async Task InsertAtPositionAsync() => await _textFieldReference!.InsertTextAsync(" [inserted at 56] ", 56);
+
+    private enum AdornmentIconPreset
+    {
+        Default,
+        Search,
+        Lock,
+        Info
+    }
+
+    private enum ClearIconPreset
+    {
+        Default,
+        Cancel
+    }
+
+    private enum MaskPreset
+    {
+        None,
+        CreditCard,
+        Cvc,
+        Digits
+    }
 }
