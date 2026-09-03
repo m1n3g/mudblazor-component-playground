@@ -18,8 +18,8 @@
                                          Immediate="@_immediate" DebounceInterval="@_debounceInterval" Placeholder="@(_placeholder ? "Enter number" : null)"
                                          OnDebounceIntervalElapsed="HandleDebounceIntervalElapsed"
                                          HelperText="@(_helperText ? $"Range: {_min?.ToString() ?? "any"} - {_max}, step {_step}" : null)"
-                                         HelperTextOnFocus="@_helperOnFocus" Error="@_hasError" ErrorText="Please enter a number"
-                                         Required="@_required" RequiredError="A value is required" OnlyValidateIfDirty="@_onlyValidateIfDirty"
+                                         HelperTextOnFocus="@_helperOnFocus" Error="@_hasError" ErrorText="@_errorText"
+                                         Required="@_required" RequiredError="@_requiredError" OnlyValidateIfDirty="@_onlyValidateIfDirty"
                                          ShrinkLabel="@_shrinkLabel" Min="@IntMin" Max="@IntMax" Step="@IntStep"
                                          MaxLength="@MaxLengthValue" Format="@FormatValue" Culture="@SelectedCulture" HideSpinButtons="@_hideSpinButtons"
                                          Adornment="@_adornment" AdornmentIcon="@AdornmentIcon" AdornmentText="@_adornmentText"
@@ -34,8 +34,8 @@
                                          Immediate="@_immediate" DebounceInterval="@_debounceInterval" Placeholder="@(_placeholder ? "Enter number" : null)"
                                          OnDebounceIntervalElapsed="HandleDebounceIntervalElapsed"
                                          HelperText="@(_helperText ? $"Range: {_min?.ToString() ?? "any"} - {_max}, step {_step}" : null)"
-                                         HelperTextOnFocus="@_helperOnFocus" Error="@_hasError" ErrorText="Please enter a number"
-                                         Required="@_required" RequiredError="A value is required" OnlyValidateIfDirty="@_onlyValidateIfDirty"
+                                         HelperTextOnFocus="@_helperOnFocus" Error="@_hasError" ErrorText="@_errorText"
+                                         Required="@_required" RequiredError="@_requiredError" OnlyValidateIfDirty="@_onlyValidateIfDirty"
                                          ShrinkLabel="@_shrinkLabel" Min="@DoubleMin" Max="@DoubleMax" Step="@DoubleStep"
                                          MaxLength="@MaxLengthValue" Format="@FormatValue" Culture="@SelectedCulture" HideSpinButtons="@_hideSpinButtons"
                                          Adornment="@_adornment" AdornmentIcon="@AdornmentIcon" AdornmentText="@_adornmentText"
@@ -50,8 +50,8 @@
                                          Immediate="@_immediate" DebounceInterval="@_debounceInterval" Placeholder="@(_placeholder ? "Enter number" : null)"
                                          OnDebounceIntervalElapsed="HandleDebounceIntervalElapsed"
                                          HelperText="@(_helperText ? $"Range: {_min?.ToString() ?? "any"} - {_max}, step {_step}" : null)"
-                                         HelperTextOnFocus="@_helperOnFocus" Error="@_hasError" ErrorText="Please enter a number"
-                                         Required="@_required" RequiredError="A value is required" OnlyValidateIfDirty="@_onlyValidateIfDirty"
+                                         HelperTextOnFocus="@_helperOnFocus" Error="@_hasError" ErrorText="@_errorText"
+                                         Required="@_required" RequiredError="@_requiredError" OnlyValidateIfDirty="@_onlyValidateIfDirty"
                                          ShrinkLabel="@_shrinkLabel" Min="@IntMin" Max="@IntMax" Step="@IntStep"
                                          MaxLength="@MaxLengthValue" Format="@FormatValue" Culture="@SelectedCulture" HideSpinButtons="@_hideSpinButtons"
                                          Adornment="@_adornment" AdornmentIcon="@AdornmentIcon" AdornmentText="@_adornmentText"
@@ -66,8 +66,8 @@
                                          Immediate="@_immediate" DebounceInterval="@_debounceInterval" Placeholder="@(_placeholder ? "Enter number" : null)"
                                          OnDebounceIntervalElapsed="HandleDebounceIntervalElapsed"
                                          HelperText="@(_helperText ? $"Range: {_min?.ToString() ?? "any"} - {_max}, step {_step}" : null)"
-                                         HelperTextOnFocus="@_helperOnFocus" Error="@_hasError" ErrorText="Please enter a number"
-                                         Required="@_required" RequiredError="A value is required" OnlyValidateIfDirty="@_onlyValidateIfDirty"
+                                         HelperTextOnFocus="@_helperOnFocus" Error="@_hasError" ErrorText="@_errorText"
+                                         Required="@_required" RequiredError="@_requiredError" OnlyValidateIfDirty="@_onlyValidateIfDirty"
                                          ShrinkLabel="@_shrinkLabel" Min="@DoubleMin" Max="@DoubleMax" Step="@DoubleStep"
                                          MaxLength="@MaxLengthValue" Format="@FormatValue" Culture="@SelectedCulture" HideSpinButtons="@_hideSpinButtons"
                                          Adornment="@_adornment" AdornmentIcon="@AdornmentIcon" AdornmentText="@_adornmentText"
@@ -102,6 +102,15 @@
                     </MudItem>
                     <MudItem xs="12" md="6">
                         <MudNumericField T="int?" Label="Maximum length" HelperText="Maximum number of characters" Margin="Margin.Dense" Immediate="true" @bind-Value="_maxLength" Placeholder="No limit" />
+                    </MudItem>
+
+                    <MudItem xs="12" md="6">
+                        <MudTextField T="string" Label="Error text" @bind-Value="_errorText"
+                                      Placeholder="Enter error text" Clearable="true" />
+                    </MudItem>
+                    <MudItem xs="12" md="6">
+                        <MudTextField T="string" Label="Required error" @bind-Value="_requiredError"
+                                      Placeholder="Enter required error" Clearable="true" />
                     </MudItem>
 
                 </MudGrid>
@@ -230,6 +239,8 @@
     private bool _helperOnFocus;
     private bool _clearable = true;
     private bool _hasError;
+    private string _errorText = "Please enter a number";
+    private string _requiredError = "A value is required";
     private bool _shrinkLabel;
     private bool _required;
     private bool _onlyValidateIfDirty;

@@ -190,6 +190,8 @@
                               @bind-Value="_errorText"
                               @bind-Value:after="ClearValidationAsync"
                               Clearable="true"
+                              ShrinkLabel="true"
+                              Placeholder="Enter required error"
                               Disabled="@(!_showError)" />
             </MudItem>
 
