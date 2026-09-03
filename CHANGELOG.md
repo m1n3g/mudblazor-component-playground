@@ -740,3 +740,59 @@ Updated [`MudExpansionPanelsDemo.razor`](./Pages/Components/DataDisplay/MudExpan
 
 - Fixed custom header fragments that caused Razor parser errors
 - Restored the `Jedi Council` title for custom icon and badge header modes
+
+## 2026-09-03
+
+### Slider Demo Migration and UX Refinement
+
+Updated [`MudSliderDemo.razor`](./Pages/Components/Inputs/MudSliderDemo.razor):
+
+- Migrated the demo to the shared horizontal layout
+- Added configurable color, variant, minimum, maximum, step, tick marks, tick labels, and value-label format options
+- Improved tick-label spacing without changing the preview container layout
+- Kept vertical slider previews responsive without introducing a fixed height
+
+### Switch Demo Migration and Option Refinement
+
+Updated [`MudSwitchDemo.razor`](./Pages/Components/Inputs/MudSwitchDemo.razor):
+
+- Migrated the demo to the shared horizontal layout with an outlined preview panel
+- Added label, checked/unchecked color, label placement, size, ripple, read-only, disabled, required, and error controls
+- Added checked and unchecked thumb-icon presets with configurable icon color
+- Standardized the option grouping and placement for clearer scanning
+
+### Switch and NumericField Validation Refinement
+
+Updated [`MudSwitchDemo.razor`](./Pages/Components/Inputs/MudSwitchDemo.razor) and [`MudNumericFieldDemo.razor`](./Pages/Components/Inputs/MudNumericFieldDemo.razor):
+
+- Set switch checked and unchecked thumb icons to `None` by default
+- Added state-aware thumb icon presets and visible switch error text feedback
+- Added configurable Error text and Required error fields below the NumericField range controls
+- Bound the NumericField validation messages across all supported numeric binding types
+
+### Select and NumericField Cleanup
+
+Updated [`MudSelectDemo.razor`](./Pages/Components/Inputs/MudSelectDemo.razor) and [`MudNumericFieldDemo.razor`](./Pages/Components/Inputs/MudNumericFieldDemo.razor):
+
+- Removed the redundant MudForm and separate Validate/Reset section from the Select preview
+- Added NumericField adornment position, icon, text, color, icon-size, and clear-icon options
+
+### TextField Demo Migration and Completion
+
+Updated [`MudTextFieldDemo.razor`](./Pages/Components/Inputs/MudTextFieldDemo.razor):
+
+- Migrated the demo to the shared horizontal layout with an outlined preview panel
+- Added three vertically stacked Text, Outlined, and Filled variant examples sharing the same value
+- Added counter, maximum-length, input-type, multiline, max-lines, sizing, typography, underline, full-width, validation, and adornment options
+- Added all supported `InputType` enum presets and restricted input masking to numeric input types
+- Added programmatic focus, selection, caret, and text-insertion controls
+- Added email-format validation and reset behavior when changing input types, including safe handling for Color and Password inputs
+
+### ToggleGroup Demo Migration and UX Refinement
+
+Updated [`MudToggleGroupDemo.razor`](./Pages/Components/Inputs/MudToggleGroupDemo.razor):
+
+- Added single-selection, multi-selection, and toggle-selection examples with live selected-value feedback
+- Standardized the preview into separate MudStack sections with dividers between examples
+- Added Color, Size, Outlined, Check mark, Fixed content, Delimiters, Ripple, Disabled, and Vertical options
+- Aligned Outlined, Delimiters, and Ripple initial values with the MudToggleGroup component defaults
