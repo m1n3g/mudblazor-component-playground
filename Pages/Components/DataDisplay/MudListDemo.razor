@@ -2,120 +2,355 @@
 @using MudBlazor
 
 <style>
-.truncate {
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-}
+    .list-preview-sections {
+        display: flex;
+        flex-direction: column;
+        gap: 24px;
+    }
+
+    .list-preview-sections-horizontal {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    @@media (max-width: 959.98px) {
+        .list-preview-sections-horizontal {
+            display: flex;
+            flex-direction: column;
+        }
+    }
 </style>
 
-<MudGrid>
-    <MudItem xs="12" md="6">
-        <MudPaper Width="300px">
-            <MudList T="string" ReadOnly="@ReadOnly" Dense="@Dense" Gutters="@Gutters" Disabled="@Disabled" Padding="@Padding">
-                <MudListSubheader Class="truncate" Gutters="@Gutters">
-                    EmailEmailEmailEmailEmailEmailEmailEmailEmailEmailEmailEmailEmailEmailEmailEmailEmail
-                </MudListSubheader>
+<DemoPageLayout Title="Lists"
+                Description="A scrollable list for displaying text, avatars, and icons. Use lists to help users find a specific item and act on it."
+                Variant="DemoPageLayoutVariant.Horizontal">
+    <Preview>
+        <MudText Typo="Typo.subtitle2" Style="font-weight: 600" Class="my-2">Formatting</MudText>
+        <div class="list-preview-sections @(!IsHorizontalLayout ? "list-preview-sections-horizontal" : null) w-100">
+            <div>
+                <MudText Typo="Typo.subtitle2" Style="font-weight: 600;">Navigation list</MudText>
+                <MudList T="string" Color="@_color" ReadOnly="@_readOnly" Dense="@_dense" Gutters="@_gutters"
+                         Padding="@_padding" Disabled="@_disabled">
+                    <MudListSubheader Gutters="@_gutters" Inset="@_inset">Mail</MudListSubheader>
+                    <MudListItem @key="@($"{_expanded}-{_expandLessIconPreset}-{_expandMoreIconPreset}-{_expandIconColor}")"
+                                 Text="Inbox" Icon="@ItemIcon(Icons.Material.Filled.Inbox)" IconColor="@ItemIconColor"
+                                 IconSize="@_iconSize" AvatarContent="@InboxAvatar" Inset="@_inset"
+                                 Ripple="@_ripple" @bind-Expanded="_expanded"
+                                 ExpandIconColor="@_expandIconColor" ExpandLessIcon="@ExpandLessIcon" ExpandMoreIcon="@ExpandMoreIcon">
+                        <NestedList>
+                            <MudListItem Text="Important" Icon="@ItemIcon(Icons.Material.Filled.Star)"
+                                         IconColor="@ItemIconColor" IconSize="@_iconSize" AvatarContent="@ImportantAvatar"
+                                         Inset="@_inset" Ripple="@_ripple" />
+                            <MudListItem Text="Later" Icon="@ItemIcon(Icons.Material.Filled.WatchLater)"
+                                         IconColor="@ItemIconColor" IconSize="@_iconSize" AvatarContent="@LaterAvatar"
+                                         Inset="@_inset" Ripple="@_ripple" />
+                        </NestedList>
+                    </MudListItem>
+                    <MudListItem Text="Sent" Icon="@ItemIcon(Icons.Material.Filled.Send)" IconColor="@ItemIconColor"
+                                 IconSize="@_iconSize" AvatarContent="@SentAvatar" Inset="@_inset" Ripple="@_ripple" />
+                    <MudListItem Text="Drafts" Icon="@ItemIcon(Icons.Material.Filled.Drafts)" IconColor="@ItemIconColor"
+                                 IconSize="@_iconSize" AvatarContent="@DraftsAvatar" Inset="@_inset" Ripple="@_ripple" />
+                    <MudDivider />
+                    <MudListItem Text="Photos" Icon="@ItemIcon(Icons.Material.Filled.Photo)" IconColor="@ItemIconColor"
+                                 IconSize="@_iconSize" AvatarContent="@PhotosAvatar" Inset="@_inset" Ripple="@_ripple" />
+                    @if (!string.IsNullOrWhiteSpace(_itemText) || !string.IsNullOrWhiteSpace(_secondaryText))
+                    {
+                        <MudListItem Text="@_itemText" SecondaryText="@_secondaryText"
+                                     Inset="@_inset" Ripple="@_ripple" />
+                    }
+                </MudList>
+            </div>
 
-                <MudListItem Text="Inbox" Expanded>
-                    <NestedList>
-                        <MudListItem Class="truncate" Icon="@(Icon ? Icons.Material.Filled.StarRate: null)">
-                            <div class="truncate"> Starredddddddddddddddddddddddddddddddddddddd</div>
-                        </MudListItem>
-                        <MudListItem Icon="@(Icon ? Icons.Material.Filled.WatchLater: null)">
-                                <AvatarContent>
-                                    <MudAvatar>
-                                        <MudImage Src="images/mony.jpg" />
-                                    </MudAvatar>
-                                </AvatarContent>
-                        </MudListItem>
+            <div>
+                <MudText Typo="Typo.subtitle2" Style="font-weight: 600;">Selection list</MudText>
+                @if (_selectionMode == SelectionMode.MultiSelection)
+                {
+                    <MudList T="string" @key="@($"{_checkedIconPreset}-{_uncheckedIconPreset}-{_checkBoxColor}")"
+                             SelectionMode="@_selectionMode" @bind-SelectedValues="SelectedValues"
+                             Color="@_color" CheckBoxColor="@_checkBoxColor" ReadOnly="@_readOnly" Dense="@_dense"
+                             Gutters="@_gutters" Padding="@_padding" Disabled="@_disabled"
+                             CheckedIcon="@CheckedIcon" UncheckedIcon="@UncheckedIcon">
+                        <MudListSubheader Gutters="@_gutters" Inset="@_inset">@SelectionHeader</MudListSubheader>
+                        <MudListItem Text="Milk" Value="@("Milk")" Inset="@_inset" Ripple="@_ripple" />
+                        <MudListItem Text="Coffee" Value="@("Coffee")" Inset="@_inset" Ripple="@_ripple" />
+                        <MudListItem Text="Tea" Value="@("Tea")" Inset="@_inset" Ripple="@_ripple" />
+                        <MudListItem Text="Sparkling water" Value="@("Sparkling water")" Inset="@_inset" Ripple="@_ripple" />
+                    </MudList>
+                    <MudText Typo="Typo.caption">Selected (@_selectedValues.Count): @string.Join(", ", _selectedValues)
+                    </MudText>
+                }
+                else
+                {
+                    <MudList T="string" SelectionMode="@_selectionMode" @bind-SelectedValue="_selectedValue" Color="@_color"
+                             CheckBoxColor="@_checkBoxColor" ReadOnly="@_readOnly" Dense="@_dense" Gutters="@_gutters"
+                             Padding="@_padding" Disabled="@_disabled">
+                        <MudListSubheader Gutters="@_gutters" Inset="@_inset">@SelectionHeader</MudListSubheader>
+                        <MudListItem Text="Milk" Value="@("Milk")" Inset="@_inset" Ripple="@_ripple" />
+                        <MudListItem Text="Coffee" Value="@("Coffee")" Inset="@_inset" Ripple="@_ripple" />
+                        <MudListItem Text="Tea" Value="@("Tea")" Inset="@_inset" Ripple="@_ripple" />
+                        <MudListItem Text="Sparkling water" Value="@("Sparkling water")" Inset="@_inset" Ripple="@_ripple" />
+                    </MudList>
+                    <MudText Typo="Typo.caption">Selected: @_selectedValue</MudText>
+                }
+            </div>
+        </div>
+    </Preview>
 
-                        <MudListItem Class="truncate" Icon="@(Icon ? Icons.Material.Filled.StarRate: null)">
-                            <NestedList>
-                                <MudListItem Class="truncate" Icon="@(Icon ? Icons.Material.Filled.StarRate: null)">
-                                    <div class="truncate"> Starredddddddddddddddddddddddddddddddddddddd</div>
-                                </MudListItem>
-                            </NestedList>
-                        </MudListItem>
-                    </NestedList>
-                </MudListItem>
+    <Options>
+        <MudGrid Spacing="4" Class="w-100">
+            <MudItem xs="12" sm="6">
+                <MudSelect T="Color" Label="Icon color" @bind-Value="_iconColor" Dense="true">
+                    @foreach (Color color in Enum.GetValues(typeof(Color)))
+                    {
+                        <MudSelectItem Value="@color">@color</MudSelectItem>
+                    }
+                </MudSelect>
+            </MudItem>
 
-                <MudListItem Icon="@(Icon ? Icons.Material.Filled.Send: null)" Class="truncate" Text="Sent mailllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllll" @bind-Expanded="_expanded">
-                    <NestedList>
-                        <MudListItem>Re: Meeting tomorrow</MudListItem>
-                        <MudListItem>Fwd: JavaScript memes xD</MudListItem>
-                    </NestedList>
-                </MudListItem>
-                <MudListItem Icon="@(Icon ? Icons.Material.Filled.Drafts: null)">
-                    Drafts
-                </MudListItem>
-                <MudDivider/>
-                <MudListItem Icon="@(Icon ? Icons.Material.Filled.WatchLater: null)">
-                    <AvatarContent>
-                        @if (ShowAvatar)
+            <MudItem xs="12" sm="6">
+                <MudSelect T="Size" Label="Icon size" @bind-Value="_iconSize" Dense="true">
+                    @foreach (Size size in Enum.GetValues(typeof(Size)))
+                    {
+                        <MudSelectItem Value="@size">@size</MudSelectItem>
+                    }
+                </MudSelect>
+            </MudItem>
+
+            <MudItem xs="12" sm="6">
+                <MudTextField Label="Text" @bind-Value="_itemText" Placeholder="Trash" Clearable="true" />
+            </MudItem>
+
+            <MudItem xs="12" sm="6">
+                <MudTextField Label="Secondary text" @bind-Value="_secondaryText"
+                              Placeholder="Removed items" Clearable="true" />
+            </MudItem>
+
+            <MudItem xs="12" sm="6">
+                <MudSelect T="ExpandIconPreset" Label="Expand icon" @bind-Value="_expandLessIconPreset" Dense="true">
+                    <MudSelectItem Value="ExpandIconPreset.Default">Default</MudSelectItem>
+                    <MudSelectItem Value="ExpandIconPreset.ExpandLess">Expand less</MudSelectItem>
+                    <MudSelectItem Value="ExpandIconPreset.KeyboardArrowUp">Keyboard arrow up</MudSelectItem>
+                    <MudSelectItem Value="ExpandIconPreset.ArrowDropUp">Arrow drop up</MudSelectItem>
+                    <MudSelectItem Value="ExpandIconPreset.UnfoldLess">Unfold less</MudSelectItem>
+                </MudSelect>
+            </MudItem>
+
+            <MudItem xs="12" sm="6">
+                <MudSelect T="ExpandIconPreset" Label="Collapse icon" @bind-Value="_expandMoreIconPreset" Dense="true">
+                    <MudSelectItem Value="ExpandIconPreset.Default">Default</MudSelectItem>
+                    <MudSelectItem Value="ExpandIconPreset.ExpandMore">Expand more</MudSelectItem>
+                    <MudSelectItem Value="ExpandIconPreset.KeyboardArrowDown">Keyboard arrow down</MudSelectItem>
+                    <MudSelectItem Value="ExpandIconPreset.ArrowDropDown">Arrow drop down</MudSelectItem>
+                    <MudSelectItem Value="ExpandIconPreset.UnfoldMore">Unfold more</MudSelectItem>
+                </MudSelect>
+            </MudItem>
+
+            <MudItem xs="12">
+                <MudSelect T="Color" Label="Expand icon color" @bind-Value="_expandIconColor" Dense="true">
+                    @foreach (Color color in Enum.GetValues(typeof(Color)))
+                    {
+                        <MudSelectItem Value="@color">@color</MudSelectItem>
+                    }
+                </MudSelect>
+            </MudItem>
+
+            <MudItem xs="12">
+                <MudText Typo="Typo.subtitle2" Style="font-weight: 600" Class="my-2">Selection list</MudText>
+                <MudGrid Spacing="4">
+                    <MudItem xs="12" md="6">
+                        <MudSelect T="SelectionMode" Label="Selection mode" @bind-Value="_selectionMode" Dense="true">
+                            <MudSelectItem Value="SelectionMode.SingleSelection">Single selection</MudSelectItem>
+                            <MudSelectItem Value="SelectionMode.MultiSelection">Multi-selection</MudSelectItem>
+                            <MudSelectItem Value="SelectionMode.ToggleSelection">Toggle selection</MudSelectItem>
+                        </MudSelect>
+                    </MudItem>
+
+                    <MudItem xs="12" sm="6">
+                        <MudSelect T="Color" Label="Checkbox color" @bind-Value="_checkBoxColor" Dense="true"
+                                Disabled="@(_selectionMode != SelectionMode.MultiSelection)">
+                            @foreach (Color color in Enum.GetValues(typeof(Color)))
                             {
-                                <MudAvatar>
-                                    <MudImage Src="images/mony.jpg" />
-                                </MudAvatar>
+                                <MudSelectItem Value="@color">@color</MudSelectItem>
                             }
-                    </AvatarContent>
-                    <ChildContent>
-                        Photos
-                    </ChildContent>
-                </MudListItem>
-                <MudListSubheader Class="mb-n3">
-                    <MudSwitch Color="Color.Primary" @bind-Value="_expanded">"Sent mail" Expansion</MudSwitch>
-                </MudListSubheader>
-                <MudListItem Text="Trash" SecondaryText="Removed e-mails" />
-                <MudListItem Text="Spam" SecondaryText="E-mails from common providers" />
-            </MudList>
-        </MudPaper>
-    </MudItem>
+                        </MudSelect>
+                    </MudItem>
 
-    <MudItem xs="12" md="6">
-        <MudPaper Class="mt-4" Width="300px">
-            <MudList T="string" @bind-SelectedValues="SelectedValues" SelectionMode="SelectionMode.MultiSelection" ReadOnly="@ReadOnly" CheckBoxColor="Color.Primary" Gutters="@Gutters" Dense="@Dense">
-                <MudListSubheader>
-                    Select your favourite drinks:
-                </MudListSubheader>
-                <MudListItem Text="Milk" />
-                <MudListItem Disabled="true" Text="Sparkling Water" Value='"Carbonated H²O"' />
-                <MudListItem Text="Teas" Expanded>
-                    <NestedList>
-                        <MudListItem Text="English Tea" Value='"Earl Grey"' />
-                        <MudListItem Text="Chinese Tea" Value='"Gunpowder Tea"' />
-                        <MudListItem Text="Bubble Tea" />
-                    </NestedList>
-                </MudListItem>
-            </MudList>
-        </MudPaper>
-    </MudItem>
+                    <MudItem xs="12" sm="6">
+                        <MudSelect T="ListIconPreset" Label="Unchecked icon" @bind-Value="_uncheckedIconPreset"
+                                Dense="true" Disabled="@(_selectionMode != SelectionMode.MultiSelection)">
+                            <MudSelectItem Value="ListIconPreset.Default">Default</MudSelectItem>
+                            <MudSelectItem Value="ListIconPreset.Close">Close</MudSelectItem>
+                            <MudSelectItem Value="ListIconPreset.Star">Star</MudSelectItem>
+                            <MudSelectItem Value="ListIconPreset.Circle">Circle</MudSelectItem>
+                        </MudSelect>
+                    </MudItem>
 
-    <MudItem xs="12" md="12" Class="d-flex">
-        <MudCheckBox @bind-Value="Icon" Label="Icon" />
-        <MudCheckBox @bind-Value="IconColor" Label="IconColor" />
-        <MudCheckBox @bind-Value="ReadOnly" Label="ReadOnly" />
-        <MudCheckBox @bind-Value="Disabled" Label="Disabled" />
-        <MudCheckBox @bind-Value="Dense" Label="Dense" />
-        <MudCheckBox @bind-Value="Gutters" Label="Gutters" />
-        <MudCheckBox @bind-Value="Padding" Label="Padding" />
-    </MudItem>
-</MudGrid>
+                    <MudItem xs="12" sm="6">
+                        <MudSelect T="ListIconPreset" Label="Checked icon" @bind-Value="_checkedIconPreset"
+                                Dense="true" Disabled="@(_selectionMode != SelectionMode.MultiSelection)">
+                            <MudSelectItem Value="ListIconPreset.Default">Default</MudSelectItem>
+                            <MudSelectItem Value="ListIconPreset.Check">Check</MudSelectItem>
+                            <MudSelectItem Value="ListIconPreset.Star">Star</MudSelectItem>
+                            <MudSelectItem Value="ListIconPreset.Circle">Circle</MudSelectItem>
+                        </MudSelect>
+                    </MudItem>
+
+            <MudItem xs="12">
+                <MudTextField Label="Selection list heading" @bind-Value="_selectionHeader"
+                              Placeholder="Enter heading text" Clearable="true" />
+                    </MudItem>
+                </MudGrid>
+
+            </MudItem>
+
+            <MudItem xs="12">
+                <MudText Typo="Typo.subtitle2" Style="font-weight: 600" Class="mt-2 mb-1">Behavior</MudText>
+                <div class="d-flex flex-wrap align-center justify-start" style="column-gap: 12px; row-gap: 0;">
+                    <MudCheckBox @bind-Value="_expanded" Label="Expanded" Color="Color.Primary" />
+                    <MudCheckBox @bind-Value="_dense" Label="Dense" Color="Color.Primary" />
+                    <MudCheckBox @bind-Value="_readOnly" Label="Read only" Color="Color.Primary" />
+                    <MudCheckBox @bind-Value="_disabled" Label="Disabled" Color="Color.Primary" />
+                    <MudCheckBox @bind-Value="_gutters" Label="Gutters" Color="Color.Primary" />
+                    <MudCheckBox @bind-Value="_padding" Label="Padding" Color="Color.Primary" />
+                    <MudCheckBox @bind-Value="_inset" Label="Inset" Color="Color.Primary" />
+                    <MudCheckBox @bind-Value="_showIcons" Label="Icons" Color="Color.Primary" />
+                    <MudCheckBox @bind-Value="_iconColorEnabled" Label="Icon color" Color="Color.Primary"
+                                 Disabled="@(!_showIcons)" />
+                    <MudCheckBox @bind-Value="_showAvatar" Label="Show avatar" Color="Color.Primary" />
+                    <MudCheckBox @bind-Value="_ripple" Label="Ripple" Color="Color.Primary" />
+                </div>
+            </MudItem>
+
+        </MudGrid>
+    </Options>
+</DemoPageLayout>
 
 @code {
-    public bool Dense { get; set; }
-    public bool ReadOnly { get; set; }
-    public bool Gutters { get; set; } = true;
-    public bool Padding { get; set; } = true;
-    public bool Disabled { get; set; }
-    public bool Icon { get; set; } = true;
-    public bool IconColor { get; set; } = true;
-    public bool ShowAvatar { get; set; } = true;
+    [CascadingParameter(Name = "DemoLayoutVariant")]
+    private DemoPageLayoutVariant LayoutVariant { get; set; } = DemoPageLayoutVariant.Horizontal;
 
-    public Color StableColor => IconColor ? Color.Primary : default;
-    public Color RadioactiveColor => IconColor ? Color.Tertiary : default;
+    private bool IsHorizontalLayout => LayoutVariant == DemoPageLayoutVariant.Horizontal;
 
-    public IReadOnlyCollection<string> SelectedValues = ["Milk", "Cafe Latte"];
+    private bool _dense;
+    private bool _readOnly;
+    private bool _gutters = true;
+    private bool _padding;
+    private bool _inset;
+    private bool _ripple = true;
+    private bool _expanded = true;
+    private bool _disabled;
+    private bool _showIcons = true;
+    private bool _iconColorEnabled = true;
+    private bool _showAvatar;
+    private Color _color = Color.Primary;
+    private Color _iconColor = Color.Inherit;
+    private Size _iconSize = Size.Medium;
+    private Color _checkBoxColor = Color.Default;
+    private Color _expandIconColor = Color.Default;
+    private SelectionMode _selectionMode = SelectionMode.SingleSelection;
+    private ListIconPreset _checkedIconPreset;
+    private ListIconPreset _uncheckedIconPreset;
+    private ExpandIconPreset _expandLessIconPreset;
+    private ExpandIconPreset _expandMoreIconPreset;
+    private string _selectionHeader = "Choose your favorite drinks";
+    private string _itemText = "Trash";
+    private string _secondaryText = "Removed items";
+    private string _selectedValue = "Milk";
+    private HashSet<string> _selectedValues = new() { "Milk" };
 
-    public bool _expanded;
+    private IReadOnlyCollection<string> SelectedValues
+    {
+        get => _selectedValues;
+        set => _selectedValues = value?.ToHashSet() ?? new();
+    }
+
+    private Color ItemIconColor => _iconColorEnabled ? _iconColor : Color.Inherit;
+
+    private string SelectionHeader => string.IsNullOrWhiteSpace(_selectionHeader)
+        ? _selectionMode == SelectionMode.MultiSelection ? "Choose your favorite drinks" : "Choose one drink"
+        : _selectionHeader;
+
+    private string? ItemIcon(string icon) => _showIcons ? icon : null;
+
+    private string CheckedIcon => _checkedIconPreset switch
+    {
+        ListIconPreset.Check => Icons.Material.Filled.Check,
+        ListIconPreset.Star => Icons.Material.Filled.Star,
+        ListIconPreset.Circle => Icons.Material.Filled.RadioButtonChecked,
+        _ => Icons.Material.Filled.CheckBox
+    };
+
+    private string UncheckedIcon => _uncheckedIconPreset switch
+    {
+        ListIconPreset.Close => Icons.Material.Filled.Close,
+        ListIconPreset.Star => Icons.Material.Filled.StarBorder,
+        ListIconPreset.Circle => Icons.Material.Filled.RadioButtonUnchecked,
+        _ => Icons.Material.Filled.CheckBoxOutlineBlank
+    };
+
+    private string ExpandLessIcon => _expandLessIconPreset switch
+    {
+        ExpandIconPreset.KeyboardArrowUp => Icons.Material.Filled.KeyboardArrowUp,
+        ExpandIconPreset.ArrowDropUp => Icons.Material.Filled.ArrowDropUp,
+        ExpandIconPreset.UnfoldLess => Icons.Material.Filled.UnfoldLess,
+        ExpandIconPreset.ExpandLess => Icons.Material.Filled.ExpandLess,
+        _ => Icons.Material.Filled.ExpandLess
+    };
+
+    private string ExpandMoreIcon => _expandMoreIconPreset switch
+    {
+        ExpandIconPreset.KeyboardArrowDown => Icons.Material.Filled.KeyboardArrowDown,
+        ExpandIconPreset.ArrowDropDown => Icons.Material.Filled.ArrowDropDown,
+        ExpandIconPreset.UnfoldMore => Icons.Material.Filled.UnfoldMore,
+        ExpandIconPreset.ExpandMore => Icons.Material.Filled.ExpandMore,
+        _ => Icons.Material.Filled.ExpandMore
+    };
+
+    private RenderFragment? InboxAvatar => _showAvatar
+        ? @<MudAvatar Size="Size.Small" Color="Color.Primary" Variant="Variant.Filled">M</MudAvatar>
+        : null;
+
+    private RenderFragment? ImportantAvatar => _showAvatar
+        ? @<MudAvatar Size="Size.Small" Color="Color.Secondary" Variant="Variant.Filled">I</MudAvatar>
+        : null;
+
+    private RenderFragment? LaterAvatar => _showAvatar
+        ? @<MudAvatar Size="Size.Small" Color="Color.Secondary" Variant="Variant.Filled">L</MudAvatar>
+        : null;
+
+    private RenderFragment? SentAvatar => _showAvatar
+        ? @<MudAvatar Size="Size.Small" Color="Color.Primary" Variant="Variant.Filled">S</MudAvatar>
+        : null;
+
+    private RenderFragment? DraftsAvatar => _showAvatar
+        ? @<MudAvatar Size="Size.Small" Color="Color.Primary" Variant="Variant.Filled">D</MudAvatar>
+        : null;
+
+    private RenderFragment? PhotosAvatar => _showAvatar
+        ? @<MudAvatar Size="Size.Small">
+            <MudImage Src="images/mony.jpg" Alt="Photos avatar" />
+          </MudAvatar>
+        : null;
+
+    private enum ListIconPreset
+    {
+        Default,
+        Check,
+        Close,
+        Star,
+        Circle
+    }
+
+    private enum ExpandIconPreset
+    {
+        Default,
+        ExpandLess,
+        ExpandMore,
+        KeyboardArrowUp,
+        KeyboardArrowDown,
+        ArrowDropUp,
+        ArrowDropDown,
+        UnfoldLess,
+        UnfoldMore
+    }
 }

@@ -657,3 +657,155 @@ Updated [`Pages/Components/Feedback/MudSkeletonDemo.razor`](./Pages/Components/F
 - Set the default skeleton type to `Text` and animation to `Pulse`
 - Added a paragraph-style Text preview and moved the card-style preview to Rectangle
 - Refined the Circle preview with a centered profile circle, normal background blocks, and constrained custom dimensions
+
+### Shared Demo Layout Migrations
+
+Migrated the following demos to the shared `DemoPageLayout` structure:
+
+- [`MudFormDemo.razor`](./Pages/Components/Inputs/MudFormDemo.razor)
+- [`MudNumericFieldDemo.razor`](./Pages/Components/Inputs/MudNumericFieldDemo.razor)
+- [`MudSkeletonDemo.razor`](./Pages/Components/Feedback/MudSkeletonDemo.razor)
+
+## 2026-08-29
+
+### Form Demo and Option Ordering Improvements
+
+Updated [`MudFormDemo.razor`](./Pages/Components/Inputs/MudFormDemo.razor):
+
+- Improved the registration fields and credit-card validation example
+- Standardized the form options and validation actions
+- Reordered options for clearer scanning and consistent control behavior
+
+### Demo Guidelines
+
+Updated [`GUIDELINES.md`](./GUIDELINES.md) with shared rules for demo layout, labels, option ordering, and component review workflow.
+
+## 2026-08-30
+
+### NumericField Demo Completion
+
+Updated [`MudNumericFieldDemo.razor`](./Pages/Components/Inputs/MudNumericFieldDemo.razor):
+
+- Added int, double, nullable int, and nullable double data-binding examples
+- Added clearer minimum, maximum, step, and maximum-length controls with helper text
+- Added culture, number-format, display-format, debounce, clearable, and hide-spin-button options
+- Added binding guidance for value types versus nullable types
+- Connected the selected binding type and shared options to all preview fields
+
+## 2026-08-31
+
+### Radio Demo Migration and UX Refinement
+
+Updated [`MudRadioDemo.razor`](./Pages/Components/Inputs/MudRadioDemo.razor):
+
+- Migrated the page to the shared demo layout
+- Consolidated the preview into a single Choose one example
+- Added independent checked-color, unchecked-color, checked-icon, unchecked-icon, and size controls
+- Added Required, configurable error messages, validation actions, and colored validation status
+- Fixed default color handling so unchecked colors do not inherit the checked color
+- Standardized left alignment and validation spacing
+
+### Checkbox Demo UX Refinement
+
+Updated [`MudCheckBoxDemo.razor`](./Pages/Components/Inputs/MudCheckBoxDemo.razor):
+
+- Bound all four preview items, including Tertiary, to the shared options
+- Removed duplicate Default color values and nullable color bindings
+- Added Ripple and outlined Star support for unchecked icons
+- Made the Default sample the validation target and removed the separate validation example
+- Standardized left-aligned validation actions and moved validation status to its own row
+- Removed redundant validation messages rendered both by the component and the preview
+
+### Option Ordering Guidelines
+
+Updated [`GUIDELINES.md`](./GUIDELINES.md) with the preferred input option sequence:
+
+`Dense`, `Read only`, `Disabled`, `Drop Shadow`, `Ripple`, `Placeholder`, `Helper text`, `Helper text on focus`, `Clearable`, `Shrink label`, `Required`, `Error`
+
+## 2026-09-01
+
+### Select Demo Enhancements
+
+Updated [`MudSelectDemo.razor`](./Pages/Components/Inputs/MudSelectDemo.razor):
+
+- Added full-width selection, custom multi-selection text, and Select All controls
+- Added configurable selection text with `{count}` and `{values}` tokens
+- Added open and close icon presets with MudSelect’s default dropdown icons
+- Added autocomplete examples for empty-text reset, keyboard Tab selection, and async progress
+- Standardized adornment placement and helper-text behavior across single and multi-selection previews
+
+### Expansion Panels Header Fix
+
+Updated [`MudExpansionPanelsDemo.razor`](./Pages/Components/DataDisplay/MudExpansionPanelsDemo.razor):
+
+- Fixed custom header fragments that caused Razor parser errors
+- Restored the `Jedi Council` title for custom icon and badge header modes
+
+## 2026-09-03
+
+### Slider Demo Migration and UX Refinement
+
+Updated [`MudSliderDemo.razor`](./Pages/Components/Inputs/MudSliderDemo.razor):
+
+- Migrated the demo to the shared horizontal layout
+- Added configurable color, variant, minimum, maximum, step, tick marks, tick labels, and value-label format options
+- Improved tick-label spacing without changing the preview container layout
+- Kept vertical slider previews responsive without introducing a fixed height
+
+### Switch Demo Migration and Option Refinement
+
+Updated [`MudSwitchDemo.razor`](./Pages/Components/Inputs/MudSwitchDemo.razor):
+
+- Migrated the demo to the shared horizontal layout with an outlined preview panel
+- Added label, checked/unchecked color, label placement, size, ripple, read-only, disabled, required, and error controls
+- Added checked and unchecked thumb-icon presets with configurable icon color
+- Standardized the option grouping and placement for clearer scanning
+
+### Switch and NumericField Validation Refinement
+
+Updated [`MudSwitchDemo.razor`](./Pages/Components/Inputs/MudSwitchDemo.razor) and [`MudNumericFieldDemo.razor`](./Pages/Components/Inputs/MudNumericFieldDemo.razor):
+
+- Set switch checked and unchecked thumb icons to `None` by default
+- Added state-aware thumb icon presets and visible switch error text feedback
+- Added configurable Error text and Required error fields below the NumericField range controls
+- Bound the NumericField validation messages across all supported numeric binding types
+
+### Select and NumericField Cleanup
+
+Updated [`MudSelectDemo.razor`](./Pages/Components/Inputs/MudSelectDemo.razor) and [`MudNumericFieldDemo.razor`](./Pages/Components/Inputs/MudNumericFieldDemo.razor):
+
+- Removed the redundant MudForm and separate Validate/Reset section from the Select preview
+- Added NumericField adornment position, icon, text, color, icon-size, and clear-icon options
+
+### TextField Demo Migration and Completion
+
+Updated [`MudTextFieldDemo.razor`](./Pages/Components/Inputs/MudTextFieldDemo.razor):
+
+- Migrated the demo to the shared horizontal layout with an outlined preview panel
+- Added three vertically stacked Text, Outlined, and Filled variant examples sharing the same value
+- Added counter, maximum-length, input-type, multiline, max-lines, sizing, typography, underline, full-width, validation, and adornment options
+- Added all supported `InputType` enum presets and restricted input masking to numeric input types
+- Added programmatic focus, selection, caret, and text-insertion controls
+- Added email-format validation and reset behavior when changing input types, including safe handling for Color and Password inputs
+
+### ToggleGroup Demo Migration and UX Refinement
+
+Updated [`MudToggleGroupDemo.razor`](./Pages/Components/Inputs/MudToggleGroupDemo.razor):
+
+- Added single-selection, multi-selection, and toggle-selection examples with live selected-value feedback
+- Standardized the preview into separate MudStack sections with dividers between examples
+- Added Color, Size, Outlined, Check mark, Fixed content, Delimiters, Ripple, Disabled, and Vertical options
+- Aligned Outlined, Delimiters, and Ripple initial values with the MudToggleGroup component defaults
+
+## 2026-09-05
+
+### List Demo and Sidebar Navigation Refinement
+
+Updated [`MudListDemo.razor`](./Pages/Components/DataDisplay/MudListDemo.razor) and [`NavMenu.razor`](./Layout/NavMenu.razor):
+
+- Added configurable icon color, icon size, item text, secondary text, selection mode, checkbox color, and selection icons
+- Bound inset and ripple behavior across the list items and subheaders
+- Added nested-list expansion controls with configurable expand/collapse icons and icon color
+- Added conditional rendering for the editable secondary navigation item when both text values are empty
+- Aligned list, list-item, and subheader initial values with the MudBlazor API defaults
+- Enabled multiple sidebar groups to remain expanded and opened Buttons, Charts, Form & Inputs, and Table by default

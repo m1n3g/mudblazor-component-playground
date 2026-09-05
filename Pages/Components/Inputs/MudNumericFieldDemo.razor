@@ -3,10 +3,11 @@
 @using System.Globalization
 
 <DemoPageLayout Title="Numeric Field"
-                Description="Numeric fields accept numbers with optional adornments, limits, and validation states."
+                Description="A field for numeric values from users."
                 Variant="DemoPageLayoutVariant.Vertical">
     <Preview>
-        <MudStack Spacing="4" Class="w-100">
+        <MudPaper Outlined="true" Class="pa-4 w-100">
+            <MudStack Spacing="3" Class="w-100">
             @switch (_bindingType)
             {
                 case NumericBindingType.Int:
@@ -17,10 +18,12 @@
                                          Immediate="@_immediate" DebounceInterval="@_debounceInterval" Placeholder="@(_placeholder ? "Enter number" : null)"
                                          OnDebounceIntervalElapsed="HandleDebounceIntervalElapsed"
                                          HelperText="@(_helperText ? $"Range: {_min?.ToString() ?? "any"} - {_max}, step {_step}" : null)"
-                                         HelperTextOnFocus="@_helperOnFocus" Error="@_hasError" ErrorText="Please enter a number"
-                                         Required="@_required" RequiredError="A value is required" OnlyValidateIfDirty="@_onlyValidateIfDirty"
+                                         HelperTextOnFocus="@_helperOnFocus" Error="@_hasError" ErrorText="@_errorText"
+                                         Required="@_required" RequiredError="@_requiredError" FullWidth="@_fullWidth" Underline="@_underline" OnlyValidateIfDirty="@_onlyValidateIfDirty"
                                          ShrinkLabel="@_shrinkLabel" Min="@IntMin" Max="@IntMax" Step="@IntStep"
-                                         MaxLength="@MaxLengthValue" Format="@FormatValue" Culture="@SelectedCulture" HideSpinButtons="@_hideSpinButtons" />
+                                         MaxLength="@MaxLengthValue" Format="@FormatValue" Culture="@SelectedCulture" HideSpinButtons="@_hideSpinButtons"
+                                         Adornment="@_adornment" AdornmentIcon="@AdornmentIcon" AdornmentText="@_adornmentText"
+                                         AdornmentColor="@_adornmentColor" IconSize="@_iconSize" ClearIcon="@ClearIcon" />
                     }
                     break;
                 case NumericBindingType.Double:
@@ -31,10 +34,12 @@
                                          Immediate="@_immediate" DebounceInterval="@_debounceInterval" Placeholder="@(_placeholder ? "Enter number" : null)"
                                          OnDebounceIntervalElapsed="HandleDebounceIntervalElapsed"
                                          HelperText="@(_helperText ? $"Range: {_min?.ToString() ?? "any"} - {_max}, step {_step}" : null)"
-                                         HelperTextOnFocus="@_helperOnFocus" Error="@_hasError" ErrorText="Please enter a number"
-                                         Required="@_required" RequiredError="A value is required" OnlyValidateIfDirty="@_onlyValidateIfDirty"
+                                         HelperTextOnFocus="@_helperOnFocus" Error="@_hasError" ErrorText="@_errorText"
+                                         Required="@_required" RequiredError="@_requiredError" FullWidth="@_fullWidth" Underline="@_underline" OnlyValidateIfDirty="@_onlyValidateIfDirty"
                                          ShrinkLabel="@_shrinkLabel" Min="@DoubleMin" Max="@DoubleMax" Step="@DoubleStep"
-                                         MaxLength="@MaxLengthValue" Format="@FormatValue" Culture="@SelectedCulture" HideSpinButtons="@_hideSpinButtons" />
+                                         MaxLength="@MaxLengthValue" Format="@FormatValue" Culture="@SelectedCulture" HideSpinButtons="@_hideSpinButtons"
+                                         Adornment="@_adornment" AdornmentIcon="@AdornmentIcon" AdornmentText="@_adornmentText"
+                                         AdornmentColor="@_adornmentColor" IconSize="@_iconSize" ClearIcon="@ClearIcon" />
                     }
                     break;
                 case NumericBindingType.NullableInt:
@@ -45,10 +50,12 @@
                                          Immediate="@_immediate" DebounceInterval="@_debounceInterval" Placeholder="@(_placeholder ? "Enter number" : null)"
                                          OnDebounceIntervalElapsed="HandleDebounceIntervalElapsed"
                                          HelperText="@(_helperText ? $"Range: {_min?.ToString() ?? "any"} - {_max}, step {_step}" : null)"
-                                         HelperTextOnFocus="@_helperOnFocus" Error="@_hasError" ErrorText="Please enter a number"
-                                         Required="@_required" RequiredError="A value is required" OnlyValidateIfDirty="@_onlyValidateIfDirty"
+                                         HelperTextOnFocus="@_helperOnFocus" Error="@_hasError" ErrorText="@_errorText"
+                                         Required="@_required" RequiredError="@_requiredError" FullWidth="@_fullWidth" Underline="@_underline" OnlyValidateIfDirty="@_onlyValidateIfDirty"
                                          ShrinkLabel="@_shrinkLabel" Min="@IntMin" Max="@IntMax" Step="@IntStep"
-                                         MaxLength="@MaxLengthValue" Format="@FormatValue" Culture="@SelectedCulture" HideSpinButtons="@_hideSpinButtons" />
+                                         MaxLength="@MaxLengthValue" Format="@FormatValue" Culture="@SelectedCulture" HideSpinButtons="@_hideSpinButtons"
+                                         Adornment="@_adornment" AdornmentIcon="@AdornmentIcon" AdornmentText="@_adornmentText"
+                                         AdornmentColor="@_adornmentColor" IconSize="@_iconSize" ClearIcon="@ClearIcon" />
                     }
                     break;
                 case NumericBindingType.NullableDouble:
@@ -59,20 +66,22 @@
                                          Immediate="@_immediate" DebounceInterval="@_debounceInterval" Placeholder="@(_placeholder ? "Enter number" : null)"
                                          OnDebounceIntervalElapsed="HandleDebounceIntervalElapsed"
                                          HelperText="@(_helperText ? $"Range: {_min?.ToString() ?? "any"} - {_max}, step {_step}" : null)"
-                                         HelperTextOnFocus="@_helperOnFocus" Error="@_hasError" ErrorText="Please enter a number"
-                                         Required="@_required" RequiredError="A value is required" OnlyValidateIfDirty="@_onlyValidateIfDirty"
+                                         HelperTextOnFocus="@_helperOnFocus" Error="@_hasError" ErrorText="@_errorText"
+                                         Required="@_required" RequiredError="@_requiredError" FullWidth="@_fullWidth" Underline="@_underline" OnlyValidateIfDirty="@_onlyValidateIfDirty"
                                          ShrinkLabel="@_shrinkLabel" Min="@DoubleMin" Max="@DoubleMax" Step="@DoubleStep"
-                                         MaxLength="@MaxLengthValue" Format="@FormatValue" Culture="@SelectedCulture" HideSpinButtons="@_hideSpinButtons" />
+                                         MaxLength="@MaxLengthValue" Format="@FormatValue" Culture="@SelectedCulture" HideSpinButtons="@_hideSpinButtons"
+                                         Adornment="@_adornment" AdornmentIcon="@AdornmentIcon" AdornmentText="@_adornmentText"
+                                         AdornmentColor="@_adornmentColor" IconSize="@_iconSize" ClearIcon="@ClearIcon" />
                     }
                     break;
             }
-        </MudStack>
+            </MudStack>
+        </MudPaper>
     </Preview>
 
     <Options>
         <MudGrid Spacing="4" Justify="Justify.Center" Class="w-100">
             <MudItem xs="12">
-                <MudText Typo="Typo.subtitle2" Style="font-weight: 600" Class="mb-3">Value and limits</MudText>
                 <MudGrid Spacing="4">
                     <MudItem xs="12">
                         <MudSelect T="NumericBindingType" @bind-Value="_bindingType" Label="Data binding type" HelperText="Nullable values may start empty. Min, Max, and Step always use non-null defaults." Dense="true">
@@ -95,11 +104,19 @@
                         <MudNumericField T="int?" Label="Maximum length" HelperText="Maximum number of characters" Margin="Margin.Dense" Immediate="true" @bind-Value="_maxLength" Placeholder="No limit" />
                     </MudItem>
 
+                    <MudItem xs="12" md="6">
+                        <MudTextField T="string" Label="Error text" @bind-Value="_errorText"
+                                      Placeholder="Enter error text" Clearable="true" />
+                    </MudItem>
+                    <MudItem xs="12" md="6">
+                        <MudTextField T="string" Label="Required error" @bind-Value="_requiredError"
+                                      Placeholder="Enter required error" Clearable="true" />
+                    </MudItem>
                 </MudGrid>
             </MudItem>
 
             <MudItem xs="12">
-                <MudText Typo="Typo.subtitle2" Style="font-weight: 600" Class="mt-2 mb-3">Formatting</MudText>
+                <MudText Typo="Typo.subtitle2" Style="font-weight: 600" Class="my-2">Formatting</MudText>
                 <MudGrid Spacing="4">
                     <MudItem xs="12" md="6">
                         <MudSelect T="string" @bind-Value="_cultureName" Label="Number format"
@@ -136,6 +153,56 @@
             </MudItem>
 
             <MudItem xs="12">
+                <MudText Typo="Typo.subtitle2" Style="font-weight: 600" Class="my-2">Adornment</MudText>
+                <MudGrid Spacing="4">
+                    <MudItem xs="12" md="6">
+                        <MudSelect T="Adornment" Label="Adornment" @bind-Value="_adornment" Dense="true">
+                            <MudSelectItem Value="Adornment.None">None</MudSelectItem>
+                            <MudSelectItem Value="Adornment.Start">Start</MudSelectItem>
+                            <MudSelectItem Value="Adornment.End">End</MudSelectItem>
+                        </MudSelect>
+                    </MudItem>
+                    <MudItem xs="12" md="6">
+                        <MudSelect T="AdornmentIconPreset" Label="Adornment icon" @bind-Value="_adornmentIconPreset" Dense="true">
+                            <MudSelectItem Value="AdornmentIconPreset.Default">Default</MudSelectItem>
+                            <MudSelectItem Value="AdornmentIconPreset.Calculate">Calculate</MudSelectItem>
+                            <MudSelectItem Value="AdornmentIconPreset.Percent">Percent</MudSelectItem>
+                            <MudSelectItem Value="AdornmentIconPreset.Info">Info</MudSelectItem>
+                        </MudSelect>
+                    </MudItem>
+
+                    <MudItem xs="12" md="6">
+                        <MudSelect T="Color" Label="Adornment color" @bind-Value="_adornmentColor" Dense="true">
+                            @foreach (Color color in Enum.GetValues(typeof(Color)))
+                            {
+                                <MudSelectItem Value="@color">@color</MudSelectItem>
+                            }
+                        </MudSelect>
+                    </MudItem>
+
+                    <MudItem xs="12" md="6">
+                        <MudSelect T="Size" Label="Adornment icon size" @bind-Value="_iconSize" Dense="true">
+                            <MudSelectItem Value="Size.Small">Small</MudSelectItem>
+                            <MudSelectItem Value="Size.Medium">Medium</MudSelectItem>
+                            <MudSelectItem Value="Size.Large">Large</MudSelectItem>
+                        </MudSelect>
+                    </MudItem>
+       
+                    <MudItem xs="12" md="6">
+                        <MudTextField T="string" Label="Adornment text" @bind-Value="_adornmentText" Placeholder="Enter adornment text" HelperText="The AdornmentIcon will be ignored if this property is set." Clearable />
+                    </MudItem>
+
+                    <MudItem xs="12" md="6">
+                        <MudSelect T="ClearIconPreset" Label="Clear icon" @bind-Value="_clearIconPreset" Dense="true">
+                            <MudSelectItem Value="ClearIconPreset.Default">Default</MudSelectItem>
+                            <MudSelectItem Value="ClearIconPreset.Cancel">Cancel</MudSelectItem>
+                        </MudSelect>
+                    </MudItem>
+
+                </MudGrid>
+            </MudItem>
+
+            <MudItem xs="12">
                 <MudText Typo="Typo.subtitle2" Style="font-weight: 600" Class="mt-2 mb-1">Behavior</MudText>
                 <div class="d-flex flex-wrap align-center justify-start" style="column-gap: 12px; row-gap: 0;">
                     <MudCheckBox @bind-Value="_dense" Label="Dense" Color="Color.Primary" />
@@ -145,10 +212,13 @@
                     <MudCheckBox @bind-Value="_helperText" Label="Helper text" Color="Color.Primary" />
                     <MudCheckBox @bind-Value="_helperOnFocus" Label="Helper text on focus" Color="Color.Primary" />
                     <MudCheckBox @bind-Value="_clearable" Label="Clearable" Color="Color.Primary" />
-                    <MudCheckBox @bind-Value="_hasError" Label="Show error" Color="Color.Error" />
                     <MudCheckBox @bind-Value="_shrinkLabel" Label="Shrink label" Color="Color.Primary" />
-                    <MudCheckBox @bind-Value="_hideSpinButtons" Label="Hide spin buttons" Color="Color.Primary" />
                     <MudCheckBox @bind-Value="_required" Label="Required" Color="Color.Primary" />
+                    <MudCheckBox @bind-Value="_hasError" Label="Show error" Color="Color.Primary" />
+                    <MudCheckBox @bind-Value="_fullWidth" Label="Full width" Color="Color.Primary" />
+                    <MudCheckBox @bind-Value="_underline" Label="Underline" Color="Color.Primary" />
+                    <MudCheckBox @bind-Value="_immediate" Label="Immediate" Color="Color.Primary" />
+                    <MudCheckBox @bind-Value="_hideSpinButtons" Label="Hide spin buttons" Color="Color.Primary" />
                     <MudCheckBox @bind-Value="_onlyValidateIfDirty" Label="Only validate if dirty" Color="Color.Primary" />
                 </div>
             </MudItem>
@@ -165,16 +235,26 @@
     private bool _dense;
     private bool _readOnly;
     private bool _disabled;
-    private bool _placeholder;
+    private bool _placeholder = true;
     private bool _helperText;
     private bool _helperOnFocus;
     private bool _clearable = true;
     private bool _hasError;
+    private bool _fullWidth;
+    private bool _underline = true;
+    private string _errorText = "Please enter a number";
+    private string _requiredError = "A value is required";
     private bool _shrinkLabel;
     private bool _required;
     private bool _onlyValidateIfDirty;
     private bool _hideSpinButtons;
     private bool _immediate = true;
+    private Adornment _adornment;
+    private Color _adornmentColor = Color.Default;
+    private Size _iconSize = Size.Medium;
+    private string? _adornmentText;
+    private AdornmentIconPreset _adornmentIconPreset;
+    private ClearIconPreset _clearIconPreset;
 
     private Margin _margin = Margin.None;
     private Margin ComputedMargin => _dense ? Margin.Dense : _margin;
@@ -213,7 +293,37 @@
         _ => CultureInfo.InvariantCulture
     };
 
+    private string? AdornmentIcon => _adornmentIconPreset switch
+    {
+        AdornmentIconPreset.Calculate => Icons.Material.Filled.Calculate,
+        AdornmentIconPreset.Percent => Icons.Material.Filled.Percent,
+        AdornmentIconPreset.Info => Icons.Material.Filled.Info,
+        _ => null
+    };
+
+    private string ClearIcon => _clearIconPreset switch
+    {
+        ClearIconPreset.Close => Icons.Material.Filled.Close,
+        ClearIconPreset.Cancel => Icons.Material.Filled.Cancel,
+        _ => Icons.Material.Filled.Clear
+    };
+
     private void HandleDebounceIntervalElapsed(string text) => _lastDebouncedText = string.IsNullOrWhiteSpace(text) ? "Empty" : text;
+
+    private enum AdornmentIconPreset
+    {
+        Default,
+        Calculate,
+        Percent,
+        Info
+    }
+
+    private enum ClearIconPreset
+    {
+        Default,
+        Close,
+        Cancel
+    }
 
     private enum NumericBindingType
     {

@@ -9,9 +9,7 @@
                 Variant="DemoPageLayoutVariant.Vertical">
     <Preview>
         <MudPaper Class="pa-4 w-100" Outlined="true">
-            <MudText Typo="Typo.subtitle1" Class="mb-3" Style="font-weight: 600;">Registration</MudText>
-
-
+            <MudText Typo="Typo.subtitle2" Class="mb-3" Style="font-weight: 600;">Registration</MudText>
             <MudForm @ref="_form" Model="@_model">
                 <MudStack Spacing="2">
                     <MudTextField T="string" Label="Full name" For="@(() => _model.Name)" @bind-Value="_model.Name"
@@ -116,17 +114,17 @@
                     <MudCheckBox @bind-Value="_dense" Label="Dense" Color="Color.Primary" />
                     <MudCheckBox @bind-Value="_readOnly" Label="Read only" Color="Color.Primary" />
                     <MudCheckBox @bind-Value="_disabled" Label="Disabled" Color="Color.Primary" />
-                    <MudCheckBox @bind-Value="_clearable" Label="Clearable" Color="Color.Primary" />
                     <MudCheckBox @bind-Value="_placeholder" Label="Placeholder" Color="Color.Primary" />
                     <MudCheckBox @bind-Value="_helperText" Label="Helper text" Color="Color.Primary" />
                     <MudCheckBox @bind-Value="_helperOnFocus" Label="Helper text on focus" Color="Color.Primary" />
+                    <MudCheckBox @bind-Value="_clearable" Label="Clearable" Color="Color.Primary" />
                     <MudCheckBox @bind-Value="_shrinkLabel" Label="Shrink label" Color="Color.Primary" />
-                    <MudCheckBox @bind-Value="_immediate" Label="Immediate" Color="Color.Secondary" />
+                    <MudCheckBox @bind-Value="_immediate" Label="Immediate" Color="Color.Primary" />
                 </div>
             </MudItem>
 
             <MudItem xs="12">
-                <MudText Typo="Typo.subtitle2" Class="mb-2">Form actions</MudText>
+                <MudText Typo="Typo.subtitle2" Style="font-weight: 600" Class="mb-2">Form actions</MudText>
                 <MudStack Row="true" Spacing="2" Class="flex-wrap">
                     <MudButton Variant="Variant.Outlined" OnClick="@Validate" Disabled="@_disabled">Validate</MudButton>
                     <MudButton Variant="Variant.Outlined" Color="Color.Warning" OnClick="@ResetValidation">Clear errors</MudButton>
