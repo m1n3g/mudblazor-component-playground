@@ -796,3 +796,16 @@ Updated [`MudToggleGroupDemo.razor`](./Pages/Components/Inputs/MudToggleGroupDem
 - Standardized the preview into separate MudStack sections with dividers between examples
 - Added Color, Size, Outlined, Check mark, Fixed content, Delimiters, Ripple, Disabled, and Vertical options
 - Aligned Outlined, Delimiters, and Ripple initial values with the MudToggleGroup component defaults
+
+## 2026-09-05
+
+### List Demo and Sidebar Navigation Refinement
+
+Updated [`MudListDemo.razor`](./Pages/Components/DataDisplay/MudListDemo.razor) and [`NavMenu.razor`](./Layout/NavMenu.razor):
+
+- Added configurable icon color, icon size, item text, secondary text, selection mode, checkbox color, and selection icons
+- Bound inset and ripple behavior across the list items and subheaders
+- Added nested-list expansion controls with configurable expand/collapse icons and icon color
+- Added conditional rendering for the editable secondary navigation item when both text values are empty
+- Aligned list, list-item, and subheader initial values with the MudBlazor API defaults
+- Enabled multiple sidebar groups to remain expanded and opened Buttons, Charts, Form & Inputs, and Table by default
