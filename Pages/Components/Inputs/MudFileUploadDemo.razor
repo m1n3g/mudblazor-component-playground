@@ -141,7 +141,7 @@
     <Options>
         <MudGrid Spacing="4" Justify="Justify.FlexStart" Class="w-100">
             <MudItem xs="12" md="6">
-                <MudSelect T="FileTypePreset" Label="Accepted file types" @bind-Value="_fileTypePreset" @bind-Value:after="ClearValidationAsync">
+                <MudSelect T="FileTypePreset" Label="Accepted file types" Dense="true" @bind-Value="_fileTypePreset" @bind-Value:after="ClearValidationAsync">
                     <MudSelectItem Value="FileTypePreset.Any">Any file</MudSelectItem>
                     <MudSelectItem Value="FileTypePreset.Images">Images</MudSelectItem>
                     <MudSelectItem Value="FileTypePreset.Documents">Documents</MudSelectItem>
@@ -151,7 +151,7 @@
             </MudItem>
 
             <MudItem xs="12" md="6">
-                <MudSelect T="UploadTrigger" Label="Upload trigger" @bind-Value="_uploadTrigger" @bind-Value:after="ClearValidationAsync">
+                <MudSelect T="UploadTrigger" Label="Upload trigger" Dense="true" @bind-Value="_uploadTrigger" @bind-Value:after="ClearValidationAsync">
                     <MudSelectItem Value="UploadTrigger.Default">Default</MudSelectItem>
                     <MudSelectItem Value="UploadTrigger.Button">Button</MudSelectItem>
                     <MudSelectItem Value="UploadTrigger.Fab">FAB</MudSelectItem>
@@ -179,7 +179,7 @@
             </MudItem>
 
             <MudItem xs="12" md="6">
-                <MudSelect T="FileSelectionDisplay" Label="Selected file display" @bind-Value="_fileSelectionDisplay" @bind-Value:after="ClearValidationAsync">
+                <MudSelect T="FileSelectionDisplay" Label="Selected file display" Dense="true" @bind-Value="_fileSelectionDisplay" @bind-Value:after="ClearValidationAsync">
                     <MudSelectItem Value="@FileSelectionDisplay.Outside">Default chips (outside)</MudSelectItem>
                     <MudSelectItem Value="@FileSelectionDisplay.BuiltIn">Inline chips (inside)</MudSelectItem>
                 </MudSelect>

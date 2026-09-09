@@ -28,13 +28,13 @@
         <MudPaper Class="pa-3" Elevation="25">
             <MudText Typo="Typo.h6" Class="mb-2">Global settings</MudText>
 
-            <MudSelect T="Variant" Label="Variant" @bind-Value="GlobalVariant">
+            <MudSelect T="Variant" Label="Variant" Dense="true" @bind-Value="GlobalVariant">
                 <MudSelectItem Value="Variant.Filled" />
                 <MudSelectItem Value="Variant.Outlined" />
                 <MudSelectItem Value="Variant.Text" />
             </MudSelect>
 
-            <MudSelect T="string" Label="Position" @bind-Value="GlobalPositionClass" Class="mt-2">
+            <MudSelect T="string" Label="Position" Dense="true" @bind-Value="GlobalPositionClass" Class="mt-2">
                 <MudSelectItem Value="@(Defaults.Classes.Position.TopLeft)">Top Left</MudSelectItem>
                 <MudSelectItem Value="@(Defaults.Classes.Position.TopCenter)">Top Center</MudSelectItem>
                 <MudSelectItem Value="@(Defaults.Classes.Position.TopRight)">Top Right</MudSelectItem>
@@ -72,7 +72,7 @@
         <MudPaper Class="pa-3" Elevation="25">
             <MudText Typo="Typo.h6" Class="mb-2">Per-snackbar overrides</MudText>
 
-            <MudSelect T="Severity" Label="Severity" @bind-Value="SelectedSeverity">
+            <MudSelect T="Severity" Label="Severity" Dense="true" @bind-Value="SelectedSeverity">
                 <MudSelectItem Value="Severity.Normal" />
                 <MudSelectItem Value="Severity.Info" />
                 <MudSelectItem Value="Severity.Success" />

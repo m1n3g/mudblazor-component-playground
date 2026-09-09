@@ -67,7 +67,7 @@
             </MudItem>
 
             <MudItem xs="12" sm="6">
-                <MudSelect T="Color" Label="Checked color" @bind-Value="_color" Class="w-100">
+                <MudSelect T="Color" Label="Checked color" Dense="true" @bind-Value="_color" Class="w-100">
                     @foreach (Color color in Enum.GetValues(typeof(Color)))
                     {
                         <MudSelectItem Value="@color">@color</MudSelectItem>
@@ -76,7 +76,7 @@
             </MudItem>
 
             <MudItem xs="12" sm="6">
-                <MudSelect T="Color" Label="Unchecked color" @bind-Value="_uncheckedColor" Class="w-100">
+                <MudSelect T="Color" Label="Unchecked color" Dense="true" @bind-Value="_uncheckedColor" Class="w-100">
                     <MudSelectItem Value="@Color.Default">Default</MudSelectItem>
                     @foreach (Color color in Enum.GetValues(typeof(Color)))
                     {
@@ -89,7 +89,7 @@
             </MudItem>
 
             <MudItem xs="12" sm="6">
-                <MudSelect T="CheckboxIconPreset" Label="Checked icon" @bind-Value="_checkedIconPreset" Class="w-100">
+                <MudSelect T="CheckboxIconPreset" Label="Checked icon" Dense="true" @bind-Value="_checkedIconPreset" Class="w-100">
                     <MudSelectItem Value="@CheckboxIconPreset.Default">Default</MudSelectItem>
                     <MudSelectItem Value="@CheckboxIconPreset.CheckCircle">Check circle</MudSelectItem>
                     <MudSelectItem Value="@CheckboxIconPreset.Star">Star</MudSelectItem>
@@ -97,7 +97,7 @@
             </MudItem>
 
             <MudItem xs="12" sm="6">
-                <MudSelect T="CheckboxIconPreset" Label="Unchecked icon" @bind-Value="_uncheckedIconPreset" Class="w-100">
+                <MudSelect T="CheckboxIconPreset" Label="Unchecked icon" Dense="true" @bind-Value="_uncheckedIconPreset" Class="w-100">
                     <MudSelectItem Value="@CheckboxIconPreset.Default">Default</MudSelectItem>
                     <MudSelectItem Value="@CheckboxIconPreset.RadioButtonUnchecked">Radio button unchecked</MudSelectItem>
                     <MudSelectItem Value="@CheckboxIconPreset.StarOutline">Star</MudSelectItem>
@@ -105,7 +105,7 @@
             </MudItem>
 
             <MudItem xs="12" sm="6">
-                <MudSelect T="CheckboxIconPreset" Label="Indeterminate icon" @bind-Value="_indeterminateIconPreset" Class="w-100">
+                <MudSelect T="CheckboxIconPreset" Label="Indeterminate icon" Dense="true" @bind-Value="_indeterminateIconPreset" Class="w-100">
                     <MudSelectItem Value="@CheckboxIconPreset.Default">Default</MudSelectItem>
                     <MudSelectItem Value="@CheckboxIconPreset.Remove">Remove</MudSelectItem>
                     <MudSelectItem Value="@CheckboxIconPreset.HorizontalRule">Horizontal rule</MudSelectItem>
@@ -113,7 +113,7 @@
             </MudItem>
 
             <MudItem xs="12" sm="6">
-                <MudSelect T="Size" Label="Size" @bind-Value="_size" Class="w-100">
+                <MudSelect T="Size" Label="Size" Dense="true" @bind-Value="_size" Class="w-100">
                     <MudSelectItem Value="@Size.Small">Small</MudSelectItem>
                     <MudSelectItem Value="@Size.Medium">Medium</MudSelectItem>
                     <MudSelectItem Value="@Size.Large">Large</MudSelectItem>

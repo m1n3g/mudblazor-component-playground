@@ -172,7 +172,7 @@
     <MudItem xs="12" md="4">
         <MudText Class="mb-3" Typo="Typo.h6">TablePager Customization:</MudText>
         <MudSwitch @bind-Value="showPager" Color="Color.Primary">Show Table Pager</MudSwitch>
-        <MudSelect Class="mb-2" T="HorizontalAlignment" Label="HorizontalAlignment" @bind-Value="horizontalAlignment">
+        <MudSelect Class="mb-2" T="HorizontalAlignment" Label="HorizontalAlignment" Dense="true" @bind-Value="horizontalAlignment">
             <MudSelectItem Value="HorizontalAlignment.Center" />
             <MudSelectItem Value="HorizontalAlignment.Left" />
             <MudSelectItem Value="HorizontalAlignment.Right" />
@@ -190,21 +190,21 @@
 
     <MudItem xs="12" md="4">
         <MudText Class="mb-3" Typo="Typo.h6">Inline Edit Mode (Not function use another):</MudText>
-        <MudSelect Class="mb-2" Label="Edit Trigger" T="TableEditTrigger" @bind-Value="editTrigger">
+        <MudSelect Class="mb-2" Label="Edit Trigger" T="TableEditTrigger" Dense="true" @bind-Value="editTrigger">
             <MudSelectItem Value="TableEditTrigger.RowClick">Row Click</MudSelectItem>
             <MudSelectItem Value="TableEditTrigger.EditButton">Edit Button</MudSelectItem>
         </MudSelect>
 
         @if (editTrigger == TableEditTrigger.EditButton)
         {
-            <MudSelect Class="mb-2" Label="Edit Button Position" T="TableEditButtonPosition" @bind-Value="editButtonPosition">
+            <MudSelect Class="mb-2" Label="Edit Button Position" T="TableEditButtonPosition" Dense="true" @bind-Value="editButtonPosition">
                 <MudSelectItem Value="TableEditButtonPosition.Start">Start</MudSelectItem>
                 <MudSelectItem Value="TableEditButtonPosition.End">End</MudSelectItem>
                 <MudSelectItem Value="TableEditButtonPosition.StartAndEnd">Start and End</MudSelectItem>
             </MudSelect>
         }
 
-        <MudSelect Class="mb-2" Label="Apply Button Position" T="TableApplyButtonPosition" @bind-Value="applyButtonPosition">
+        <MudSelect Class="mb-2" Label="Apply Button Position" T="TableApplyButtonPosition" Dense="true" @bind-Value="applyButtonPosition">
             <MudSelectItem Value="TableApplyButtonPosition.Start">Start</MudSelectItem>
             <MudSelectItem Value="TableApplyButtonPosition.End">End</MudSelectItem>
             <MudSelectItem Value="TableApplyButtonPosition.StartAndEnd">Start and End</MudSelectItem>

@@ -11,7 +11,7 @@
 
             <MudNumericField T="int" Label="Selected value" @bind-Value="selected" Min="0" Max="@max" Class="mb-2" />
 
-            <MudSelect T="Color" Label="Color" @bind-Value="color" Class="mb-2">
+            <MudSelect T="Color" Label="Color" Dense="true" @bind-Value="color" Class="mb-2">
                 <MudSelectItem Value="Color.Default" />
                 <MudSelectItem Value="Color.Primary" />
                 <MudSelectItem Value="Color.Secondary" />
@@ -23,7 +23,7 @@
             </MudSelect>
 
             <!-- NEW: Size dropdown -->
-            <MudSelect T="Size" Label="Size" @bind-Value="size" Class="mb-2">
+            <MudSelect T="Size" Label="Size" Dense="true" @bind-Value="size" Class="mb-2">
                 <MudSelectItem Value="Size.Small" />
                 <MudSelectItem Value="Size.Medium" />
                 <MudSelectItem Value="Size.Large" />

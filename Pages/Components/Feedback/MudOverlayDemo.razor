@@ -12,7 +12,7 @@
             <MudSwitch Color="Color.Primary" @bind-Value="_containerClickToClose">Click to close</MudSwitch>
             <MudSwitch Color="Color.Primary" @bind-Value="_containerShowLoader">Show loader</MudSwitch>
 
-            <MudSelect T="Backdrop" Label="Background" @bind-Value="_containerBackdrop" Class="mt-2">
+            <MudSelect T="Backdrop" Label="Background" Dense="true" @bind-Value="_containerBackdrop" Class="mt-2">
                 <MudSelectItem Value="Backdrop.Dark">Dark</MudSelectItem>
                 <MudSelectItem Value="Backdrop.Light">Light</MudSelectItem>
             </MudSelect>
@@ -53,7 +53,7 @@
             <MudSwitch Color="Color.Primary" @bind-Value="_fullClickToClose">Click to close</MudSwitch>
             <MudSwitch Color="Color.Primary" @bind-Value="_fullShowLoader">Show loader</MudSwitch>
 
-            <MudSelect T="Backdrop" Label="Background" @bind-Value="_fullBackdrop" Class="mt-2">
+            <MudSelect T="Backdrop" Label="Background" Dense="true" @bind-Value="_fullBackdrop" Class="mt-2">
                 <MudSelectItem Value="Backdrop.Dark">Dark</MudSelectItem>
                 <MudSelectItem Value="Backdrop.Light">Light</MudSelectItem>
             </MudSelect>

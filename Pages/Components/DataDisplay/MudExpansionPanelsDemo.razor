@@ -95,7 +95,7 @@
     <Options>
         <MudGrid Spacing="4" Class="w-100">
             <MudItem xs="12">
-                <MudSelect T="HeaderIconMode" @bind-Value="_headerIconMode" Label="Header icon">
+                        <MudSelect T="HeaderIconMode" @bind-Value="_headerIconMode" Label="Header icon" Dense="true">
                     <MudSelectItem Value="@HeaderIconMode.Default">Default</MudSelectItem>
                     <MudSelectItem Value="@HeaderIconMode.Custom">Custom header icon</MudSelectItem>
                     <MudSelectItem Value="@HeaderIconMode.Badge">MudIcon with badge</MudSelectItem>
@@ -103,7 +103,7 @@
             </MudItem>
 
             <MudItem xs="12">
-                <MudSelect T="ExpansionIconPreset" @bind-Value="_expansionIconPreset" Label="Expansion icon">
+                        <MudSelect T="ExpansionIconPreset" @bind-Value="_expansionIconPreset" Label="Expansion icon" Dense="true">
                     <MudSelectItem Value="@ExpansionIconPreset.Default">Default</MudSelectItem>
                     <MudSelectItem Value="@ExpansionIconPreset.Add">Add</MudSelectItem>
                     <MudSelectItem Value="@ExpansionIconPreset.ChevronRight">Chevron right</MudSelectItem>
@@ -124,7 +124,7 @@
             </MudItem>
 
             <MudItem xs="12">
-                <MudSelect T="ExpansionPanelChoice" @bind-Value="_initiallyExpandedPanel" Label="Initially expanded panel">
+                    <MudSelect T="ExpansionPanelChoice" @bind-Value="_initiallyExpandedPanel" Label="Initially expanded panel" Dense="true">
                     <MudSelectItem Value="@ExpansionPanelChoice.None">None</MudSelectItem>
                     <MudSelectItem Value="@ExpansionPanelChoice.JediCouncil">Jedi Council</MudSelectItem>
                     <MudSelectItem Value="@ExpansionPanelChoice.CloneArmy">Clone Army</MudSelectItem>
@@ -150,7 +150,7 @@
             @if (_disablePanel)
             {
                 <MudItem xs="12">
-                    <MudSelect T="ExpansionPanelChoice" @bind-Value="_disabledPanel" Label="Panel to disable">
+                    <MudSelect T="ExpansionPanelChoice" @bind-Value="_disabledPanel" Label="Panel to disable" Dense="true">
                         <MudSelectItem Value="@ExpansionPanelChoice.JediCouncil">Jedi Council</MudSelectItem>
                         <MudSelectItem Value="@ExpansionPanelChoice.CloneArmy">Clone Army</MudSelectItem>
                         <MudSelectItem Value="@ExpansionPanelChoice.Sith">Sith</MudSelectItem>

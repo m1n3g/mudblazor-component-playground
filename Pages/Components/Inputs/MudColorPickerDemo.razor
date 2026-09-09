@@ -52,7 +52,7 @@
                 AdornmentIcon="@Icons.Material.Filled.Tag" @bind-Text="_colorExtra2" />
 
             <!-- Margin selector (like your other demo) -->
-            <MudSelect @bind-Value="_margin" Label="Margin">
+            <MudSelect @bind-Value="_margin" Label="Margin" Dense="true">
                 @foreach (var m in Enum.GetValues(typeof(Margin)).Cast<Margin>())
                 {
                     <MudSelectItem Value="m">@m</MudSelectItem>

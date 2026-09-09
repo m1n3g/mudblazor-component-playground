@@ -110,7 +110,7 @@
 
 <MudGrid>
     <MudItem xs="12" md="4">
-        <MudSelect Class="mt-5" Label="Edit Trigger" T="TableEditTrigger" @bind-Value="editTrigger">
+            <MudSelect Class="mt-5" Label="Edit Trigger" T="TableEditTrigger" Dense="true" @bind-Value="editTrigger">
             <MudSelectItem Value="TableEditTrigger.RowClick">Row Click</MudSelectItem>
             <MudSelectItem Value="TableEditTrigger.EditButton">Edit Button</MudSelectItem>
         </MudSelect>
@@ -118,7 +118,7 @@
     @if (editTrigger == TableEditTrigger.EditButton)
     {
         <MudItem xs="12" md="4">
-            <MudSelect Class="mt-5" Label="Edit Button Position" T="TableEditButtonPosition" @bind-Value="editButtonPosition">
+            <MudSelect Class="mt-5" Label="Edit Button Position" T="TableEditButtonPosition" Dense="true" @bind-Value="editButtonPosition">
                 <MudSelectItem Value="TableEditButtonPosition.Start">Start</MudSelectItem>
                 <MudSelectItem Value="TableEditButtonPosition.End">End</MudSelectItem>
                 <MudSelectItem Value="TableEditButtonPosition.StartAndEnd">Start and End</MudSelectItem>
@@ -126,7 +126,7 @@
         </MudItem>
     }
     <MudItem xs="12" md="4">
-        <MudSelect Class="mt-5" Label="Apply Button Position" T="TableApplyButtonPosition" @bind-Value="applyButtonPosition">
+            <MudSelect Class="mt-5" Label="Apply Button Position" T="TableApplyButtonPosition" Dense="true" @bind-Value="applyButtonPosition">
             <MudSelectItem Value="TableApplyButtonPosition.Start">Start</MudSelectItem>
             <MudSelectItem Value="TableApplyButtonPosition.End">End</MudSelectItem>
             <MudSelectItem Value="TableApplyButtonPosition.StartAndEnd">Start and End</MudSelectItem>
