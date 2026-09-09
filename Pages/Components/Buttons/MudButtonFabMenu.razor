@@ -5,7 +5,7 @@
                 Description="A menu appearing from a MudFab that displays a list of items."
                 Variant="DemoPageLayoutVariant.Horizontal">
     <Preview>
-        <div class="w-100 d-flex justify-center" style="padding: 88px 0 32px;">
+        <div class="w-100 d-flex justify-center" style="padding: 144px 0 32px;">
                 <MudStack Spacing="2" AlignItems="AlignItems.Center">
                 <MudFabMenu @key="CurrentFabIcon"
                             @bind-Open="_open"
@@ -21,18 +21,21 @@
                             OpenOnMouseHover="@_openOnMouseHover"
                             CloseOnMenuItemClicked="@_closeOnMenuItemClicked"
                             Label="@_label">
-                    <MudFabMenuItem Label="Create"
-                                    StartIcon="@Icons.Material.Filled.AddCircle"
+                    <MudFabMenuItem Label="@GetItemLabel("Create")"
+                                    StartIcon="@GetItemStartIcon(Icons.Material.Filled.AddCircle)"
+                                    EndIcon="@SelectedItemEndIcon"
                                     Color="Color.Primary"
                                     Size="@_itemSize"
                                     OnClick="@(() => OnMenuItemClick("Create"))" />
-                    <MudFabMenuItem Label="Edit"
-                                    StartIcon="@Icons.Material.Filled.Edit"
+                    <MudFabMenuItem Label="@GetItemLabel("Edit")"
+                                    StartIcon="@GetItemStartIcon(Icons.Material.Filled.Edit)"
+                                    EndIcon="@SelectedItemEndIcon"
                                     Color="Color.Secondary"
                                     Size="@_itemSize"
                                     OnClick="@(() => OnMenuItemClick("Edit"))" />
-                    <MudFabMenuItem Label="Share"
-                                    StartIcon="@Icons.Material.Filled.Share"
+                    <MudFabMenuItem Label="@GetItemLabel("Share")"
+                                    StartIcon="@GetItemStartIcon(Icons.Material.Filled.Share)"
+                                    EndIcon="@SelectedItemEndIcon"
                                     Color="Color.Info"
                                     Size="@_itemSize"
                                     OnClick="@(() => OnMenuItemClick("Share"))" />
@@ -48,8 +51,14 @@
     <Options>
         <MudGrid Spacing="4" Justify="Justify.Center" Class="w-100">
             <MudItem xs="12" md="6">
-                <MudTextField ShrinkLabel Label="Label" Placeholder="Enter label"
-                              @bind-Value="_label" />
+                <MudSelect T="ItemContentMode"
+                           Label="FAB Item content"
+                           Dense="true"
+                           @bind-Value="_itemContentMode">
+                    <MudSelectItem Value="ItemContentMode.IconOnly">Icon only</MudSelectItem>
+                    <MudSelectItem Value="ItemContentMode.LabelOnly">Label only</MudSelectItem>
+                    <MudSelectItem Value="ItemContentMode.IconAndLabel">Icon and label</MudSelectItem>
+                </MudSelect>
             </MudItem>
 
             <MudItem xs="12" md="6">
@@ -69,6 +78,11 @@
                 </MudSelect>
             </MudItem>
 
+            <MudItem xs="12">
+                <MudTextField ShrinkLabel Label="FAB Label" Placeholder="Enter label"
+                              @bind-Value="_label" />
+            </MudItem>
+
             <MudItem xs="12" md="6">
                 <MudSelect T="Size"
                            Label="FAB Size"
@@ -82,12 +96,39 @@
 
             <MudItem xs="12" md="6">
                 <MudSelect T="Size"
-                           Label="Item Size"
+                           Label="FAB Item Size"
                            Dense="true"
                            @bind-Value="_itemSize">
                     <MudSelectItem Value="Size.Small">Small</MudSelectItem>
                     <MudSelectItem Value="Size.Medium">Medium</MudSelectItem>
                     <MudSelectItem Value="Size.Large">Large</MudSelectItem>
+                </MudSelect>
+            </MudItem>
+
+            <MudItem xs="12" md="6">
+                <MudSelect T="string"
+                           Label="FAB Item Start Icon"
+                           Dense="true"
+                           @bind-Value="_startIconSelection">
+                    <MudSelectItem Value="@DefaultStartIconOption">Default item icons</MudSelectItem>
+                    <MudSelectItem Value="@NoIconOption">None</MudSelectItem>
+                    <MudSelectItem Value="@Icons.Material.Filled.AddCircle">Add circle</MudSelectItem>
+                    <MudSelectItem Value="@Icons.Material.Filled.Edit">Edit</MudSelectItem>
+                    <MudSelectItem Value="@Icons.Material.Filled.Share">Share</MudSelectItem>
+                    <MudSelectItem Value="@Icons.Material.Filled.Star">Star</MudSelectItem>
+                </MudSelect>
+            </MudItem>
+
+            <MudItem xs="12" md="6">
+                <MudSelect T="string"
+                           Label="FAB Item End Icon"
+                           Dense="true"
+                           @bind-Value="_endIconSelection">
+                    <MudSelectItem Value="@NoIconOption">None</MudSelectItem>
+                    <MudSelectItem Value="@Icons.Material.Filled.ArrowForward">Arrow forward</MudSelectItem>
+                    <MudSelectItem Value="@Icons.Material.Filled.ChevronRight">Chevron right</MudSelectItem>
+                    <MudSelectItem Value="@Icons.Material.Filled.OpenInNew">Open in new</MudSelectItem>
+                    <MudSelectItem Value="@Icons.Material.Filled.Done">Done</MudSelectItem>
                 </MudSelect>
             </MudItem>
 
@@ -144,6 +185,16 @@
 </DemoPageLayout>
 
 @code {
+    private const string DefaultStartIconOption = "__DEFAULT__";
+    private const string NoIconOption = "__NONE__";
+
+    private enum ItemContentMode
+    {
+        IconOnly,
+        LabelOnly,
+        IconAndLabel
+    }
+
     private string _label = string.Empty;
     private string _lastAction = "None";
     private bool _open;
@@ -155,9 +206,25 @@
     private Color _color = Color.Default;
     private Size _size = Size.Medium;
     private Size _itemSize = Size.Medium;
+    private ItemContentMode _itemContentMode = ItemContentMode.IconAndLabel;
+    private string _startIconSelection = DefaultStartIconOption;
+    private string _endIconSelection = NoIconOption;
     private Direction _direction = Direction.Top;
     private Origin _anchor = Origin.BottomRight;
     private AlignItems _alignItems = AlignItems.Center;
+    private string? GetItemLabel(string label)
+        => _itemContentMode == ItemContentMode.IconOnly ? null : label;
+
+    private string? GetItemStartIcon(string defaultIcon)
+        => _itemContentMode == ItemContentMode.LabelOnly || _startIconSelection == NoIconOption
+            ? null
+            : _startIconSelection == DefaultStartIconOption ? defaultIcon : _startIconSelection;
+
+    private string? SelectedItemEndIcon
+        => _itemContentMode == ItemContentMode.LabelOnly || _endIconSelection == NoIconOption
+            ? null
+            : _endIconSelection;
+
     private string CurrentFabIcon => _useCloseIcon && _open
         ? Icons.Material.Filled.Close
         : Icons.Material.Filled.Add;
