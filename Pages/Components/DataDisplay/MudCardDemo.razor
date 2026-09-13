@@ -1,5 +1,6 @@
 @page "/components/card"
 @using MudBlazor
+@implements IDisposable
 
 <DemoPageLayout Title="Card"
                 Description="Cards contain actions, text, or media like images or graphics. Keeping a card to a single subject keeps the design clean."
@@ -7,6 +8,54 @@
                 PreviewContentMaxWidth="900px">
     <Preview>
         <div class="d-flex justify-center w-100">
+            @if (_loadingEnabled && _isLoading)
+            {
+                <MudCard Style="@CardStyle"
+                         Outlined="@_outlined"
+                         Elevation="@_elevation"
+                         Square="@_square"
+                         ContentPadding="@_contentPadding">
+                    @if (_showHeader)
+                    {
+                        <MudCardHeader>
+                            <CardHeaderAvatar>
+                                <MudSkeleton SkeletonType="SkeletonType.Circle"
+                                             Animation="Animation.Pulse"
+                                             Width="40px"
+                                             Height="40px" />
+                            </CardHeaderAvatar>
+                            <CardHeaderContent>
+                                <MudSkeleton SkeletonType="SkeletonType.Text" Animation="Animation.Pulse" Width="45%" Height="20px" />
+                                <MudSkeleton SkeletonType="SkeletonType.Text" Animation="Animation.Pulse" Width="30%" Height="16px" />
+                            </CardHeaderContent>
+                        </MudCardHeader>
+                    }
+
+                    @if (_showMedia)
+                    {
+                        <MudSkeleton SkeletonType="SkeletonType.Rectangle"
+                                     Animation="Animation.Pulse"
+                                     Width="100%"
+                                     Height="@($"{_mediaHeight}px")" />
+                    }
+
+                    <MudCardContent>
+                        <MudSkeleton SkeletonType="SkeletonType.Text" Animation="Animation.Pulse" Width="42%" Height="22px" />
+                        <MudSkeleton SkeletonType="SkeletonType.Text" Animation="Animation.Pulse" Width="96%" Height="16px" />
+                        <MudSkeleton SkeletonType="SkeletonType.Text" Animation="Animation.Pulse" Width="82%" Height="16px" />
+                    </MudCardContent>
+
+                    @if (_showActions)
+                    {
+                        <MudCardActions Class="d-flex justify-start">
+                            <MudSkeleton SkeletonType="SkeletonType.Rectangle" Animation="Animation.Pulse" Width="78px" Height="36px" />
+                            <MudSkeleton SkeletonType="SkeletonType.Rectangle" Animation="Animation.Pulse" Width="96px" Height="36px" />
+                        </MudCardActions>
+                    }
+                </MudCard>
+            }
+            else
+            {
                 <MudCard Style="@CardStyle"
                          Outlined="@_outlined"
                          Elevation="@_elevation"
@@ -48,6 +97,7 @@
                     </MudCardActions>
                 }
             </MudCard>
+            }
         </div>
     </Preview>
 
@@ -94,21 +144,19 @@
                 </MudSelect>
             </MudItem>
 
+            @if (_showMedia)
+            {
+                <MudItem xs="12">
+                    <MudSlider Min="160" Max="320" Step="10" @bind-Value="_mediaHeight" Color="Color.Primary">
+                        @($"Media Height: {_mediaHeight}px")
+                    </MudSlider>
+                </MudItem>
+            }
+
             <MudItem xs="12">
                 <MudSlider Min="0" Max="24" Step="1" @bind-Value="_elevation" Color="Color.Info">
                     @($"Elevation: {_elevation}")
                 </MudSlider>
-            </MudItem>
-
-            <MudItem xs="12">
-                <div class="d-flex flex-wrap align-center justify-start" style="column-gap: 12px;">
-                    <MudCheckBox @bind-Value="_showHeader" Label="Show Header" Color="Color.Primary" />
-                    <MudCheckBox @bind-Value="_outlined" Label="Outlined" Color="Color.Primary" />
-                    <MudCheckBox @bind-Value="_showMedia" Label="Show Media" Color="Color.Primary" />
-                    <MudCheckBox @bind-Value="_showActions" Label="Show Actions" Color="Color.Primary" />
-                    <MudCheckBox @bind-Value="_square" Label="Square" Color="Color.Primary" />
-                    <MudCheckBox @bind-Value="_contentPadding" Label="Content Padding" Color="Color.Primary" />
-                </div>
             </MudItem>
 
             @if (_showHeader)
@@ -145,14 +193,30 @@
                 </MudItem>
             }
 
-            @if (_showMedia)
-            {
-                <MudItem xs="12">
-                    <MudSlider Min="160" Max="320" Step="10" @bind-Value="_mediaHeight" Color="Color.Primary">
-                        @($"Media Height: {_mediaHeight}px")
-                    </MudSlider>
-                </MudItem>
-            }
+            <MudItem xs="12">
+                <MudNumericField T="int"
+                                 Label="Loading seconds"
+                                 HelperText="Set 0 for an instant render"
+                                 Min="0"
+                                 Max="30"
+                                 Disabled="@(!_loadingEnabled)"
+                                 @bind-Value="_loadingSeconds"
+                                 @bind-Value:after="RestartLoadingAsync"
+                                 Margin="Margin.Dense" />
+            </MudItem>
+
+            <MudItem xs="12">
+                <MudText Typo="Typo.subtitle2" Style="font-weight: 600" Class="mt-2 mb-1">Behavior</MudText>
+                <div class="d-flex flex-wrap align-center justify-start" style="column-gap: 12px;">
+                    <MudCheckBox @bind-Value="_loadingEnabled" @bind-Value:after="RestartLoadingAsync" Label="Loading with skeleton" Color="Color.Primary" />
+                    <MudCheckBox @bind-Value="_outlined" Label="Outlined" Color="Color.Primary" />
+                    <MudCheckBox @bind-Value="_square" Label="Square" Color="Color.Primary" />
+                    <MudCheckBox @bind-Value="_showHeader" Label="Show Header" Color="Color.Primary" />
+                    <MudCheckBox @bind-Value="_showMedia" Label="Show Media" Color="Color.Primary" />
+                    <MudCheckBox @bind-Value="_showActions" Label="Show Actions" Color="Color.Primary" />
+                    <MudCheckBox @bind-Value="_contentPadding" Label="Content Padding" Color="Color.Primary" />
+                </div>
+            </MudItem>
 
         </MudGrid>
     </Options>
@@ -172,6 +236,10 @@
     private bool _showActions = true;
     private bool _square;
     private bool _contentPadding = true;
+    private bool _loadingEnabled;
+    private bool _isLoading;
+    private int _loadingSeconds = 2;
+    private CancellationTokenSource? _loadingCts;
     private CardActionsAlignment _actionsAlignment = CardActionsAlignment.Start;
     private Color _avatarColor = Color.Secondary;
 
@@ -192,6 +260,39 @@
         CardActionsAlignment.SpaceBetween => "justify-space-between",
         _ => "justify-start"
     };
+
+    private async Task RestartLoadingAsync()
+    {
+        _loadingCts?.Cancel();
+        _loadingCts?.Dispose();
+        _loadingCts = null;
+
+        if (!_loadingEnabled)
+        {
+            _isLoading = false;
+            return;
+        }
+
+        var cts = new CancellationTokenSource();
+        _loadingCts = cts;
+        _isLoading = true;
+
+        try
+        {
+            await Task.Delay(TimeSpan.FromSeconds(_loadingSeconds), cts.Token);
+            if (!cts.IsCancellationRequested)
+                _isLoading = false;
+        }
+        catch (OperationCanceledException)
+        {
+        }
+    }
+
+    public void Dispose()
+    {
+        _loadingCts?.Cancel();
+        _loadingCts?.Dispose();
+    }
 
     private enum CardWidthPreset
     {
