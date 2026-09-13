@@ -1,135 +1,194 @@
 @page "/components/overlay"
 @using MudBlazor
 
-<MudGrid Spacing="2">
+<DemoPageLayout Title="Overlay"
+                Description="Renders a translucent layer over content, typically used for modals, popovers, progress bars, or blocking interactions."
+                Variant="DemoPageLayoutVariant.Horizontal">
+    <Preview>
+        <MudStack AlignItems="AlignItems.Center" Spacing="3" Class="w-100">
+            <MudPaper Class="pa-5 w-100" Outlined="true" Style="position:relative; min-height:320px;">
+                <MudText Typo="Typo.h6" Style="font-weight: 600">@CurrentModeTitle</MudText>
+                <MudText Typo="Typo.body2" Class="mt-1">
+                    @(_overlayMode == OverlayMode.Container
+                        ? "The overlay is constrained to this content area."
+                        : "The overlay covers the viewport when it is visible.")
+                </MudText>
 
-    <!-- Controls (container overlay) -->
-    <MudItem xs="12" md="6" lg="4">
-        <MudPaper Class="pa-5" Elevation="25">
-            <MudText Typo="Typo.h6" Class="mb-2">Container Overlay</MudText>
-
-            <MudSwitch Color="Color.Primary" @bind-Value="_containerVisible">Show overlay</MudSwitch>
-            <MudSwitch Color="Color.Primary" @bind-Value="_containerClickToClose">Click to close</MudSwitch>
-            <MudSwitch Color="Color.Primary" @bind-Value="_containerShowLoader">Show loader</MudSwitch>
-
-            <MudSelect T="Backdrop" Label="Background" Dense="true" @bind-Value="_containerBackdrop" Class="mt-2">
-                <MudSelectItem Value="Backdrop.Dark">Dark</MudSelectItem>
-                <MudSelectItem Value="Backdrop.Light">Light</MudSelectItem>
-            </MudSelect>
-
-            <MudSlider T="int" @bind-Value="_containerOpacityPct" Min="0" Max="100" Step="5" Class="mt-2">Opacity (%)</MudSlider>
-            <MudSlider T="int" @bind-Value="_containerBlurPx" Min="0" Max="12" Step="1" Class="mt-2">Blur (px)</MudSlider>
-            <MudNumericField T="int" Label="z-index" @bind-Value="_containerZ" Min="1" Max="9999" Immediate Class="mt-2" />
-        </MudPaper>
-    </MudItem>
-
-    <!-- Live container with overlay -->
-    <MudItem xs="12" md="6" lg="8">
-        <MudPaper Class="pa-5" Style="position:relative; min-height:260px;" Elevation="25">
-            <MudText Typo="Typo.subtitle1" Class="mb-2">Content area</MudText>
-            <MudText Typo="Typo.body2">This paper acts as the overlay’s container. Toggle the overlay to see it cover only this section.</MudText>
-
-            <MudOverlay Visible="@_containerVisible"
-                        Class="d-flex justify-center align-center"
-                        Style="@GetOverlayStyle(_containerBackdrop, _containerOpacityPct, _containerBlurPx, _containerZ)"
-                        @onclick="@(() => { if (_containerClickToClose) _containerVisible = false; })">
-                @if (_containerShowLoader)
+                @if (_overlayMode == OverlayMode.Container)
                 {
-                    <MudStack AlignItems="AlignItems.Center" Spacing="1">
-                        <MudProgressCircular Indeterminate="true" Color="Color.Primary" />
-                        <MudText Typo="Typo.caption">Loading…</MudText>
-                    </MudStack>
+                    <MudPaper Outlined="true" Class="pa-4 mt-4" Style="position:relative; min-height:190px;">
+                        <MudText Typo="Typo.subtitle1" Style="font-weight: 600">Content area</MudText>
+                        <MudText Typo="Typo.body2" Class="mt-1">
+                            Toggle the overlay to cover only this section.
+                        </MudText>
+
+                        <MudOverlay @bind-Visible="_visible"
+                                    Absolute="@(_overlayMode == OverlayMode.Container)"
+                                    Modal="@_modal"
+                                    LockScroll="@_lockScroll"
+                                    AutoClose="@_autoClose"
+                                    DarkBackground="@IsDarkBackground"
+                                    LightBackground="@IsLightBackground"
+                                    ZIndex="@_zIndex"
+                                    Class="d-flex justify-center align-center"
+                                    Style="@GetOverlayStyle(false)"
+                                    >
+                            @if (_showLoader)
+                            {
+                                <MudStack AlignItems="AlignItems.Center" Spacing="1">
+                                    <MudProgressCircular Indeterminate="true" Color="Color.Primary" />
+                                    <MudText Typo="Typo.caption">Loading...</MudText>
+                                </MudStack>
+                            }
+                        </MudOverlay>
+                    </MudPaper>
                 }
-            </MudOverlay>
-        </MudPaper>
-    </MudItem>
-
-    <!-- Controls (full-screen overlay) -->
-    <MudItem xs="12" md="6" lg="4">
-        <MudPaper Class="pa-5" Elevation="25">
-            <MudText Typo="Typo.h6" Class="mb-2">Full-Screen Overlay</MudText>
-
-            <MudSwitch Color="Color.Primary" @bind-Value="_fullVisible">Show overlay</MudSwitch>
-            <MudSwitch Color="Color.Primary" @bind-Value="_fullClickToClose">Click to close</MudSwitch>
-            <MudSwitch Color="Color.Primary" @bind-Value="_fullShowLoader">Show loader</MudSwitch>
-
-            <MudSelect T="Backdrop" Label="Background" Dense="true" @bind-Value="_fullBackdrop" Class="mt-2">
-                <MudSelectItem Value="Backdrop.Dark">Dark</MudSelectItem>
-                <MudSelectItem Value="Backdrop.Light">Light</MudSelectItem>
-            </MudSelect>
-
-            <MudSlider T="int" @bind-Value="_fullOpacityPct" Min="0" Max="100" Step="5" Class="mt-2">Opacity (%)</MudSlider>
-            <MudSlider T="int" @bind-Value="_fullBlurPx" Min="0" Max="12" Step="1" Class="mt-2">Blur (px)</MudSlider>
-            <MudNumericField T="int" Label="z-index" @bind-Value="_fullZ" Min="1" Max="9999" Immediate Class="mt-2" />
-        </MudPaper>
-    </MudItem>
-
-    <!-- Full-screen overlay itself -->
-    <MudItem xs="12" md="6" lg="8">
-        <MudPaper Class="pa-5" Elevation="25">
-            <MudText Typo="Typo.subtitle1" Class="mb-1">Note</MudText>
-            <MudText Typo="Typo.body2">This overlay covers the entire viewport. Use z-index if it appears under other elements like app bars or drawers.</MudText>
-        </MudPaper>
-
-        @if (_fullVisible)
-        {
-            <MudOverlay Visible="true"
-                        Class="d-flex justify-center align-center"
-                        Style="@GetFullscreenStyle(_fullBackdrop, _fullOpacityPct, _fullBlurPx, _fullZ)"
-                        @onclick="@(() => { if (_fullClickToClose) _fullVisible = false; })">
-                @if (_fullShowLoader)
+                else
                 {
-                    <MudStack AlignItems="AlignItems.Center" Spacing="1">
-                        <MudProgressCircular Indeterminate="true" Color="Color.Primary" />
-                        <MudText Typo="Typo.caption">Please wait…</MudText>
-                    </MudStack>
+                    <MudButton Variant="Variant.Filled"
+                               Color="Color.Primary"
+                               Class="mt-4"
+                               OnClick="ToggleOverlay">
+                        @(_visible ? "Hide full-screen overlay" : "Show full-screen overlay")
+                    </MudButton>
+
+                    @if (_visible)
+                    {
+                        <MudOverlay @bind-Visible="_visible"
+                                    Absolute="false"
+                                    Modal="@_modal"
+                                    LockScroll="@_lockScroll"
+                                    AutoClose="@_autoClose"
+                                    DarkBackground="@IsDarkBackground"
+                                    LightBackground="@IsLightBackground"
+                                    ZIndex="@_zIndex"
+                                    Class="d-flex flex-column justify-center align-center"
+                                    Style="@GetOverlayStyle(true)">
+                            @if (_showLoader)
+                            {
+                                <MudStack AlignItems="AlignItems.Center" Spacing="2">
+                                    <MudProgressCircular Indeterminate="true" Color="Color.Primary" />
+                                    <MudText Typo="Typo.body1">Please wait...</MudText>
+                                    <MudButton Variant="Variant.Outlined"
+                                               Color="Color.Primary"
+                                               OnClick="HideOverlay">
+                                        Close overlay
+                                    </MudButton>
+                                </MudStack>
+                            }
+                            else
+                            {
+                                <MudButton Variant="Variant.Filled"
+                                           Color="Color.Primary"
+                                           OnClick="HideOverlay">
+                                    Close overlay
+                                </MudButton>
+                            }
+                        </MudOverlay>
+                    }
                 }
-            </MudOverlay>
-        }
-    </MudItem>
-</MudGrid>
+            </MudPaper>
+
+            <MudText Typo="Typo.caption">
+                Overlay visible: @_visible
+            </MudText>
+        </MudStack>
+    </Preview>
+
+    <Options>
+        <MudGrid Spacing="4" Class="w-100">
+            <MudItem xs="12" md="6">
+                <MudSelect T="OverlayMode"
+                           Label="Overlay mode"
+                           Dense="true"
+                           @bind-Value="_overlayMode"
+                           @bind-Value:after="HideOverlay">
+                    <MudSelectItem Value="OverlayMode.Container">Container</MudSelectItem>
+                    <MudSelectItem Value="OverlayMode.FullScreen">Full screen</MudSelectItem>
+                </MudSelect>
+            </MudItem>
+
+            <MudItem xs="12" md="6">
+                <MudSelect T="Backdrop" Label="Background" Dense="true" @bind-Value="_backdrop">
+                    <MudSelectItem Value="Backdrop.Transparent">Transparent</MudSelectItem>
+                    <MudSelectItem Value="Backdrop.Light">Light</MudSelectItem>
+                    <MudSelectItem Value="Backdrop.Dark">Dark</MudSelectItem>
+                </MudSelect>
+            </MudItem>
+
+            <MudItem xs="12">
+                <MudNumericField T="int"
+                                 Label="Z-index"
+                                 @bind-Value="_zIndex"
+                                 Min="1"
+                                 Max="9999"
+                                 Immediate
+                                 Margin="Margin.Dense" />
+            </MudItem>
+
+            <MudItem xs="12">
+                <MudText Typo="Typo.subtitle2" Style="font-weight: 600" Class="mt-2 mb-1">Behavior</MudText>
+                <div class="d-flex flex-wrap align-center justify-start" style="column-gap: 12px; row-gap: 0;">
+                    <MudCheckBox @bind-Value="_visible" Label="Show overlay" Color="Color.Primary" />
+                    <MudCheckBox @bind-Value="_autoClose" Label="Auto close" Color="Color.Primary" />
+                    <MudCheckBox @bind-Value="_showLoader" Label="Show loader" Color="Color.Primary" />
+                    <MudCheckBox @bind-Value="_modal" Label="Modal" Color="Color.Primary" />
+                    <MudCheckBox @bind-Value="_lockScroll" Label="Lock scroll" Color="Color.Primary" />
+                </div>
+            </MudItem>
+
+            <MudItem xs="12">
+                <MudPaper Outlined="true" Class="pa-4">
+                    <MudText Typo="Typo.subtitle2" Style="font-weight: 600" Class="mb-2">Option explanations</MudText>
+                    <MudStack Spacing="1">
+                        <MudText Typo="Typo.body2"><strong>Show overlay:</strong> Displays or hides the overlay.</MudText>
+                        <MudText Typo="Typo.body2"><strong>Auto close:</strong> Closes the overlay when it is clicked.</MudText>
+                        <MudText Typo="Typo.body2"><strong>Show loader:</strong> Displays a loading indicator inside the overlay.</MudText>
+                        <MudText Typo="Typo.body2"><strong>Modal:</strong> Prevents interaction with the content behind the overlay.</MudText>
+                        <MudText Typo="Typo.body2"><strong>Lock scroll:</strong> Prevents the page from scrolling while the overlay is visible.</MudText>
+                    </MudStack>
+                </MudPaper>
+            </MudItem>
+        </MudGrid>
+    </Options>
+</DemoPageLayout>
 
 @code {
-    // Simple backdrop options
-    private enum Backdrop { Dark, Light }
-
-    // Container overlay state
-    private bool _containerVisible;
-    private bool _containerClickToClose = true;
-    private bool _containerShowLoader = true;
-    private Backdrop _containerBackdrop = Backdrop.Dark;
-    private int _containerOpacityPct = 50;
-    private int _containerBlurPx = 2;
-    private int _containerZ = 1300;
-
-    // Full-screen overlay state
-    private bool _fullVisible;
-    private bool _fullClickToClose = true;
-    private bool _fullShowLoader = true;
-    private Backdrop _fullBackdrop = Backdrop.Dark;
-    private int _fullOpacityPct = 40;
-    private int _fullBlurPx = 0;
-    private int _fullZ = 1400;
-
-    // Style builders
-    private string GetOverlayStyle(Backdrop backdrop, int opacityPct, int blurPx, int z) =>
-        $"position:absolute; inset:0; z-index:{z}; " +
-        $"background-color:{ColorFromBackdrop(backdrop, opacityPct)}; " +
-        BackdropFilter(blurPx);
-
-    private string GetFullscreenStyle(Backdrop backdrop, int opacityPct, int blurPx, int z) =>
-        $"position:fixed; inset:0; z-index:{z}; " +
-        $"background-color:{ColorFromBackdrop(backdrop, opacityPct)}; " +
-        BackdropFilter(blurPx);
-
-    private static string ColorFromBackdrop(Backdrop b, int opacityPct)
+    private enum OverlayMode
     {
-        var a = Math.Clamp(opacityPct, 0, 100) / 100.0;
-        return b == Backdrop.Dark
-            ? $"rgba(33,33,33,{a:0.##})"
-            : $"rgba(255,255,255,{a:0.##})";
+        Container,
+        FullScreen
     }
 
-    private static string BackdropFilter(int blurPx)
-        => blurPx <= 0 ? "" : $"backdrop-filter:blur({blurPx}px); -webkit-backdrop-filter:blur({blurPx}px);";
+    private enum Backdrop
+    {
+        Transparent,
+        Dark,
+        Light
+    }
+
+    private OverlayMode _overlayMode = OverlayMode.Container;
+    private Backdrop _backdrop = Backdrop.Transparent;
+    private bool _visible;
+    private bool _autoClose;
+    private bool _showLoader = true;
+    private bool _modal = true;
+    private bool _lockScroll = true;
+    private int _zIndex = 5;
+
+    private bool IsDarkBackground => _backdrop == Backdrop.Dark;
+    private bool IsLightBackground => _backdrop == Backdrop.Light;
+
+    private string CurrentModeTitle => _overlayMode == OverlayMode.Container
+        ? "Container overlay"
+        : "Full-screen overlay";
+
+    private void ToggleOverlay()
+        => _visible = !_visible;
+
+    private void HideOverlay()
+        => _visible = false;
+
+    private string GetOverlayStyle(bool fullScreen)
+        => $"position:{(fullScreen ? "fixed" : "absolute")}; inset:0;";
 }
