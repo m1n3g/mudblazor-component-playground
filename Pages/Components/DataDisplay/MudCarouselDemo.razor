@@ -56,7 +56,9 @@
                          Style="@($"height:{_height}px; max-width: 760px;")"
                          @bind-SelectedIndex="_selectedIndex"
                          ShowArrows="@_showArrows"
+                         ArrowsColor="@_arrowsColor"
                          ShowBullets="@_showBullets"
+                         BulletsColor="@_bulletsColor"
                          EnableSwipeGesture="@_enableSwipe"
                          AutoCycle="@_autoCycle"
                          AutoCycleTime="@TimeSpan.FromSeconds(_autoCycleSeconds)">
@@ -123,6 +125,24 @@
                 <MudSlider Min="160" Max="600" Step="10" @bind-Value="_height" Color="Color.Info">
                     @($"Height: {_height}px")
                 </MudSlider>
+            </MudItem>
+
+            <MudItem xs="12" md="6">
+                <MudSelect T="Color" Label="Arrow color" Dense="true" @bind-Value="_arrowsColor">
+                    @foreach (Color color in Enum.GetValues(typeof(Color)))
+                    {
+                        <MudSelectItem Value="@color">@color</MudSelectItem>
+                    }
+                </MudSelect>
+            </MudItem>
+
+            <MudItem xs="12" md="6">
+                <MudSelect T="Color" Label="Bullet color" Dense="true" @bind-Value="_bulletsColor">
+                    @foreach (Color color in Enum.GetValues(typeof(Color)))
+                    {
+                        <MudSelectItem Value="@color">@color</MudSelectItem>
+                    }
+                </MudSelect>
             </MudItem>
 
             @if (_transition == Transition.Custom)
@@ -193,6 +213,8 @@
     private bool _enableSwipe = true;
     private bool _autoCycle;
     private Transition _transition = Transition.Fade;
+    private Color _arrowsColor = Color.Inherit;
+    private Color _bulletsColor = Color.Inherit;
     private readonly Dictionary<string, object> _noDragAttr = new() { ["draggable"] = "false" };
     private readonly Random _random = new();
     private int _height = 280;
