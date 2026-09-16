@@ -818,3 +818,42 @@ Updated [`MudIconButtonDemo.razor`](./Pages/Components/Buttons/MudIconButtonDemo
 
 - Added a `Drop Shadow` checkbox after `Disabled`
 - Bound the option to the preview with the API-default value disabled
+
+## 2026-09-09
+
+### FAB Menu Demo Option Refinement
+
+Updated [`MudButtonFabMenu.razor`](./Pages/Components/Buttons/MudButtonFabMenu.razor):
+
+- Added item content modes for icon-only, label-only, and icon-and-label previews
+- Added configurable item start and end icon presets while preserving the default per-item icons
+- Reordered the option panel into the shared row structure for clearer scanning
+
+## 2026-09-13
+
+### Overlay Demo API Alignment
+
+Updated [`MudOverlayDemo.razor`](./Pages/Components/Feedback/MudOverlayDemo.razor):
+
+- Removed the custom blur and opacity controls so the preview focuses on MudOverlay API properties
+- Made z-index a full-width option
+- Added an outlined preview surface to match the established form-component demo layout
+- Added an outlined explanation panel for the behavior checkboxes
+
+## 2026-09-16
+
+### Carousel Control Color Options
+
+Updated [`MudCarouselDemo.razor`](./Pages/Components/DataDisplay/MudCarouselDemo.razor):
+
+- Bound explicit colors for carousel arrows and bullets
+- Defaulted both controls to `Color.Inherit`
+- Added independent arrow and bullet color selectors to the options panel
+
+### Chip and Chip Set Demo Refinement
+
+Updated [`MudChipsDemo.razor`](./Pages/Components/DataDisplay/MudChipsDemo.razor) and [`MudChipSetDemo.razor`](./Pages/Components/DataDisplay/MudChipSetDemo.razor):
+
+- Added options to show or hide regular chip icons while preserving avatar content
+- Made chip close callbacks conditional on the closable option
+- Set `Icons.Material.Filled.Cancel` as the default close icon in both demos
