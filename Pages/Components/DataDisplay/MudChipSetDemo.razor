@@ -17,6 +17,7 @@
                 <MudChip T="Color" @key="chip.Color" Text="@chip.Text" Color="@chip.Color" Value="@chip.Color"
                          Variant="@_variant" Size="@_size" SelectedColor="@_selectionColor"
                          Disabled="@_disabled" Ripple="@_ripple"
+                         Icon="@(_showIcons ? GetSingleChipIcon(chip.Color) : null)"
                          CheckedIcon="@_checkedIcon" CloseIcon="@_closeIcon" />
             }
         </MudChipSet>
@@ -44,7 +45,8 @@
             {
                 <MudChip T="string" @key="chip" Value="@chip" Variant="@_variant" Size="@_size"
                          SelectedColor="@_selectionColor" Disabled="@_disabled"
-                         Ripple="@_ripple" CheckedIcon="@_checkedIcon"
+                         Ripple="@_ripple" Icon="@(_showIcons ? Icons.Material.Filled.Label : null)"
+                         CheckedIcon="@_checkedIcon"
                          CloseIcon="@_closeIcon" />
             }
         </MudChipSet>
@@ -109,7 +111,7 @@
             </MudItem>
             <MudItem xs="12" sm="6">
                 <MudSelect T="string" Label="Close Icon" @bind-Value="_closeIcon" Dense="true">
-                    <MudSelectItem Value="@Icons.Material.Filled.Close">Default</MudSelectItem>
+                    <MudSelectItem Value="@Icons.Material.Filled.Cancel">Default</MudSelectItem>
                     <MudSelectItem Value="@Icons.Material.Filled.Close">Close</MudSelectItem>
                     <MudSelectItem Value="@Icons.Material.Filled.Cancel">Cancel</MudSelectItem>
                     <MudSelectItem Value="@Icons.Material.Filled.Delete">Delete</MudSelectItem>
@@ -128,6 +130,7 @@
             <MudCheckBox @bind-Value="_disabled">Disabled</MudCheckBox>
             <MudCheckBox @bind-Value="_checkMark">Check marks</MudCheckBox>
             <MudCheckBox @bind-Value="_allClosable">Closable chips</MudCheckBox>
+            <MudCheckBox @bind-Value="_showIcons">Show chip icons</MudCheckBox>
             <MudCheckBox @bind-Value="_ripple">Ripple</MudCheckBox>
         </div>
     </Options>
@@ -152,13 +155,26 @@
     private Color _selectionColor = Color.Inherit;
     private bool _disabled;
     private bool _readOnly;
+    private bool _showIcons = true;
     private bool _ripple = true;
     private bool _allClosable;
     private string _checkedIcon = Icons.Material.Filled.Check;
-    private string _closeIcon = Icons.Material.Filled.Close;
+    private string _closeIcon = Icons.Material.Filled.Cancel;
 
     public SelectionMode SelectionMode = SelectionMode.SingleSelection;
     public Color SelectedColor;
+
+    private static string GetSingleChipIcon(Color color) => color switch
+    {
+        Color.Primary => Icons.Material.Filled.Star,
+        Color.Secondary => Icons.Material.Filled.Favorite,
+        Color.Info => Icons.Material.Filled.Info,
+        Color.Success => Icons.Material.Filled.CheckCircle,
+        Color.Warning => Icons.Material.Filled.Warning,
+        Color.Error => Icons.Material.Filled.Error,
+        Color.Dark => Icons.Material.Filled.DarkMode,
+        _ => Icons.Material.Filled.Label
+    };
 
     // Dropdown-bound props
     private Variant _variant = Variant.Filled;
