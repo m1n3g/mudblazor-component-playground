@@ -857,3 +857,14 @@ Updated [`MudChipsDemo.razor`](./Pages/Components/DataDisplay/MudChipsDemo.razor
 - Added options to show or hide regular chip icons while preserving avatar content
 - Made chip close callbacks conditional on the closable option
 - Set `Icons.Material.Filled.Cancel` as the default close icon in both demos
+
+## 2026-09-24
+
+### Demo Defaults and Layout Updates
+
+Updated the following demo pages:
+
+- [`MudDialogDemo.razor`](./Pages/Components/Feedback/MudDialogDemo.razor): defaulted MaxWidth and Close button options to off
+- [`MudChipSetDemo.razor`](./Pages/Components/DataDisplay/MudChipSetDemo.razor): added a Default chip to the preview
+- [`MudColorPickerDemo.razor`](./Pages/Components/Inputs/MudColorPickerDemo.razor): migrated to the shared horizontal layout with Text, Outlined, and Filled previews, expanded options, and a persistent picker panel
+- [`MudMenuDemo.razor`](./Pages/Components/Navigation/MudMenuDemo.razor): shortened the `Trigger Variant` option label to `Variant`
