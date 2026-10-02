@@ -104,10 +104,8 @@
 
             <MudItem xs="12">
                         <MudSelect T="ExpansionIconPreset" @bind-Value="_expansionIconPreset" Label="Expansion icon" Dense="true">
-                    <MudSelectItem Value="@ExpansionIconPreset.Default">Default</MudSelectItem>
-                    <MudSelectItem Value="@ExpansionIconPreset.Add">Add</MudSelectItem>
-                    <MudSelectItem Value="@ExpansionIconPreset.ChevronRight">Chevron right</MudSelectItem>
-                    <MudSelectItem Value="@ExpansionIconPreset.KeyboardArrowDown">Keyboard arrow down</MudSelectItem>
+                    <MudSelectItem Value="@ExpansionIconPreset.Default">Expand more</MudSelectItem>
+                    <MudSelectItem Value="@ExpansionIconPreset.ArrowDropDown">Arrow drop down</MudSelectItem>
                 </MudSelect>
             </MudItem>
 
@@ -234,9 +232,7 @@
     private string? ExpansionIcon => _expansionIconPreset switch
     {
         ExpansionIconPreset.Default => Icons.Material.Filled.ExpandMore,
-        ExpansionIconPreset.Add => Icons.Material.Filled.Add,
-        ExpansionIconPreset.ChevronRight => Icons.Material.Filled.ChevronRight,
-        ExpansionIconPreset.KeyboardArrowDown => Icons.Material.Filled.KeyboardArrowDown,
+        ExpansionIconPreset.ArrowDropDown => Icons.Material.Filled.ArrowDropDown,
         _ => null
     };
 
@@ -274,9 +270,7 @@
     private enum ExpansionIconPreset
     {
         Default,
-        Add,
-        ChevronRight,
-        KeyboardArrowDown
+        ArrowDropDown
     }
 
     private enum ExpansionPanelChoice
