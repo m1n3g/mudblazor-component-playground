@@ -1,112 +1,188 @@
 @page "/components/rating"
 @using MudBlazor
 
-<MudGrid Spacing="2">
-    <!-- Controls -->
-    <MudItem xs="12" md="6" lg="4">
-        <MudPaper Class="pa-3">
-            <MudText Typo="Typo.h6" Class="mb-2">Controls</MudText>
+<DemoPageLayout Title="Rating"
+                Description="Ratings provide insight regarding others' opinions and experiences."
+                Variant="DemoPageLayoutVariant.Vertical">
+    <Preview>
+        <MudPaper Class="w-100 pa-4 d-flex flex-column align-start gap-3" Outlined="true">
+            <MudStack Spacing="3" AlignItems="AlignItems.Center" Class="w-100">
+                <MudRating MaxValue="@_maxValue"
+                           @bind-SelectedValue="_selectedValue"
+                           Color="@_color"
+                           Size="@_size"
+                           ReadOnly="@_readOnly"
+                           Disabled="@_disabled"
+                           Ripple="@_ripple"
+                           FullIcon="@SelectedFullIcon"
+                           EmptyIcon="@SelectedEmptyIcon"
+                           FullIconColor="@_fullIconColor"
+                           EmptyIconColor="@_emptyIconColor"
+                           HoveredValueChanged="OnHoveredValueChanged" />
 
-            <MudNumericField T="int" Label="Max value" @bind-Value="max" Min="1" Class="mb-2" />
-
-            <MudNumericField T="int" Label="Selected value" @bind-Value="selected" Min="0" Max="@max" Class="mb-2" />
-
-            <MudSelect T="Color" Label="Color" Dense="true" @bind-Value="color" Class="mb-2">
-                <MudSelectItem Value="Color.Default" />
-                <MudSelectItem Value="Color.Primary" />
-                <MudSelectItem Value="Color.Secondary" />
-                <MudSelectItem Value="Color.Info" />
-                <MudSelectItem Value="Color.Success" />
-                <MudSelectItem Value="Color.Warning" />
-                <MudSelectItem Value="Color.Error" />
-                <MudSelectItem Value="Color.Dark" />
-            </MudSelect>
-
-            <!-- NEW: Size dropdown -->
-            <MudSelect T="Size" Label="Size" Dense="true" @bind-Value="size" Class="mb-2">
-                <MudSelectItem Value="Size.Small" />
-                <MudSelectItem Value="Size.Medium" />
-                <MudSelectItem Value="Size.Large" />
-            </MudSelect>
-
-            <MudSwitch Color="Color.Primary" @bind-Value="useHearts">Use hearts</MudSwitch>
-            <MudSwitch Color="Color.Primary" @bind-Value="readOnly">Read only</MudSwitch>
-            <MudSwitch Color="Color.Primary" @bind-Value="disabled">Disabled</MudSwitch>
-
-            <MudStack Row Spacing="2" Class="mt-3">
-                <MudButton Variant="Variant.Outlined" OnClick="@(() => selected = 0)">Clear</MudButton>
-                <MudButton Variant="Variant.Outlined" OnClick="@(() => selected = max)">Max</MudButton>
+                <MudText Typo="Typo.body2">
+                    Hovered: @(_hoveredValue?.ToString() ?? "None") | Selected: @_selectedValue / @_maxValue
+                </MudText>
             </MudStack>
         </MudPaper>
-    </MudItem>
+    </Preview>
 
-    <!-- Live demo -->
-    <MudItem xs="12" md="6" lg="4">
-        <MudPaper Class="pa-3 d-flex flex-column align-center">
-            <MudText Typo="Typo.h6" Class="mb-3">Live preview</MudText>
+    <Options>
+        <MudGrid Spacing="4" Class="w-100">
+            <MudItem xs="12" md="6">
+                <MudNumericField T="int"
+                                 Label="Max Value"
+                                 Value="@_maxValue"
+                                 ValueChanged="OnMaxValueChanged"
+                                 Min="1"
+                                 Max="100"
+                                 Immediate="true" />
+            </MudItem>
 
-            <MudRating MaxValue="@max"
-                       @bind-SelectedValue="@selected"
-                       Color="@color"
-                       Size="@size"
-                       ReadOnly="@readOnly"
-                       Disabled="@disabled"
-                       FullIcon="@fullIcon"
-                       EmptyIcon="@emptyIcon" />
+            <MudItem xs="12" md="6">
+                <MudNumericField T="int"
+                                 Label="Selected Value"
+                                 @bind-Value="_selectedValue"
+                                 Min="0"
+                                 Max="@_maxValue"
+                                 Immediate="true" />
+            </MudItem>
 
-            <MudText Class="mt-2" Typo="Typo.body2">
-                Selected: <b>@selected</b> / @max
-            </MudText>
-        </MudPaper>
-    </MudItem>
+            <MudItem xs="12">
+                <MudStack Row="true" Spacing="2">
+                    <MudButton Variant="Variant.Outlined" OnClick="ClearRating">Clear</MudButton>
+                    <MudButton Variant="Variant.Outlined" OnClick="SetMaxRating">Max</MudButton>
+                </MudStack>
+            </MudItem>
 
-    <!-- Presets -->
-    <MudItem xs="12" lg="4">
-        <MudPaper Class="pa-3">
-            <MudText Typo="Typo.h6" Class="mb-2">Presets</MudText>
+            <MudItem xs="12">
+                <MudGrid Spacing="4">
+                    <MudItem xs="12" md="6">
+                        <MudSelect T="Color" Label="Color" Dense="true" @bind-Value="_color">
+                            <MudSelectItem Value="Color.Default">Default</MudSelectItem>
+                            <MudSelectItem Value="Color.Primary">Primary</MudSelectItem>
+                            <MudSelectItem Value="Color.Secondary">Secondary</MudSelectItem>
+                            <MudSelectItem Value="Color.Tertiary">Tertiary</MudSelectItem>
+                            <MudSelectItem Value="Color.Info">Info</MudSelectItem>
+                            <MudSelectItem Value="Color.Success">Success</MudSelectItem>
+                            <MudSelectItem Value="Color.Warning">Warning</MudSelectItem>
+                            <MudSelectItem Value="Color.Error">Error</MudSelectItem>
+                            <MudSelectItem Value="Color.Dark">Dark</MudSelectItem>
+                        </MudSelect>
+                    </MudItem>
 
-            <MudStack Spacing="2">
-                <div>
-                    <MudText Typo="Typo.subtitle2">Stars (Primary)</MudText>
-                    <MudRating MaxValue="5" SelectedValue="4" Color="Color.Primary"
-                               FullIcon="@Icons.Material.Filled.Star"
-                               EmptyIcon="@Icons.Material.Outlined.StarOutline"
-                               Size="Size.Medium"
-                               ReadOnly="true" />
+                    <MudItem xs="12" md="6">
+                        <MudSelect T="Size" Label="Size" Dense="true" @bind-Value="_size">
+                            <MudSelectItem Value="Size.Small">Small</MudSelectItem>
+                            <MudSelectItem Value="Size.Medium">Medium</MudSelectItem>
+                            <MudSelectItem Value="Size.Large">Large</MudSelectItem>
+                        </MudSelect>
+                    </MudItem>
+
+                    <MudItem xs="12" md="6">
+                        <MudSelect T="RatingIconPreset" Label="Empty Icon" Dense="true" @bind-Value="_emptyIconPreset">
+                            <MudSelectItem Value="@RatingIconPreset.Star">Default</MudSelectItem>
+                            <MudSelectItem Value="@RatingIconPreset.Heart">Heart Outline</MudSelectItem>
+                            <MudSelectItem Value="@RatingIconPreset.ThumbsUp">Thumbs Up Outline</MudSelectItem>
+                        </MudSelect>
+                    </MudItem>
+
+                    <MudItem xs="12" md="6">
+                        <MudSelect T="RatingIconPreset" Label="Full Icon" Dense="true" @bind-Value="_fullIconPreset">
+                            <MudSelectItem Value="@RatingIconPreset.Star">Default</MudSelectItem>
+                            <MudSelectItem Value="@RatingIconPreset.Heart">Heart</MudSelectItem>
+                            <MudSelectItem Value="@RatingIconPreset.ThumbsUp">Thumbs Up</MudSelectItem>
+                        </MudSelect>
+                    </MudItem>
+
+                    <MudItem xs="12" md="6">
+                        <MudSelect T="Color?" Label="Empty Icon Color" Dense="true" @bind-Value="_emptyIconColor">
+                            <MudSelectItem T="Color?" Value="@((Color?)null)">Use rating color</MudSelectItem>
+                            <MudSelectItem T="Color?" Value="@((Color?)Color.Primary)">Primary</MudSelectItem>
+                            <MudSelectItem T="Color?" Value="@((Color?)Color.Secondary)">Secondary</MudSelectItem>
+                            <MudSelectItem T="Color?" Value="@((Color?)Color.Tertiary)">Tertiary</MudSelectItem>
+                            <MudSelectItem T="Color?" Value="@((Color?)Color.Info)">Info</MudSelectItem>
+                            <MudSelectItem T="Color?" Value="@((Color?)Color.Success)">Success</MudSelectItem>
+                            <MudSelectItem T="Color?" Value="@((Color?)Color.Warning)">Warning</MudSelectItem>
+                            <MudSelectItem T="Color?" Value="@((Color?)Color.Error)">Error</MudSelectItem>
+                            <MudSelectItem T="Color?" Value="@((Color?)Color.Dark)">Dark</MudSelectItem>
+                        </MudSelect>
+                    </MudItem>
+
+                    <MudItem xs="12" md="6">
+                        <MudSelect T="Color?" Label="Full Icon Color" Dense="true" @bind-Value="_fullIconColor">
+                            <MudSelectItem T="Color?" Value="@((Color?)null)">Use rating color</MudSelectItem>
+                            <MudSelectItem T="Color?" Value="@((Color?)Color.Primary)">Primary</MudSelectItem>
+                            <MudSelectItem T="Color?" Value="@((Color?)Color.Secondary)">Secondary</MudSelectItem>
+                            <MudSelectItem T="Color?" Value="@((Color?)Color.Tertiary)">Tertiary</MudSelectItem>
+                            <MudSelectItem T="Color?" Value="@((Color?)Color.Info)">Info</MudSelectItem>
+                            <MudSelectItem T="Color?" Value="@((Color?)Color.Success)">Success</MudSelectItem>
+                            <MudSelectItem T="Color?" Value="@((Color?)Color.Warning)">Warning</MudSelectItem>
+                            <MudSelectItem T="Color?" Value="@((Color?)Color.Error)">Error</MudSelectItem>
+                            <MudSelectItem T="Color?" Value="@((Color?)Color.Dark)">Dark</MudSelectItem>
+                        </MudSelect>
+                    </MudItem>
+                </MudGrid>
+            </MudItem>
+
+            <MudItem xs="12">
+                <MudText Typo="Typo.subtitle2" Style="font-weight: 600" Class="mt-2 mb-1">Behavior</MudText>
+                <div class="d-flex flex-wrap align-center justify-start" style="column-gap: 12px;">
+                    <MudCheckBox @bind-Value="_readOnly" Label="Read only" Color="Color.Primary" />
+                    <MudCheckBox @bind-Value="_disabled" Label="Disabled" Color="Color.Primary" />
+                    <MudCheckBox @bind-Value="_ripple" Label="Ripple" Color="Color.Primary" />
                 </div>
+            </MudItem>
 
-                <div class="mt-3">
-                    <MudText Typo="Typo.subtitle2">Hearts (Success)</MudText>
-                    <MudRating MaxValue="5" SelectedValue="5" Color="Color.Success"
-                               FullIcon="@Icons.Material.Filled.Favorite"
-                               EmptyIcon="@Icons.Material.Outlined.FavoriteBorder"
-                               Size="Size.Large"
-                               ReadOnly="true" />
-                </div>
-
-                <div class="mt-3">
-                    <MudText Typo="Typo.subtitle2">Disabled</MudText>
-                    <MudRating MaxValue="10" SelectedValue="7" Color="Color.Info" Disabled="true"
-                               FullIcon="@Icons.Material.Filled.Star"
-                               EmptyIcon="@Icons.Material.Outlined.StarOutline"
-                               Size="Size.Small" />
-                </div>
-            </MudStack>
-        </MudPaper>
-    </MudItem>
-</MudGrid>
+        </MudGrid>
+    </Options>
+</DemoPageLayout>
 
 @code {
-    // state
-    private int max = 5;
-    private int selected = 3;
-    private Color color = Color.Primary;
-    private Size size = Size.Medium;   // NEW: bound to the dropdown
-    private bool readOnly;
-    private bool disabled;
-    private bool useHearts;
+    private int _maxValue = 5;
+    private int _selectedValue;
+    private int? _hoveredValue;
+    private Color _color = Color.Default;
+    private Size _size = Size.Medium;
+    private bool _readOnly;
+    private bool _disabled;
+    private bool _ripple;
+    private RatingIconPreset _fullIconPreset = RatingIconPreset.Star;
+    private RatingIconPreset _emptyIconPreset = RatingIconPreset.Star;
+    private Color? _fullIconColor;
+    private Color? _emptyIconColor;
 
-    // icons
-    private string fullIcon  => useHearts ? Icons.Material.Filled.Favorite        : Icons.Material.Filled.Star;
-    private string emptyIcon => useHearts ? Icons.Material.Outlined.FavoriteBorder: Icons.Material.Outlined.StarOutline;
+    private string SelectedFullIcon => _fullIconPreset switch
+    {
+        RatingIconPreset.Heart => Icons.Material.Filled.Favorite,
+        RatingIconPreset.ThumbsUp => Icons.Material.Filled.ThumbUp,
+        _ => Icons.Material.Filled.Star
+    };
+
+    private string SelectedEmptyIcon => _emptyIconPreset switch
+    {
+        RatingIconPreset.Heart => Icons.Material.Outlined.FavoriteBorder,
+        RatingIconPreset.ThumbsUp => Icons.Material.Filled.ThumbUpOffAlt,
+        _ => Icons.Material.Outlined.StarOutline
+    };
+
+    private void ClearRating() => _selectedValue = 0;
+
+    private void SetMaxRating() => _selectedValue = _maxValue;
+
+    private void OnMaxValueChanged(int value)
+    {
+        _maxValue = Math.Clamp(value, 1, 100);
+        _selectedValue = Math.Min(_selectedValue, _maxValue);
+    }
+
+    private void OnHoveredValueChanged(int? value)
+        => _hoveredValue = value;
+
+    private enum RatingIconPreset
+    {
+        Star,
+        Heart,
+        ThumbsUp
+    }
 }
