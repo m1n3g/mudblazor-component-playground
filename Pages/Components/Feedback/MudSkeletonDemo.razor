@@ -59,11 +59,11 @@
             </MudItem>
 
             <MudItem xs="12">
-                <MudTextField Label="Width" @bind-Value="_width" @bind-Value:after="OnWidthChanged" ShrinkLabel="true" Clearable="true" HelperText="CSS value such as 250px or 100%" />
+                <MudTextField Label="Width" @bind-Value="_width" @bind-Value:after="OnWidthChanged" ShrinkLabel="true" Clearable="true" Placeholder="Enter value" HelperText="CSS value such as 250px or 100%" />
             </MudItem>
 
             <MudItem xs="12">
-                <MudTextField Label="Height" @bind-Value="_height" ShrinkLabel="true" Clearable="true" HelperText="CSS value such as 32px or 110px" />
+                <MudTextField Label="Height" @bind-Value="_height" ShrinkLabel="true" Clearable="true" Placeholder="Enter value" HelperText="CSS value such as 32px or 110px" />
                 <MudButton Variant="Variant.Outlined" Color="Color.Primary" OnClick="ResetDimensions" Class="mt-5">
                     Reset dimensions
                 </MudButton>
