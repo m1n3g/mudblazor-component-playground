@@ -2,94 +2,94 @@
 @using MudBlazor
 @inject ISnackbar Snackbar
 
-<MudGrid Spacing="2">
-    <!-- Col 1: Quick demos -->
-    <MudItem xs="12" md="4">
-        <MudPaper Class="pa-3" Elevation="25">
-            <MudText Typo="Typo.h6" Class="mb-2">Quick alerts</MudText>
-            <MudStack Row="true" Spacing="2">
-                <MudButton Color="Color.Dark"    OnClick="@(() => Show("The reactor type is RBMK-1000", Severity.Normal))">Normal</MudButton>
-                <MudButton Color="Color.Info"    OnClick="@(() => Show("The reactor was fired up successfully", Severity.Info))">Info</MudButton>
-                <MudButton Color="Color.Success" OnClick="@(() => Show("The reactor is running at optimum temperature", Severity.Success))">Success</MudButton>
-                <MudButton Color="Color.Warning" OnClick="@(() => Show("The reactor temperature exceeds the optimal range", Severity.Warning))">Warning</MudButton>
-                <MudButton Color="Color.Error"   OnClick="@(() => Show("Reactor meltdown is imminent", Severity.Error))">Error</MudButton>
+<DemoPageLayout Title="Snackbar"
+                Description="Queues and displays Snackbar toast notifications, serving as the default MudBlazor.ISnackbar implementation rendered by the MudSnackbarProvider."
+                Variant="DemoPageLayoutVariant.Horizontal">
+    <Preview>
+        <MudStack AlignItems="@(IsHorizontalLayout ? AlignItems.Start : AlignItems.Center)" Spacing="3" Class="w-100">
+            <MudText Typo="Typo.subtitle2" Style="font-weight: 600;">Try a sample notification</MudText>
+
+            <MudStack Row Spacing="1" AlignItems="AlignItems.Center" Justify="@(IsHorizontalLayout ? Justify.FlexStart : Justify.Center)" Class="w-100 flex-wrap">
+                <MudButton Color="Color.Dark" OnClick='@(() => Show("The reactor type is RBMK-1000", Severity.Normal))'>Normal</MudButton>
+                <MudButton Color="Color.Info" OnClick='@(() => Show("The reactor was fired up successfully", Severity.Info))'>Info</MudButton>
+                <MudButton Color="Color.Success" OnClick='@(() => Show("The reactor is running at optimum temperature", Severity.Success))'>Success</MudButton>
+                <MudButton Color="Color.Warning" OnClick='@(() => Show("The reactor temperature exceeds the optimal range", Severity.Warning))'>Warning</MudButton>
+                <MudButton Color="Color.Error" OnClick='@(() => Show("Reactor meltdown is imminent", Severity.Error))'>Error</MudButton>
+                <MudButton Color="Color.Primary" OnClick="ShowFragment">Show RenderFragment snackbar</MudButton>
             </MudStack>
 
-            <MudDivider Class="my-3" />
+        </MudStack>
+    </Preview>
 
-            <MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="@ShowFragment">
-                Show RenderFragment snackbar
-            </MudButton>
-        </MudPaper>
-    </MudItem>
+    <Options>
+        <MudGrid Spacing="4" Class="w-100">
+            <MudItem xs="12" md="6">
+                <MudSelect T="Variant" Label="Variant" Dense="true" @bind-Value="GlobalVariant">
+                    <MudSelectItem Value="Variant.Filled" />
+                    <MudSelectItem Value="Variant.Outlined" />
+                    <MudSelectItem Value="Variant.Text" />
+                </MudSelect>
+            </MudItem>
 
-    <!-- Col 2: Global configuration -->
-    <MudItem xs="12" md="4">
-        <MudPaper Class="pa-3" Elevation="25">
-            <MudText Typo="Typo.h6" Class="mb-2">Global settings</MudText>
+            <MudItem xs="12" md="6">
+                <MudSelect T="string" Label="Position" Dense="true" @bind-Value="GlobalPositionClass">
+                    <MudSelectItem Value="@(Defaults.Classes.Position.TopLeft)">Top Left</MudSelectItem>
+                    <MudSelectItem Value="@(Defaults.Classes.Position.TopCenter)">Top Center</MudSelectItem>
+                    <MudSelectItem Value="@(Defaults.Classes.Position.TopRight)">Top Right</MudSelectItem>
+                    <MudSelectItem Value="@(Defaults.Classes.Position.BottomLeft)">Bottom Left</MudSelectItem>
+                    <MudSelectItem Value="@(Defaults.Classes.Position.BottomCenter)">Bottom Center</MudSelectItem>
+                    <MudSelectItem Value="@(Defaults.Classes.Position.BottomRight)">Bottom Right</MudSelectItem>
+                </MudSelect>
+            </MudItem>
 
-            <MudSelect T="Variant" Label="Variant" Dense="true" @bind-Value="GlobalVariant">
-                <MudSelectItem Value="Variant.Filled" />
-                <MudSelectItem Value="Variant.Outlined" />
-                <MudSelectItem Value="Variant.Text" />
-            </MudSelect>
+            <MudItem xs="12" md="6">
+                <MudNumericField T="int" Label="Maximum displayed" @bind-Value="MaxDisplayed" Min="1" Margin="Margin.Dense" />
+            </MudItem>
+            <MudItem xs="12" md="6">
+                <MudNumericField T="int" Label="Visible duration (ms)" @bind-Value="VisibleMs" Min="100" Step="500" Margin="Margin.Dense" />
+            </MudItem>
+            <MudItem xs="12" md="6">
+                <MudNumericField T="int" Label="Show transition (ms)" @bind-Value="ShowMs" Min="0" Step="50" Margin="Margin.Dense" />
+            </MudItem>
+            <MudItem xs="12" md="6">
+                <MudNumericField T="int" Label="Hide transition (ms)" @bind-Value="HideMs" Min="0" Step="50" Margin="Margin.Dense" />
+            </MudItem>
 
-            <MudSelect T="string" Label="Position" Dense="true" @bind-Value="GlobalPositionClass" Class="mt-2">
-                <MudSelectItem Value="@(Defaults.Classes.Position.TopLeft)">Top Left</MudSelectItem>
-                <MudSelectItem Value="@(Defaults.Classes.Position.TopCenter)">Top Center</MudSelectItem>
-                <MudSelectItem Value="@(Defaults.Classes.Position.TopRight)">Top Right</MudSelectItem>
-                <MudSelectItem Value="@(Defaults.Classes.Position.BottomLeft)">Bottom Left</MudSelectItem>
-                <MudSelectItem Value="@(Defaults.Classes.Position.BottomCenter)">Bottom Center</MudSelectItem>
-                <MudSelectItem Value="@(Defaults.Classes.Position.BottomRight)">Bottom Right</MudSelectItem>
-            </MudSelect>
+            <MudItem xs="12">
+                <div class="d-flex flex-wrap align-center justify-start" style="column-gap: 12px; row-gap: 0;">
+                    <MudCheckBox @bind-Value="PreventDuplicates" Label="Prevent duplicates" Color="Color.Primary" />
+                    <MudCheckBox @bind-Value="NewestOnTop" Label="Newest on top" Color="Color.Primary" />
+                    <MudCheckBox @bind-Value="ShowCloseIcon" Label="Show close icon" Color="Color.Primary" />
+                    <MudCheckBox @bind-Value="HideSeverityIcon" Label="Hide severity icon" Color="Color.Primary" />
+                </div>
+            </MudItem>
 
-            <MudStack Class="mt-2">
-                <MudSwitch Color="Color.Primary" @bind-Value="PreventDuplicates">Prevent duplicates</MudSwitch>
-                <MudSwitch Color="Color.Primary" @bind-Value="NewestOnTop">Newest on top</MudSwitch>
-                <MudSwitch Color="Color.Primary" @bind-Value="ShowCloseIcon">Show close icon</MudSwitch>
-                <MudSwitch Color="Color.Primary" @bind-Value="HideSeverityIcon">Hide severity icon (CSS)</MudSwitch>
-            </MudStack>
+            <MudItem xs="12">
+                <MudDivider Class="my-1" />
+            </MudItem>
 
-            <MudGrid Class="mt-2">
-                <MudItem xs="6">
-                    <MudNumericField T="int" Label="Max displayed" @bind-Value="MaxDisplayed" Min="1" />
-                </MudItem>
-                <MudItem xs="6">
-                    <MudNumericField T="int" Label="Visible (ms)" @bind-Value="VisibleMs" Min="100" Step="500" />
-                </MudItem>
-                <MudItem xs="6">
-                    <MudNumericField T="int" Label="Show (ms)" @bind-Value="ShowMs" Min="0" Step="50" />
-                </MudItem>
-                <MudItem xs="6">
-                    <MudNumericField T="int" Label="Hide (ms)" @bind-Value="HideMs" Min="0" Step="50" />
-                </MudItem>
-            </MudGrid>
-        </MudPaper>
-    </MudItem>
+            <MudItem xs="12" md="4">
+                <MudSelect T="Severity" Label="Custom snackbar severity" Dense="true" @bind-Value="SelectedSeverity">
+                    <MudSelectItem Value="Severity.Normal" />
+                    <MudSelectItem Value="Severity.Info" />
+                    <MudSelectItem Value="Severity.Success" />
+                    <MudSelectItem Value="Severity.Warning" />
+                    <MudSelectItem Value="Severity.Error" />
+                </MudSelect>
+            </MudItem>
+            <MudItem xs="12" md="8">
+                <MudTextField Label="Custom message" @bind-Value="CustomMessage" Clearable/>
+            </MudItem>
+            <MudItem xs="12">
+                <MudButton Variant="Variant.Filled" Color="Color.Secondary"
+                           OnClick='@(() => Show(CustomMessage, SelectedSeverity))'>
+                    Show custom snackbar
+                </MudButton>
+            </MudItem>
+        </MudGrid>
+    </Options>
+</DemoPageLayout>
 
-    <!-- Col 3: Per-snackbar severity + custom message -->
-    <MudItem xs="12" md="4">
-        <MudPaper Class="pa-3" Elevation="25">
-            <MudText Typo="Typo.h6" Class="mb-2">Per-snackbar overrides</MudText>
-
-            <MudSelect T="Severity" Label="Severity" Dense="true" @bind-Value="SelectedSeverity">
-                <MudSelectItem Value="Severity.Normal" />
-                <MudSelectItem Value="Severity.Info" />
-                <MudSelectItem Value="Severity.Success" />
-                <MudSelectItem Value="Severity.Warning" />
-                <MudSelectItem Value="Severity.Error" />
-            </MudSelect>
-
-            <MudTextField Class="mt-2" Label="Custom message" @bind-Value="CustomMessage" />
-            <MudButton Class="mt-2" Variant="Variant.Filled" Color="Color.Secondary"
-                       OnClick="@(() => Show(CustomMessage, SelectedSeverity))">
-                Show custom snackbar
-            </MudButton>
-        </MudPaper>
-    </MudItem>
-</MudGrid>
-
-@* Optional CSS to hide the left severity icon for ALL snackbars *@
 @if (HideSeverityIcon)
 {
     <style>
@@ -99,18 +99,22 @@
 }
 
 @code {
-    // ----- Global config (applies to all snackbars) -----
+    [CascadingParameter(Name = "DemoLayoutVariant")]
+    private DemoPageLayoutVariant LayoutVariant { get; set; } = DemoPageLayoutVariant.Horizontal;
+
+    private bool IsHorizontalLayout => LayoutVariant == DemoPageLayoutVariant.Horizontal;
+
     private Variant _globalVariant = Variant.Filled;
-    private string _globalPositionClass = Defaults.Classes.Position.BottomRight;
+    private string _globalPositionClass = Defaults.Classes.Position.TopRight;
     private bool _preventDuplicates = true;
-    private bool _newestOnTop = true;
+    private bool _newestOnTop;
     private bool _showCloseIcon = true;
     private int _maxDisplayed = 5;
-    private int _visibleMs = 5000;
+    private int _visibleMs = 4000;
     private int _showMs = 200;
-    private int _hideMs = 200;
+    private int _hideMs = 150;
 
-    private bool _hideSeverityIcon; // CSS-based toggle
+    private bool _hideSeverityIcon;
 
     private Variant GlobalVariant { get => _globalVariant; set { _globalVariant = value; ApplyConfig(); } }
     private string GlobalPositionClass { get => _globalPositionClass; set { _globalPositionClass = value; ApplyConfig(); } }
@@ -125,29 +129,25 @@
 
     private void ApplyConfig()
     {
-        var c = Snackbar.Configuration;
-        c.SnackbarVariant        = _globalVariant;
-        c.PositionClass          = _globalPositionClass;
-        c.PreventDuplicates      = _preventDuplicates;
-        c.NewestOnTop            = _newestOnTop;
-        c.ShowCloseIcon          = _showCloseIcon;
-        c.MaxDisplayedSnackbars  = _maxDisplayed;
-        c.VisibleStateDuration   = _visibleMs;
-        c.ShowTransitionDuration = _showMs;
-        c.HideTransitionDuration = _hideMs;
+        var config = Snackbar.Configuration;
+        config.SnackbarVariant = _globalVariant;
+        config.PositionClass = _globalPositionClass;
+        config.PreventDuplicates = _preventDuplicates;
+        config.NewestOnTop = _newestOnTop;
+        config.ShowCloseIcon = _showCloseIcon;
+        config.MaxDisplayedSnackbars = _maxDisplayed;
+        config.VisibleStateDuration = _visibleMs;
+        config.ShowTransitionDuration = _showMs;
+        config.HideTransitionDuration = _hideMs;
     }
 
     protected override void OnInitialized() => ApplyConfig();
 
-    // ----- Per-snackbar inputs -----
     private Severity SelectedSeverity { get; set; } = Severity.Normal;
     private string CustomMessage { get; set; } = "Hello from a customizable snackbar!";
 
     private void Show(string message, Severity severity)
-    {
-        // Overload with per-message configure action — use only properties supported by your version
-        Snackbar.Add(message, severity, _ => { /* add per-snackbar overrides here if your version supports them */ });
-    }
+        => Snackbar.Add(message, severity, _ => { });
 
     private void ShowFragment()
     {
