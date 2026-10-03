@@ -54,6 +54,9 @@
             <MudItem xs="12" md="6">
                 <MudNumericField T="int" Label="Hide transition (ms)" @bind-Value="HideMs" Min="0" Step="50" Margin="Margin.Dense" />
             </MudItem>
+            <MudItem xs="12">
+                <MudButton Variant="Variant.Outlined" OnClick="ResetTiming">Reset duration and transition</MudButton>
+            </MudItem>
 
             <MudItem xs="12">
                 <div class="d-flex flex-wrap align-center justify-start" style="column-gap: 12px; row-gap: 0;">
@@ -126,6 +129,14 @@
     private int ShowMs { get => _showMs; set { _showMs = Math.Max(0, value); ApplyConfig(); } }
     private int HideMs { get => _hideMs; set { _hideMs = Math.Max(0, value); ApplyConfig(); } }
     private bool HideSeverityIcon { get => _hideSeverityIcon; set { _hideSeverityIcon = value; StateHasChanged(); } }
+
+    private void ResetTiming()
+    {
+        _visibleMs = 4000;
+        _showMs = 200;
+        _hideMs = 150;
+        ApplyConfig();
+    }
 
     private void ApplyConfig()
     {
