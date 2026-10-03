@@ -7,23 +7,27 @@
                 Description="Displays an overlay that prompts users to confirm an action or provide additional information."
                 Variant="DemoPageLayoutVariant.Horizontal">
     <Preview>
-        <MudStack Row Spacing="1" Class="align-center flex-wrap justify-start">
-            <MudButton Color="Color.Default" OnClick="OpenScrollableAsync">Scrollable dialog</MudButton>
-            <MudButton Color="Color.Primary" OnClick="OpenBlurryAsync">Blurry dialog</MudButton>
-            <MudButton OnClick="OpenInline" Color="Color.Secondary">Inline dialog</MudButton>
-            <MudButton OnClick="OpenNestedInline" Color="Color.Info">Nested inline dialog</MudButton>
-            <MudButton OnClick="OpenNestedAsync" Color="Color.Info">Nested dialogs</MudButton>
-            <MudButton OnClick="OpenCancelAllAsync" Color="Color.Error">Cancel all</MudButton>
-            <MudButton OnClick="@(() => OpenDeleteAsync(_servers[1]))" Color="Color.Error">Passing data (delete)
-            </MudButton>
-            <MudButton OnClick="OpenTemplateDeleteAsync" Color="Color.Error">Delete records</MudButton>
-            <MudButton OnClick="OpenTemplateSlowComputerAsync" Color="Color.Warning">Slow computer</MudButton>
-        </MudStack>
+        <MudStack AlignItems="@(IsHorizontalLayout ? AlignItems.Start : AlignItems.Center)" Spacing="3" Class="w-100">
+            <MudText Typo="Typo.subtitle2" Style="font-weight: 600;">Try a dialog example</MudText>
 
-        @if (_hasResult)
-        {
-            <MudAlert Severity="@LastResultSeverity" Class="mt-4">Last result: @_lastResult</MudAlert>
-        }
+            <MudStack Row Spacing="1" AlignItems="AlignItems.Center" Justify="@(IsHorizontalLayout ? Justify.FlexStart : Justify.Center)" Class="w-100 flex-wrap">
+                <MudButton Color="Color.Default" OnClick="OpenScrollableAsync">Scrollable dialog</MudButton>
+                <MudButton Color="Color.Primary" OnClick="OpenBlurryAsync">Blurry dialog</MudButton>
+                <MudButton OnClick="OpenInline" Color="Color.Secondary">Inline dialog</MudButton>
+                <MudButton OnClick="OpenNestedInline" Color="Color.Info">Nested inline dialog</MudButton>
+                <MudButton OnClick="OpenNestedAsync" Color="Color.Info">Nested dialogs</MudButton>
+                <MudButton OnClick="OpenCancelAllAsync" Color="Color.Error">Cancel all</MudButton>
+                <MudButton OnClick="@(() => OpenDeleteAsync(_servers[1]))" Color="Color.Error">Passing data (delete)
+                </MudButton>
+                <MudButton OnClick="OpenTemplateDeleteAsync" Color="Color.Error">Delete records</MudButton>
+                <MudButton OnClick="OpenTemplateSlowComputerAsync" Color="Color.Warning">Slow computer</MudButton>
+            </MudStack>
+
+            @if (_hasResult)
+            {
+                <MudAlert Dense="true" Severity="@LastResultSeverity">Last result: @_lastResult</MudAlert>
+            }
+        </MudStack>
     </Preview>
 
     <Options>
@@ -63,6 +67,11 @@
 </MudDialog>
 
 @code {
+    [CascadingParameter(Name = "DemoLayoutVariant")]
+    private DemoPageLayoutVariant LayoutVariant { get; set; } = DemoPageLayoutVariant.Horizontal;
+
+    private bool IsHorizontalLayout => LayoutVariant == DemoPageLayoutVariant.Horizontal;
+
     private bool _hasResult;
     private bool _useMaxWidth = false;
     private bool _closeButton = false;
