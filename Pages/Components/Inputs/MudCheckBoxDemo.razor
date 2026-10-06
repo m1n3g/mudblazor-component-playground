@@ -39,22 +39,13 @@
             <MudDivider Class="w-100" />
 
             <div class="d-flex flex-wrap justify-start align-center" style="column-gap: 12px; row-gap: 0;">
-                @if (_triState)
-                {
-                    <MudCheckBox T="bool?" @bind-Value="_tri" TriState="true" Color="_color"
-                                 UncheckedColor="_uncheckedColor" IndeterminateIcon="@IndeterminateIcon" Size="_size"
-                                 Dense="_dense" ReadOnly="_readOnly" Disabled="_disabled" KeyboardEnabled="_keyboardEnabled"
-                                 Ripple="_ripple" LabelPlacement="_placement" Label="Tri-state" />
-                }
-                else
-                {
-                    <MudCheckBox T="bool" @bind-Value="_binary" Color="_color" UncheckedColor="_uncheckedColor"
-                                 Size="_size" Dense="_dense" ReadOnly="_readOnly" Disabled="_disabled"
-                                 KeyboardEnabled="_keyboardEnabled" Ripple="_ripple" LabelPlacement="_placement"
-                                 Label="Standard" />
-                }
-                <MudText class="ml-2" >Value: @(_tri is null ? "null" : _tri.Value ? "true" : "false")</MudText>
-                <MudButton Variant="Variant.Text" OnClick="@(() => _tri = null)">Reset</MudButton>
+                <MudCheckBox T="bool?" @bind-Value="_tri" TriState="_triState" Color="_color"
+                             CheckedIcon="@CheckedIcon" UncheckedIcon="@UncheckedIcon"
+                             UncheckedColor="_uncheckedColor" IndeterminateIcon="@IndeterminateIcon" Size="_size"
+                             Dense="_dense" ReadOnly="_readOnly" Disabled="_disabled" KeyboardEnabled="_keyboardEnabled"
+                             Ripple="_ripple" LabelPlacement="_placement" Label="@(_triState ? "Tri-state" : "Standard")" />
+                <MudText class="ml-2">Value: @(_tri is null ? "null" : _tri.Value ? "true" : "false")</MudText>
+                <MudButton Variant="Variant.Text" OnClick="ResetTriState">Reset</MudButton>
             </div>
 
         </MudPaper>
@@ -143,7 +134,7 @@
             <MudItem xs="12">
                 <MudText Typo="Typo.subtitle2" Style="font-weight: 600" Class="mb-1">Behavior</MudText>
                 <div class="d-flex flex-wrap align-center justify-start" style="column-gap: 12px; row-gap: 0;">
-                    <MudCheckBox Color="Color.Primary" @bind-Value="_triState" Label="Tri-state" />
+                    <MudCheckBox Color="Color.Primary" @bind-Value="_triState" @bind-Value:after="OnTriStateChanged" Label="Tri-state" />
                     <MudCheckBox Color="Color.Primary" @bind-Value="_dense" Label="Dense" />
                     <MudCheckBox Color="Color.Primary" @bind-Value="_readOnly" Label="Read only" />
                     <MudCheckBox Color="Color.Primary" @bind-Value="_disabled" Label="Disabled" />
@@ -174,7 +165,6 @@
     private bool _keyboardEnabled = true;
     private bool _ripple = true;
     private Placement _placement = Placement.End;
-    private bool _binary;
     private bool? _tri;
     private MudForm? _validationForm;
     private bool _required = true;
@@ -239,4 +229,13 @@
         await _validationForm.ResetValidationAsync();
         _validationState = "Not validated";
     }
+
+    private void OnTriStateChanged()
+    {
+        if (!_triState && !_tri.HasValue)
+            _tri = false;
+    }
+
+    private void ResetTriState()
+        => _tri = _triState ? null : false;
 }
