@@ -868,3 +868,39 @@ Updated the following demo pages:
 - [`MudChipSetDemo.razor`](./Pages/Components/DataDisplay/MudChipSetDemo.razor): added a Default chip to the preview
 - [`MudColorPickerDemo.razor`](./Pages/Components/Inputs/MudColorPickerDemo.razor): migrated to the shared horizontal layout with Text, Outlined, and Filled previews, expanded options, and a persistent picker panel
 - [`MudMenuDemo.razor`](./Pages/Components/Navigation/MudMenuDemo.razor): shortened the `Trigger Variant` option label to `Variant`
+- [`MudButtonFabMenu.razor`](./Pages/Components/Buttons/MudButtonFabMenu.razor): set the FAB menu button's default start icon to Edit
+
+## 2026-10-02
+
+### Shared Layout Migrations and Preview Refinements
+
+Updated the following demo pages:
+
+- [`MudRatingDemo.razor`](./Pages/Components/Inputs/MudRatingDemo.razor): migrated the demo to the shared layout
+- [`MudToolbarDemo.razor`](./Pages/Components/Layout/MudToolbarDemo.razor): migrated the demo to the shared layout
+- [`MudPaperDemo.razor`](./Pages/Components/Layout/MudPaperDemo.razor): repositioned quick width actions
+
+## 2026-10-03
+
+### Skeleton and Expansion Panel Refinements
+
+- [`MudSkeletonDemo.razor`](./Pages/Components/Feedback/MudSkeletonDemo.razor): repositioned the option value and added a placeholder to the demo
+- [`MudExpansionPanelsDemo.razor`](./Pages/Components/DataDisplay/MudExpansionPanelsDemo.razor): updated the icon preset
+
+## 2026-10-04
+
+### Shared Layout Migrations and Interaction Updates
+
+- [`MudDialogDemo.razor`](./Pages/Components/Feedback/MudDialogDemo.razor): aligned the preview according to the active layout
+- [`MudSnackbarDemo.razor`](./Pages/Components/Feedback/MudSnackbarDemo.razor): migrated to the shared layout and added a reset control for duration and transition timing
+- [`MudTooltipDemo.razor`](./Pages/Components/DataDisplay/MudTooltipDemo.razor): migrated to the shared layout
+- [`MudTreeViewDemo.razor`](./Pages/Components/DataDisplay/MudTreeViewDemo.razor): migrated to the shared layout with selectable-tree and lazy-loading examples and bound selection and behavior controls
+
+## 2026-10-06
+
+### Checkbox Preview Binding Refinement
+
+Updated [`MudCheckBoxDemo.razor`](./Pages/Components/Inputs/MudCheckBoxDemo.razor):
+
+- Bound checked, unchecked, and indeterminate icon options to the tri-state preview
+- Bound the Tri-state option directly to the preview checkbox and kept its displayed value and reset behavior consistent when switching modes
