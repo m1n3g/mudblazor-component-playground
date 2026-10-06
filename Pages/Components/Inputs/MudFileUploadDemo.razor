@@ -188,7 +188,6 @@
             <MudItem xs="12" md="6">
                 <MudTextField Label="Error text"
                               @bind-Value="_errorText"
-                              @bind-Value:after="ClearValidationAsync"
                               Clearable="true"
                               ShrinkLabel="true"
                               Placeholder="Enter required error"
@@ -201,7 +200,7 @@
                     <MudCheckBox @bind-Value="_hidden" @bind-Value:after="ClearValidationAsync" Label="Hidden input" Color="Color.Primary" />
                     <MudCheckBox @bind-Value="_dragAndDrop" @bind-Value:after="ClearValidationAsync" Label="Drag and drop" Color="Color.Primary" />
                     <MudCheckBox @bind-Value="_disabled" @bind-Value:after="ClearValidationAsync" Label="Disabled" Color="Color.Primary" />
-                    <MudCheckBox @bind-Value="_showError" @bind-Value:after="ClearValidationAsync" Label="Show error" Color="Color.Primary" />
+                    <MudCheckBox @bind-Value="_showError" Label="Show error" Color="Color.Primary" />
                     <MudCheckBox @bind-Value="_suppressOnChangeWhenInvalid" @bind-Value:after="ClearValidationAsync" Label="Suppress invalid change" Color="Color.Primary" />
                 </div>
             </MudItem>
