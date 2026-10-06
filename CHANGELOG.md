@@ -904,3 +904,9 @@ Updated [`MudCheckBoxDemo.razor`](./Pages/Components/Inputs/MudCheckBoxDemo.razo
 
 - Bound checked, unchecked, and indeterminate icon options to the tri-state preview
 - Bound the Tri-state option directly to the preview checkbox and kept its displayed value and reset behavior consistent when switching modes
+
+### File Upload Error Feedback
+
+Updated [`MudFileUploadDemo.razor`](./Pages/Components/Inputs/MudFileUploadDemo.razor):
+
+- Prevented the Show error and Error text controls from immediately resetting the upload component's error state
