@@ -910,3 +910,24 @@ Updated [`MudCheckBoxDemo.razor`](./Pages/Components/Inputs/MudCheckBoxDemo.razo
 Updated [`MudFileUploadDemo.razor`](./Pages/Components/Inputs/MudFileUploadDemo.razor):
 
 - Prevented the Show error and Error text controls from immediately resetting the upload component's error state
+
+## 2026-10-08
+
+### Color Picker Demo Completion
+
+Updated [`MudColorPickerDemo.razor`](./Pages/Components/Inputs/MudColorPickerDemo.razor):
+
+- Added shared color binding across the Text, Outlined, Filled, and persistent static picker previews
+- Added configurable picker view, palette presets, static orientation, adornment presets, and picker-panel visibility controls
+- Added input behavior options for editability, immediate text updates, validation, and HSL-only binding updates
+- Added a Show tooltips option, enabled by default to match MudBlazor
+- Removed redundant picker color, picker shape, elevation, and throttle interval controls
+- Removed the color-picker mode dropdown because the component's mode switch is internally managed
+
+### Scroll To Top Demo
+
+Updated [`MudScrollToTopDemo.razor`](./Pages/Components/Buttons/MudScrollToTopDemo.razor):
+
+- Kept the example focused on page scrolling and removed the scroll-target selector and nested preview scroller
+- Expanded the page-scroll preview to 10 sections so the scroll-to-top button can be demonstrated
+- Added controls for the top offset, scroll behavior, and button appearance
