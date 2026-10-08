@@ -7,71 +7,83 @@
                 Description="Picks a color from a spectrum, palette, or predefined grid, with RGB, HSL, and hexadecimal inputs and optional alpha transparency."
                 Variant="DemoPageLayoutVariant.Horizontal">
     <Preview>
-        <MudPaper Outlined="true" Class="w-100 pa-4">
-            <MudStack Spacing="4" Class="w-100">
-                <MudStack Spacing="3" Class="w-100">
-                    <MudColorPicker @bind-Text="_colorText" Variant="Variant.Text" Label="@_label"
-                                    PickerVariant="@_pickerVariant" ColorPickerView="@_colorPickerView"
-                                    Margin="@ComputedMargin" Disabled="@_disabled" ReadOnly="@_readonly"
-                                    Placeholder="@(_placeholder ? "Select color" : null)"
-                                    HelperText="@(_helperText ? "Select a color or enter a color value." : null)"
-                                    HelperTextOnFocus="@_helperTextOnFocus" Clearable="@_clearable" Error="@_hasError"
-                                    ErrorText="@_errorText" Required="@_required" RequiredError="@_requiredError"
-                                    ImmediateText="true" ShrinkLabel="@_shrinkLabel"
-                                    Adornment="@_adornment" AdornmentIcon="@AdornmentIcon"
-                                    AdornmentColor="@_adornmentColor"
-                                    DragEffect="@_dragEffect" ThrottleInterval="@_throttleInterval"
-                                    UpdateBindingIfOnlyHSLChanged="@_updateBindingIfOnlyHSLChanged"
-                                    Palette="@CustomPalette"
-                                    Style="@($"color: {_colorText};")" />
+        <MudPaper Outlined="true" Class="pa-4 w-100">
+            <MudStack Spacing="3" Class="w-100">
+                <MudGrid Spacing="3" Class="w-100">
+                    <MudItem xs="12">
+                        <MudStack Spacing="3" Class="w-100">
+                            <MudColorPicker @bind-Text="_selectedColorText" @bind-Value="_selectedMudColor"
+                                            Variant="Variant.Text" Label="@_label"
+                                            PickerVariant="@_pickerVariant" ColorPickerView="@_colorPickerView"
+                                            Margin="@ComputedMargin" Disabled="@_disabled" ReadOnly="@_readonly"
+                                            Placeholder="@(_placeholder ? "Select color" : null)"
+                                            HelperText="@(_helperText ? "Select a color or enter a color value." : null)"
+                                            HelperTextOnFocus="@_helperTextOnFocus" Clearable="@_clearable" Error="@_hasError"
+                                            ErrorText="@_errorText" Required="@_required" RequiredError="@_requiredError"
+                                            Editable="@_editable" ImmediateText="@_immediateText" ShrinkLabel="@_shrinkLabel"
+                                            Adornment="@_adornment" AdornmentIcon="@AdornmentIcon"
+                                            AdornmentColor="@_adornmentColor" ClearIcon="@ClearIcon"
+                                            DragEffect="@_dragEffect"
+                                            UpdateBindingIfOnlyHSLChanged="@_updateBindingIfOnlyHSLChanged"
+                                            Palette="@CustomPalette"
+                                            Style="@($"color: {_selectedColorText};")" />
 
-                    <MudColorPicker @bind-Text="_colorOutlined" Variant="Variant.Outlined" Label="@_label"
-                                    PickerVariant="@_pickerVariant" ColorPickerView="@_colorPickerView"
-                                    Margin="@ComputedMargin" Disabled="@_disabled" ReadOnly="@_readonly"
-                                    Placeholder="@(_placeholder ? "Select color" : null)"
-                                    HelperText="@(_helperText ? "Select a color or enter a color value." : null)"
-                                    HelperTextOnFocus="@_helperTextOnFocus" Clearable="@_clearable" Error="@_hasError"
-                                    ErrorText="@_errorText" Required="@_required" RequiredError="@_requiredError"
-                                    ImmediateText="true" ShrinkLabel="@_shrinkLabel"
-                                    Adornment="@_adornment" AdornmentIcon="@AdornmentIcon"
-                                    AdornmentColor="@_adornmentColor"
-                                    DragEffect="@_dragEffect" ThrottleInterval="@_throttleInterval"
-                                    UpdateBindingIfOnlyHSLChanged="@_updateBindingIfOnlyHSLChanged"
-                                    Palette="@CustomPalette"
-                                    Style="@($"color: {_colorOutlined};")" />
+                                @if (_pickerVariant != PickerVariant.Static)
+                                {
+                                    <MudColorPicker @bind-Text="_selectedColorText" @bind-Value="_selectedMudColor"
+                                                    Variant="Variant.Outlined" Label="@_label"
+                                                    PickerVariant="@_pickerVariant" ColorPickerView="@_colorPickerView"
+                                                    Margin="@ComputedMargin" Disabled="@_disabled" ReadOnly="@_readonly"
+                                                    Placeholder="@(_placeholder ? "Select color" : null)"
+                                                    HelperText="@(_helperText ? "Select a color or enter a color value." : null)"
+                                                    HelperTextOnFocus="@_helperTextOnFocus" Clearable="@_clearable" Error="@_hasError"
+                                                    ErrorText="@_errorText" Required="@_required" RequiredError="@_requiredError"
+                                                    Editable="@_editable" ImmediateText="@_immediateText" ShrinkLabel="@_shrinkLabel"
+                                                    Adornment="@_adornment" AdornmentIcon="@AdornmentIcon"
+                                                    AdornmentColor="@_adornmentColor" ClearIcon="@ClearIcon"
+                                                    DragEffect="@_dragEffect"
+                                                    UpdateBindingIfOnlyHSLChanged="@_updateBindingIfOnlyHSLChanged"
+                                                    Palette="@CustomPalette"
+                                                    Style="@($"color: {_selectedColorText};")" />
 
-                    <MudColorPicker @bind-Text="_colorFilled" Variant="Variant.Filled" Label="@_label"
-                                    PickerVariant="@_pickerVariant" ColorPickerView="@_colorPickerView"
-                                    Margin="@ComputedMargin" Disabled="@_disabled" ReadOnly="@_readonly"
-                                    Placeholder="@(_placeholder ? "Select color" : null)"
-                                    HelperText="@(_helperText ? "Select a color or enter a color value." : null)"
-                                    HelperTextOnFocus="@_helperTextOnFocus" Clearable="@_clearable" Error="@_hasError"
-                                    ErrorText="@_errorText" Required="@_required" RequiredError="@_requiredError"
-                                    ImmediateText="true" ShrinkLabel="@_shrinkLabel"
-                                    Adornment="@_adornment" AdornmentIcon="@AdornmentIcon"
-                                    AdornmentColor="@_adornmentColor"
-                                    DragEffect="@_dragEffect" ThrottleInterval="@_throttleInterval"
-                                    UpdateBindingIfOnlyHSLChanged="@_updateBindingIfOnlyHSLChanged"
-                                    Palette="@CustomPalette"
-                                    Style="@($"color: {_colorFilled};")" />
-                </MudStack>
+                                    <MudColorPicker @bind-Text="_selectedColorText" @bind-Value="_selectedMudColor"
+                                                    Variant="Variant.Filled" Label="@_label"
+                                                    PickerVariant="@_pickerVariant" ColorPickerView="@_colorPickerView"
+                                                    Margin="@ComputedMargin" Disabled="@_disabled" ReadOnly="@_readonly"
+                                                    Placeholder="@(_placeholder ? "Select color" : null)"
+                                                    HelperText="@(_helperText ? "Select a color or enter a color value." : null)"
+                                                    HelperTextOnFocus="@_helperTextOnFocus" Clearable="@_clearable" Error="@_hasError"
+                                                    ErrorText="@_errorText" Required="@_required" RequiredError="@_requiredError"
+                                                    Editable="@_editable" ImmediateText="@_immediateText" ShrinkLabel="@_shrinkLabel"
+                                                    Adornment="@_adornment" AdornmentIcon="@AdornmentIcon"
+                                                    AdornmentColor="@_adornmentColor" ClearIcon="@ClearIcon"
+                                                    DragEffect="@_dragEffect"
+                                                    UpdateBindingIfOnlyHSLChanged="@_updateBindingIfOnlyHSLChanged"
+                                                    Palette="@CustomPalette"
+                                                    Style="@($"color: {_selectedColorText};")" />
+                                }
+                        </MudStack>
+                    </MudItem>
 
-                <MudDivider Class="w-100" />
+                    <MudDivider Class="w-100 mt-6" />
 
-                <MudText Typo="Typo.h6">Picker panel</MudText>
-
-                <MudPaper Outlined="true" Class="pa-4 d-flex justify-center">
-                    <MudColorPicker PickerVariant="PickerVariant.Static" @bind-Text="_panelColor"
-                                    ColorPickerView="@_colorPickerView"
-                                    DragEffect="@_dragEffect" ThrottleInterval="@_throttleInterval"
-                                    UpdateBindingIfOnlyHSLChanged="@_updateBindingIfOnlyHSLChanged"
-                                    Palette="@CustomPalette"
-                                    ShowToolbar="@ShowToolbar" ShowAlpha="@ShowAlpha" ShowColorField="@ShowColorField"
-                                    ShowPreview="@ShowPreview" ShowSliders="@ShowSliders" ShowInputs="@ShowInputs"
-                                    ShowModeSwitch="@ShowModeSwitch" ColorPickerMode="@ColorPickerMode" />
-                </MudPaper>
-
-                <MudText Typo="Typo.caption" Class="text-center">Selected: @_panelColor</MudText>
+                    <MudItem xs="12">
+                        <MudText Typo="Typo.subtitle2">Picker panel (Static)</MudText>
+                        <div class="d-flex justify-center">
+                            <MudColorPicker PickerVariant="PickerVariant.Static"
+                                            @bind-Text="_selectedColorText" @bind-Value="_selectedMudColor"
+                                            ColorPickerView="@_colorPickerView"
+                                            Orientation="@_orientation"
+                                            DragEffect="@_dragEffect"
+                                            UpdateBindingIfOnlyHSLChanged="@_updateBindingIfOnlyHSLChanged"
+                                            Palette="@CustomPalette"
+                                            ShowToolbar="@ShowToolbar" ShowAlpha="@ShowAlpha" ShowColorField="@ShowColorField"
+                                            ShowPreview="@ShowPreview" ShowSliders="@ShowSliders" ShowInputs="@ShowInputs"
+                                            ShowModeSwitch="@ShowModeSwitch" />
+                        </div>
+                        <MudText Typo="Typo.caption" Class="d-block text-center">Selected: @_selectedColorText</MudText>
+                    </MudItem>
+                </MudGrid>
             </MudStack>
         </MudPaper>
     </Preview>
@@ -110,16 +122,19 @@
             </MudItem>
 
             <MudItem xs="12" sm="6">
-                <MudSelect T="PalettePreset" Label="Palette" @bind-Value="_palettePreset" Dense="true">
-                    <MudSelectItem Value="PalettePreset.Default">Default</MudSelectItem>
-                    <MudSelectItem Value="PalettePreset.Warm">Warm</MudSelectItem>
-                    <MudSelectItem Value="PalettePreset.Cool">Cool</MudSelectItem>
+                <MudSelect T="Orientation" Label="Static orientation" @bind-Value="_orientation" Dense="true">
+                    <MudSelectItem Value="Orientation.Portrait">Portrait</MudSelectItem>
+                    <MudSelectItem Value="Orientation.Landscape">Landscape</MudSelectItem>
                 </MudSelect>
             </MudItem>
 
             <MudItem xs="12" sm="6">
-                <MudNumericField T="int" Label="Throttle interval (ms)" @bind-Value="_throttleInterval"
-                                 Min="0" Max="1000" Step="10" Margin="Margin.Dense" />
+                <MudSelect T="PalettePreset" Label="Palette" @bind-Value="_palettePreset" Dense="true"
+                           HelperText="Used in Palette picker view.">
+                    <MudSelectItem Value="PalettePreset.Default">Default</MudSelectItem>
+                    <MudSelectItem Value="PalettePreset.Warm">Warm</MudSelectItem>
+                    <MudSelectItem Value="PalettePreset.Cool">Cool</MudSelectItem>
+                </MudSelect>
             </MudItem>
 
             <MudItem xs="12" sm="6">
@@ -135,7 +150,7 @@
             <MudItem xs="12">
                 <MudText Typo="Typo.subtitle2" Style="font-weight: 600" Class="my-2">Adornment</MudText>
                 <MudGrid Spacing="4">
-                    <MudItem xs="12" md="6">
+                    <MudItem xs="12" sm="6">
                         <MudSelect T="Adornment" Label="Adornment" @bind-Value="_adornment" Dense="true">
                             <MudSelectItem Value="Adornment.None">None</MudSelectItem>
                             <MudSelectItem Value="Adornment.Start">Start</MudSelectItem>
@@ -143,7 +158,7 @@
                         </MudSelect>
                     </MudItem>
 
-                    <MudItem xs="12" md="6">
+                    <MudItem xs="12" sm="6">
                         <MudSelect T="AdornmentIconPreset" Label="Adornment icon" @bind-Value="_adornmentIconPreset" Dense="true">
                             <MudSelectItem Value="AdornmentIconPreset.Default">Default</MudSelectItem>
                             <MudSelectItem Value="AdornmentIconPreset.Palette">Palette</MudSelectItem>
@@ -153,7 +168,14 @@
                         </MudSelect>
                     </MudItem>
 
-                    <MudItem xs="12" md="6">
+                    <MudItem xs="12" sm="6">
+                        <MudSelect T="ClearIconPreset" Label="Clear icon" @bind-Value="_clearIconPreset" Dense="true">
+                            <MudSelectItem Value="ClearIconPreset.Default">Default</MudSelectItem>
+                            <MudSelectItem Value="ClearIconPreset.Cancel">Cancel</MudSelectItem>
+                        </MudSelect>
+                    </MudItem>
+
+                    <MudItem xs="12" sm="6">
                         <MudSelect T="Color" Label="Adornment color" @bind-Value="_adornmentColor" Dense="true">
                             @foreach (Color color in Enum.GetValues(typeof(Color)))
                             {
@@ -177,6 +199,9 @@
                     <MudCheckBox @bind-Value="_shrinkLabel" Label="Shrink label" Color="Color.Primary" />
                     <MudCheckBox @bind-Value="_required" Label="Required" Color="Color.Primary" />
                     <MudCheckBox @bind-Value="_hasError" Label="Show error" Color="Color.Primary" />
+                    <MudCheckBox @bind-Value="_editable" Label="Editable" Color="Color.Primary" />
+                    <MudCheckBox @bind-Value="_immediateText" Label="Immediate text" Color="Color.Primary"
+                                 Disabled="@(!_editable)" />
                     <MudCheckBox @bind-Value="_dragEffect" Label="Drag effect" Color="Color.Primary" />
                     <MudCheckBox @bind-Value="_updateBindingIfOnlyHSLChanged" Label="Update on HSL change" Color="Color.Primary" />
                 </div>
@@ -195,50 +220,43 @@
                 </div>
             </MudItem>
 
-            <MudItem xs="12">
-                <MudSelect T="ColorPickerMode" Label="Color picker mode" @bind-Value="ColorPickerMode" Dense="true">
-                    <MudSelectItem Value="ColorPickerMode.RGB">RGB</MudSelectItem>
-                    <MudSelectItem Value="ColorPickerMode.HSL">HSL</MudSelectItem>
-                    <MudSelectItem Value="ColorPickerMode.HEX">HEX</MudSelectItem>
-                </MudSelect>
-            </MudItem>
         </MudGrid>
     </Options>
 </DemoPageLayout>
 
 @code {
-    private string? _colorText = "#000000";
-    private string? _colorOutlined = "#000000";
-    private string? _colorFilled = "#000000";
+    private string? _selectedColorText = "#000000";
+    private MudColor? _selectedMudColor = MudColor.Parse("#000000");
     private string _label = "Color";
     private PickerVariant _pickerVariant = PickerVariant.Inline;
     private ColorPickerView _colorPickerView = ColorPickerView.Spectrum;
+    private Orientation _orientation = Orientation.Portrait;
     private PalettePreset _palettePreset = PalettePreset.Default;
 
     private bool _dense;
     private bool _disabled;
     private bool _readonly;
-    private bool _placeholder;
+    private bool _placeholder = true;
     private bool _helperText;
     private bool _helperTextOnFocus;
-    private bool _clearable;
+    private bool _clearable = true;
     private bool _required;
     private bool _hasError;
+    private bool _editable;
+    private bool _immediateText;
     private bool _shrinkLabel;
     private bool _dragEffect = true;
     private bool _updateBindingIfOnlyHSLChanged;
-    private int _throttleInterval = 100;
 
     private Margin _margin = Margin.None;
     private Margin ComputedMargin => _dense ? Margin.Dense : _margin;
 
     private Adornment _adornment = Adornment.Start;
     private AdornmentIconPreset _adornmentIconPreset = AdornmentIconPreset.Palette;
+    private ClearIconPreset _clearIconPreset = ClearIconPreset.Default;
     private Color _adornmentColor = Color.Default;
     private string _errorText = "Please pick a color.";
     private string _requiredError = "Please select a color.";
-
-    private string? _panelColor = "#000000";
 
     public bool ShowToolbar { get; set; } = true;
     public bool ShowAlpha { get; set; } = true;
@@ -247,8 +265,6 @@
     public bool ShowSliders { get; set; } = true;
     public bool ShowInputs { get; set; } = true;
     public bool ShowModeSwitch { get; set; } = true;
-
-    public ColorPickerMode ColorPickerMode { get; set; } = ColorPickerMode.RGB;
 
     private IEnumerable<MudColor> CustomPalette => _palettePreset switch
     {
@@ -290,6 +306,12 @@
         _ => null
     };
 
+    private string ClearIcon => _clearIconPreset switch
+    {
+        ClearIconPreset.Cancel => Icons.Material.Filled.Cancel,
+        _ => Icons.Material.Filled.Clear
+    };
+
     private enum AdornmentIconPreset
     {
         Default,
@@ -299,10 +321,17 @@
         Tag
     }
 
+    private enum ClearIconPreset
+    {
+        Default,
+        Cancel
+    }
+
     private enum PalettePreset
     {
         Default,
         Warm,
         Cool
     }
+
 }
