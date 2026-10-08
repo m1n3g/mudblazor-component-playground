@@ -1,62 +1,108 @@
 @page "/components/scrolltotop"
+@using System.Linq
 @using MudBlazor
 
-<MudScrollToTop>
-    <MudFab Color="Color.Primary" StartIcon="@Icons.Material.Filled.ArrowCircleUp" />
-</MudScrollToTop>
+<DemoPageLayout Title="Scroll To Top"
+                Description="Displays a button after scrolling, allowing users to quickly return to the top of a page or scrollable area."
+                Variant="DemoPageLayoutVariant.Horizontal">
+    <Preview>
+        <MudStack Spacing="3" Class="w-100">
+            <MudStack Spacing="3" Class="w-100">
+                @foreach (var section in PageSections)
+                {
+                    <MudStack Spacing="1" Class="py-4">
+                        <MudText Typo="Typo.h6">@section.Title</MudText>
+                        <MudText Typo="Typo.body2">@section.Description</MudText>
+                    </MudStack>
+                    <MudDivider />
+                }
+            </MudStack>
 
-<MudText>Lorem ipsum dolor sit amet consectetur adipiscing elit. Quisque faucibus ex sapien vitae pellentesque sem placerat. In id cursus mi pretium tellus duis convallis. Tempus leo eu aenean sed diam urna tempor. Pulvinar vivamus fringilla lacus nec metus bibendum egestas. Iaculis massa nisl malesuada lacinia integer nunc posuere. Ut hendrerit semper vel class aptent taciti sociosqu. Ad litora torquent per conubia nostra inceptos himenaeos.
+            <MudScrollToTop TopOffset="@_topOffset" ScrollBehavior="@_scrollBehavior">
+                <MudFab Color="@_buttonColor" Size="@_buttonSize" StartIcon="@ButtonIcon" />
+            </MudScrollToTop>
+        </MudStack>
+    </Preview>
 
-Lorem ipsum dolor sit amet consectetur adipiscing elit. Quisque faucibus ex sapien vitae pellentesque sem placerat. In id cursus mi pretium tellus duis convallis. Tempus leo eu aenean sed diam urna tempor. Pulvinar vivamus fringilla lacus nec metus bibendum egestas. Iaculis massa nisl malesuada lacinia integer nunc posuere. Ut hendrerit semper vel class aptent taciti sociosqu. Ad litora torquent per conubia nostra inceptos himenaeos.
+    <Options>
+        <MudGrid Spacing="4" Class="w-100">
+            <MudItem xs="12" sm="6">
+                <MudNumericField T="int" Label="Top offset (px)" @bind-Value="_topOffset" Min="0" Max="1000" Step="50"
+                                 Margin="Margin.Dense" />
+            </MudItem>
 
-Lorem ipsum dolor sit amet consectetur adipiscing elit. Quisque faucibus ex sapien vitae pellentesque sem placerat. In id cursus mi pretium tellus duis convallis. Tempus leo eu aenean sed diam urna tempor. Pulvinar vivamus fringilla lacus nec metus bibendum egestas. Iaculis massa nisl malesuada lacinia integer nunc posuere. Ut hendrerit semper vel class aptent taciti sociosqu. Ad litora torquent per conubia nostra inceptos himenaeos.
+            <MudItem xs="12" sm="6">
+                <MudSelect T="ScrollBehavior" Label="Scroll behavior" @bind-Value="_scrollBehavior" Dense="true">
+                    @foreach (var behavior in Enum.GetValues(typeof(ScrollBehavior)).Cast<ScrollBehavior>())
+                    {
+                        <MudSelectItem Value="@behavior">@behavior</MudSelectItem>
+                    }
+                </MudSelect>
+            </MudItem>
 
-Lorem ipsum dolor sit amet consectetur adipiscing elit. Quisque faucibus ex sapien vitae pellentesque sem placerat. In id cursus mi pretium tellus duis convallis. Tempus leo eu aenean sed diam urna tempor. Pulvinar vivamus fringilla lacus nec metus bibendum egestas. Iaculis massa nisl malesuada lacinia integer nunc posuere. Ut hendrerit semper vel class aptent taciti sociosqu. Ad litora torquent per conubia nostra inceptos himenaeos.
 
-Lorem ipsum dolor sit amet consectetur adipiscing elit. Quisque faucibus ex sapien vitae pellentesque sem placerat. In id cursus mi pretium tellus duis convallis. Tempus leo eu aenean sed diam urna tempor. Pulvinar vivamus fringilla lacus nec metus bibendum egestas. Iaculis massa nisl malesuada lacinia integer nunc posuere. Ut hendrerit semper vel class aptent taciti sociosqu. Ad litora torquent per conubia nostra inceptos himenaeos.
+            <MudItem xs="12" sm="6">
+                <MudSelect T="Color" Label="Button color" @bind-Value="_buttonColor" Dense="true">
+                    @foreach (Color color in Enum.GetValues(typeof(Color)))
+                    {
+                        <MudSelectItem Value="@color">@color</MudSelectItem>
+                    }
+                </MudSelect>
+            </MudItem>
 
-Lorem ipsum dolor sit amet consectetur adipiscing elit. Quisque faucibus ex sapien vitae pellentesque sem placerat. In id cursus mi pretium tellus duis convallis. Tempus leo eu aenean sed diam urna tempor. Pulvinar vivamus fringilla lacus nec metus bibendum egestas. Iaculis massa nisl malesuada lacinia integer nunc posuere. Ut hendrerit semper vel class aptent taciti sociosqu. Ad litora torquent per conubia nostra inceptos himenaeos.
+            <MudItem xs="12" sm="6">
+                <MudSelect T="Size" Label="Button size" @bind-Value="_buttonSize" Dense="true">
+                    @foreach (Size size in Enum.GetValues(typeof(Size)).Cast<Size>())
+                    {
+                        <MudSelectItem Value="@size">@size</MudSelectItem>
+                    }
+                </MudSelect>
+            </MudItem>
 
-Lorem ipsum dolor sit amet consectetur adipiscing elit. Quisque faucibus ex sapien vitae pellentesque sem placerat. In id cursus mi pretium tellus duis convallis. Tempus leo eu aenean sed diam urna tempor. Pulvinar vivamus fringilla lacus nec metus bibendum egestas. Iaculis massa nisl malesuada lacinia integer nunc posuere. Ut hendrerit semper vel class aptent taciti sociosqu. Ad litora torquent per conubia nostra inceptos himenaeos.
+            <MudItem xs="12">
+                <MudSelect T="ButtonIconPreset" Label="Icon" @bind-Value="_buttonIconPreset" Dense="true">
+                    <MudSelectItem Value="ButtonIconPreset.ArrowUpward">Arrow upward</MudSelectItem>
+                    <MudSelectItem Value="ButtonIconPreset.ArrowCircleUp">Arrow circle up</MudSelectItem>
+                    <MudSelectItem Value="ButtonIconPreset.KeyboardArrowUp">Keyboard arrow up</MudSelectItem>
+                </MudSelect>
 
-Lorem ipsum dolor sit amet consectetur adipiscing elit. Quisque faucibus ex sapien vitae pellentesque sem placerat. In id cursus mi pretium tellus duis convallis. Tempus leo eu aenean sed diam urna tempor. Pulvinar vivamus fringilla lacus nec metus bibendum egestas. Iaculis massa nisl malesuada lacinia integer nunc posuere. Ut hendrerit semper vel class aptent taciti sociosqu. Ad litora torquent per conubia nostra inceptos himenaeos.
+            </MudItem>
+        </MudGrid>
+    </Options>
+</DemoPageLayout>
 
-Lorem ipsum dolor sit amet consectetur adipiscing elit. Quisque faucibus ex sapien vitae pellentesque sem placerat. In id cursus mi pretium tellus duis convallis. Tempus leo eu aenean sed diam urna tempor. Pulvinar vivamus fringilla lacus nec metus bibendum egestas. Iaculis massa nisl malesuada lacinia integer nunc posuere. Ut hendrerit semper vel class aptent taciti sociosqu. Ad litora torquent per conubia nostra inceptos himenaeos.
+@code {
+    private int _topOffset = 300;
+    private ScrollBehavior _scrollBehavior = ScrollBehavior.Smooth;
+    private Color _buttonColor = Color.Primary;
+    private Size _buttonSize = Size.Large;
+    private ButtonIconPreset _buttonIconPreset = ButtonIconPreset.ArrowCircleUp;
 
-Lorem ipsum dolor sit amet consectetur adipiscing elit. Quisque faucibus ex sapien vitae pellentesque sem placerat. In id cursus mi pretium tellus duis convallis. Tempus leo eu aenean sed diam urna tempor. Pulvinar vivamus fringilla lacus nec metus bibendum egestas. Iaculis massa nisl malesuada lacinia integer nunc posuere. Ut hendrerit semper vel class aptent taciti sociosqu. Ad litora torquent per conubia nostra inceptos himenaeos.</MudText>
-
-<div id="unique_id_scroll_section" class="ma-0 mt-10" style="height:300px;overflow: auto;">
-    <MudPaper Height="3500px" Elevation="0" Class="d-flex flex-column justify-space-between py-6">
-        <MudText Typo="Typo.h3" Align="Align.Center">Scroll inside this container</MudText>
-        <MudText Typo="Typo.h3" Align="Align.Center">Some initial long text</MudText>
-        <MudText Typo="Typo.h3" Align="Align.Center">Middle text</MudText>
-        <MudText Typo="Typo.h3" Align="Align.Center">Bottom text</MudText>
-        <MudScrollToTop TopOffset="100"
-            OnScroll="OnScroll"
-            Selector="#unique_id_scroll_section"
-            VisibleCssClass="visible absolute"
-            HiddenCssClass="invisible">
-            <MudButton Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.ArrowUpward" Color="Color">Go to top</MudButton>
-        </MudScrollToTop>
-
-        <MudScrollToTop>
-            <MudFab Color="Color.Tertiary" StartIcon="@Icons.Material.Filled.ArrowCircleUp" />
-        </MudScrollToTop>
-
-    </MudPaper>
-</div>
-
-@code{
-    Color Color = Color.Success;
-    private void OnScroll(ScrollEventArgs e)
+    private string ButtonIcon => _buttonIconPreset switch
     {
-        var top = e.FirstChildBoundingClientRect?.Top ?? 0;
-        Color = (top * -1) switch
-        {
-            var x when x<  500 => Color.Primary,
-            var x when x < 1500 => Color.Secondary,
-            var x when x < 2500 => Color.Tertiary,
-            _=>Color.Error
-        };
+        ButtonIconPreset.ArrowUpward => Icons.Material.Filled.ArrowUpward,
+        ButtonIconPreset.KeyboardArrowUp => Icons.Material.Filled.KeyboardArrowUp,
+        _ => Icons.Material.Filled.ArrowCircleUp
+    };
+
+    private static readonly (string Title, string Description)[] PageSections =
+    [
+        ("Start", "This example listens to the page scroll position."),
+        ("Scroll position", "The component tracks how far the page has moved from the top."),
+        ("Keep scrolling", "The button appears once the page passes the selected top offset."),
+        ("Visibility threshold", "Adjust the top offset to control when the button becomes visible."),
+        ("Page scroll", "The browser page is the scroll target; no selector is needed."),
+        ("Scroll back", "Select the button to return to the beginning of the page."),
+        ("Scroll behavior", "Choose whether returning to the top happens smoothly or immediately."),
+        ("Button content", "The button is supplied as child content, so its appearance can be customized."),
+        ("Button style", "Change the button color, size, and icon from the options panel."),
+        ("Return to the beginning", "Use the floating button to scroll back to the top.")
+    ];
+
+    private enum ButtonIconPreset
+    {
+        ArrowUpward,
+        ArrowCircleUp,
+        KeyboardArrowUp
     }
 }
