@@ -32,7 +32,10 @@
                            ValueLabel="@_valueLabel"
                            ValueLabelFormat="@ValueLabelFormat"
                            Culture="@ValueLabelCulture">
-                        @(_label + ": " + _value.ToString("0.##"))
+                        @if (_showValueLabel)
+                        {
+                            @(_label + ": " + _value.ToString("0.##"))
+                        }
                     </MudSlider>
                 </div>
             </MudStack>
@@ -58,6 +61,9 @@
                 <MudSelect T="Color" Label="Color" @bind-Value="_color" Dense="true">
                     @foreach (Color color in Enum.GetValues(typeof(Color)))
                     {
+                        if (color == Color.Default)
+                            continue;
+
                         <MudSelectItem Value="@color">@color</MudSelectItem>
                     }
                 </MudSelect>
@@ -114,6 +120,7 @@
                     <MudCheckBox @bind-Value="_immediate" Label="Immediate" Color="Color.Primary" />
                     <MudCheckBox @bind-Value="_tickMarks" Label="Tick marks" Color="Color.Primary" />
                     <MudCheckBox @bind-Value="_valueLabel" Label="Value label" Color="Color.Primary" />
+                    <MudCheckBox @bind-Value="_showValueLabel" Label="Show label" Color="Color.Primary" />
                 </div>
             </MudItem>
 
@@ -128,13 +135,14 @@
     private Variant _variant = Variant.Text;
     private double _value = 50;
     private double _min = 0;
-    private double _max = 100;
+    private double _max = 10;
     private double _step = 1;
     private bool _disabled;
     private bool _immediate = true;
     private bool _vertical;
     private bool _tickMarks;
     private bool _valueLabel;
+    private bool _showValueLabel = true;
     private ValueLabelFormatPreset _valueLabelFormatPreset;
     private string? _tickLabelsText;
 
