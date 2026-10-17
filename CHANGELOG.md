@@ -931,3 +931,13 @@ Updated [`MudScrollToTopDemo.razor`](./Pages/Components/Buttons/MudScrollToTopDe
 - Kept the example focused on page scrolling and removed the scroll-target selector and nested preview scroller
 - Expanded the page-scroll preview to 10 sections so the scroll-to-top button can be demonstrated
 - Added controls for the top offset, scroll behavior, and button appearance
+
+## 2026-10-17
+
+### Slider Preview Options
+
+Updated [`MudSliderDemo.razor`](./Pages/Components/Inputs/MudSliderDemo.razor):
+
+- Removed `Color.Default` from the color selector
+- Added a **Show label** option to toggle the `Value: x` text independently of the slider's built-in value label
+- Set the maximum value default to 10
