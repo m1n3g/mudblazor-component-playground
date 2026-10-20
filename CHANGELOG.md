@@ -2,6 +2,28 @@
 
 A visual reference playground for mapping MudBlazor components to Figma design system components.
 
+## 2026-10-21
+
+### MudTimeline Demo
+
+- Migrated the demo to the shared horizontal layout with a Radio-style options grid and checkbox-based behavior controls.
+- Aligned initial timeline and dot values with MudBlazor API defaults; timeline items inherit the selected alignment by default.
+
+## 2026-10-20
+
+### Typography Reference Page
+
+- Reworked the Typography page into a responsive, grouped reference for heading, subtitle, body, and interface label styles.
+- Added examples showing how typography styles can be paired with semantic HTML elements.
+- Matched section title styling across the page and aligned descriptions with the default text color.
+
+### MudSimpleTable Shared Layout
+
+- Migrated the MudSimpleTable demo to the shared horizontal layout and organized its display options as checkboxes.
+- Aligned the initial Hover setting with the documented MudSimpleTable API default.
+- Expanded the sample to 10 rows and added Outlined, Square, and Elevation options.
+- Updated Recent contacts to show 10 realistic sample contacts across Name, Email, and Phone columns.
+
 ## 2026-07-03
 
 ### Dev Branch Update
