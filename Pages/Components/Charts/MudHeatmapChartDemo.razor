@@ -17,7 +17,7 @@
 
 <MudGrid Spacing="2" Class="d-flex">
     <MudItem xs="4">
-        <MudSelect T="Position" Label="Legend Position" @bind-Value="_legendPosition" Margin="Margin.Dense">
+        <MudSelect T="Position" Label="Legend Position" Dense="true" @bind-Value="_legendPosition" Margin="Margin.Dense">
             <MudSelectItem Value="Position.Top">Top</MudSelectItem>
             <MudSelectItem Value="Position.Bottom">Bottom</MudSelectItem>
             <MudSelectItem Value="Position.Left">Left</MudSelectItem>
@@ -26,7 +26,7 @@
     </MudItem>
 
     <MudItem xs="4">
-        <MudSelect T="XAxisLabelPosition" Label="XAxis Labels" @bind-Value="@_xAxisLabelPosition"
+        <MudSelect T="XAxisLabelPosition" Label="XAxis Labels" Dense="true" @bind-Value="@_xAxisLabelPosition"
             @bind-Value:after="BuildOptions" FullWidth="true">
             <MudSelectItem Value="XAxisLabelPosition.Top">Top</MudSelectItem>
             <MudSelectItem Value="XAxisLabelPosition.Bottom">Bottom</MudSelectItem>
@@ -35,7 +35,7 @@
     </MudItem>
 
     <MudItem xs="4">
-        <MudSelect T="YAxisLabelPosition" Label="YAxis Labels" @bind-Value="@_yAxisLabelPosition"
+        <MudSelect T="YAxisLabelPosition" Label="YAxis Labels" Dense="true" @bind-Value="@_yAxisLabelPosition"
             @bind-Value:after="BuildOptions" FullWidth="true">
             <MudSelectItem Value="YAxisLabelPosition.Left">Left</MudSelectItem>
             <MudSelectItem Value="YAxisLabelPosition.Right">Right</MudSelectItem>

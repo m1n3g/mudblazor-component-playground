@@ -1,38 +1,58 @@
 @page "/components/toolbar"
 @using MudBlazor
 
-<!-- Text field for width -->
-<MudTextField Class="mb-4" @bind-Value="_toolbarWidth" Label="Toolbar width" Placeholder="e.g. 800px or 100%"
-    Immediate="true" Variant="Variant.Outlined" Style="width: 400px" />
-<MudStack Class="mb-4" Row="true" Spacing="3">
-    <MudSwitch Class="mb-4" @bind-Value="_wrapcontent" Color="Color.Primary" Label="Wrap Content" />
-    <MudSwitch Class="mb-4" @bind-Value="_dense" Color="Color.Primary" Label="Dense" />
-    <MudSwitch Class="mb-4" @bind-Value="_gutters" Color="Color.Primary" Label="Gutters" />
-</MudStack>
+<DemoPageLayout Title="Tool Bar"
+                Description="A set of action buttons."
+                Variant="DemoPageLayoutVariant.Vertical"
+                PreviewContentMaxWidth="1000px">
+    <Preview>
+        <MudPaper Class="w-100 overflow-auto" Elevation="1" Style="@GetPaperStyle()">
+            <MudToolBar WrapContent="_wrapcontent"
+                        Dense="_dense"
+                        Gutters="_gutters">
+                <MudIconButton Icon="@Icons.Material.Outlined.Menu" Color="Color.Inherit" Class="mr-5" />
+                <MudIconButton Icon="@Icons.Material.Outlined.Add" />
+                <MudIconButton Icon="@Icons.Material.Outlined.Edit" />
+                <MudIconButton Icon="@Icons.Material.Outlined.Remove" />
+                <MudSpacer />
+                <MudIconButton Icon="@Icons.Material.Outlined.Notifications" />
+                <MudIconButton Icon="@Icons.Material.Outlined.PeopleAlt" />
+                <MudIconButton Icon="@Icons.Material.Outlined.MoreVert" Color="Color.Inherit" />
+            </MudToolBar>
+        </MudPaper>
+    </Preview>
 
-<MudPaper Elevation="25">
-    <MudToolBar WrapContent="_wrapcontent" Dense="_dense" Gutters="_gutters" Style="@GetToolbarStyle()">
-        <MudIconButton Icon="@Icons.Material.Outlined.Menu" Color="Color.Inherit" Class="mr-5" />
-        <MudIconButton Icon="@Icons.Material.Outlined.Add" />
-        <MudIconButton Icon="@Icons.Material.Outlined.Edit" />
-        <MudIconButton Icon="@Icons.Material.Outlined.Remove" />
-        <MudSpacer />
-        <MudIconButton Icon="@Icons.Material.Outlined.Notifications" />
-        <MudIconButton Icon="@Icons.Material.Outlined.PeopleAlt" />
-        <MudIconButton Icon="@Icons.Material.Outlined.MoreVert" Color="Color.Inherit" />
-    </MudToolBar>
-</MudPaper>
+    <Options>
+        <MudGrid Spacing="4" Justify="Justify.Center" Class="w-100">
+            <MudItem xs="12">
+                <MudTextField @bind-Value="_paperMaxWidth"
+                              Label="MudPaper max width"
+                              Placeholder="Value in px or %"
+                              Immediate="true"
+                              Clearable
+                              Class="w-100" />
+            </MudItem>
+
+            <MudItem xs="12">
+                <MudText Typo="Typo.subtitle2" Style="font-weight: 600" Class="mt-2 mb-1">Behavior</MudText>
+                <div class="d-flex flex-wrap align-center justify-start" style="column-gap: 12px;">
+                    <MudSwitch @bind-Value="_wrapcontent" Color="Color.Primary" Label="Wrap Content" />
+                    <MudSwitch @bind-Value="_dense" Color="Color.Primary" Label="Dense" />
+                    <MudSwitch @bind-Value="_gutters" Color="Color.Primary" Label="Gutters" />
+                </div>
+            </MudItem>
+        </MudGrid>
+    </Options>
+</DemoPageLayout>
 
 @code {
-    private bool _wrapcontent = false;
-    private bool _dense = false;
-    private bool _gutters = false;
+    private bool _wrapcontent;
+    private bool _dense;
+    private bool _gutters = true;
+    private string _paperMaxWidth = "800px";
 
-    private string _toolbarWidth = "800px"; // default
-
-    private string? GetToolbarStyle()
-    => !string.IsNullOrWhiteSpace(_toolbarWidth)
-    ? $"width: {_toolbarWidth};"
-    : null;
-
+    private string? GetPaperStyle()
+        => !string.IsNullOrWhiteSpace(_paperMaxWidth)
+            ? $"max-width: {_paperMaxWidth};"
+            : null;
 }

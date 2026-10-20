@@ -1,105 +1,217 @@
 @page "/components/treeview"
-@using System.Collections.ObjectModel
 @using MudBlazor
 
-<MudStack Row Wrap="Wrap.Wrap" Class="justify-left">
-    <MudSwitch @bind-Value="ReadOnly" Color="Color.Primary">ReadOnly</MudSwitch>
-    <MudSwitch @bind-Value="Hover" Color="Color.Primary">Hover</MudSwitch>
-    <MudSwitch @bind-Value="Ripple" Color="Color.Primary">Ripple</MudSwitch>
-    <MudSwitch @bind-Value="Dense" Color="Color.Primary">Dense</MudSwitch>
-    <MudSwitch @bind-Value="Disabled" Color="Color.Primary">Disabled</MudSwitch>
-    <MudSwitch @bind-Value="ExpandOnClick" Color="Color.Primary">ExpandOnClick</MudSwitch>
-    <MudSwitch @bind-Value="ExpandOnDoubleClick" Color="Color.Primary">ExpandOnDoubleClick</MudSwitch>
-    <MudSwitch @bind-Value="TriState" Color="Color.Info">TriState</MudSwitch>
-    <MudSwitch @bind-Value="AutoSelectParent" Color="Color.Info">AutoSelectParent</MudSwitch>
-</MudStack>
+<DemoPageLayout Title="Tree View"
+                Description="An extensively customizable tree view component for displaying hierarchical data, featuring item selection, lazy-loading, and templating support."
+                Variant="DemoPageLayoutVariant.Horizontal">
+    <Preview>
+        <MudStack Spacing="2" Class="w-100">
+            @if (_example == TreeExample.LazyLoading)
+            {
+                <MudTreeView T="string"
+                             ServerData="@LoadServerData"
+                             Items="@InitialTreeItems"
+                             Color="@_color"
+                             CheckBoxColor="@_checkBoxColor"
+                             ReadOnly="@_readOnly"
+                             Hover="@_hover"
+                             Ripple="@_ripple"
+                             Dense="@_dense"
+                             Disabled="@_disabled"
+                             ExpandOnClick="@_expandOnClick"
+                             ExpandOnDoubleClick="@_expandOnDoubleClick"
+                             AutoExpand="@_autoExpand"
+                             TriState="@_triState"
+                             AutoSelectParent="@_autoSelectParent"
+                             SelectionMode="@_selectionMode"
+                             @bind-SelectedValue="_selectedValue"
+                             @bind-SelectedValues="_selectedValues">
+                    <ItemTemplate>
+                        <MudTreeViewItem T="string"
+                                         Value="@context.Value"
+                                         Items="@context.Children"
+                                         ItemsChanged="@(new Action<IReadOnlyCollection<ITreeItemData<string>>>(items => OnItemsLoaded(context, items)))"
+                                         @bind-Expanded="@context.Expanded"
+                                         CanExpand="@context.Expandable"
+                                         Icon="@context.Icon"
+                                         LoadingIconColor="Color.Info" />
+                    </ItemTemplate>
+                </MudTreeView>
+            }
+            else
+            {
+                <MudTreeView T="string"
+                             Color="@_color"
+                             CheckBoxColor="@_checkBoxColor"
+                             ReadOnly="@_readOnly"
+                             Hover="@_hover"
+                             Ripple="@_ripple"
+                             Dense="@_dense"
+                             Disabled="@_disabled"
+                             ExpandOnClick="@_expandOnClick"
+                             ExpandOnDoubleClick="@_expandOnDoubleClick"
+                             AutoExpand="@_autoExpand"
+                             TriState="@_triState"
+                             AutoSelectParent="@_autoSelectParent"
+                             SelectionMode="@_selectionMode"
+                             @bind-SelectedValue="_selectedValue"
+                             @bind-SelectedValues="_selectedValues">
+                    <MudTreeViewItem T="string" Value='@("Applications")' Text="Applications" Icon="@Icons.Material.Filled.FolderZip">
+                        <MudTreeViewItem T="string" Value='@("Terminal")' Text="Terminal" Icon="@Icons.Material.Filled.Terminal" />
+                        <MudTreeViewItem T="string" Value='@("Browser")' Text="Browser" Icon="@Icons.Material.Filled.Language" />
+                    </MudTreeViewItem>
+                    <MudTreeViewItem T="string" Value='@("Documents")' Text="Documents" Icon="@Icons.Material.Filled.Folder" Expanded>
+                        <MudTreeViewItem T="string" Value='@("MudBlazor")' Text="MudBlazor" Icon="@Icons.Material.Filled.Folder" Expanded>
+                            <MudTreeViewItem T="string" Value='@("tasks.json")' Text="tasks.json" Icon="@Icons.Material.Filled.DataObject" />
+                            <MudTreeViewItem T="string" Value='@("launch.json")' Text="launch.json" Icon="@Icons.Material.Filled.DataObject" />
+                            <MudTreeViewItem T="string" Value='@("logo.png")' Text="logo.png" Icon="@Icons.Material.Filled.Image" />
+                        </MudTreeViewItem>
+                    </MudTreeViewItem>
+                </MudTreeView>
+            }
 
-<MudPaper Class="my-3" Width="300px" Elevation="0">
-    <MudTreeView T="string" ServerData="@LoadServerData" Items="@InitialTreeItems">
-        <ItemTemplate>
-            <MudTreeViewItem T="string" Value="@context.Value" Items="@context.Children"
-                ItemsChanged="@(new Action<IReadOnlyCollection<ITreeItemData<string>>>(items => OnItemsLoaded(context, items)))"
-                @bind-Expanded="@context.Expanded" CanExpand="@context.Expandable" Icon="@context.Icon"
-                LoadingIconColor="Color.Info" />
-        </ItemTemplate>
-    </MudTreeView>
-</MudPaper>
+            @if (_selectionMode == SelectionMode.SingleSelection)
+            {
+                <MudText Typo="Typo.caption">Selected value: @(_selectedValue ?? "None")</MudText>
+            }
+            else
+            {
+                <MudText Typo="Typo.caption">Selected values: @(_selectedValues.Count == 0 ? "None" : string.Join(", ", _selectedValues))</MudText>
+            }
+        </MudStack>
+    </Preview>
 
-<MudDivider />
+    <Options>
+        <MudGrid Spacing="4" Class="w-100">
+            <MudItem xs="12" md="6">
+                <MudSelect T="TreeExample" Label="Tree example" Dense="true"
+                           @bind-Value="_example" @bind-Value:after="OnExampleChanged">
+                    <MudSelectItem Value="TreeExample.Selectable">Selectable tree</MudSelectItem>
+                    <MudSelectItem Value="TreeExample.LazyLoading">Lazy-loaded tree</MudSelectItem>
+                </MudSelect>
+            </MudItem>
+            <MudItem xs="12" md="6">
+                <MudSelect T="SelectionMode" Label="Selection mode" Dense="true" @bind-Value="_selectionMode">
+                    <MudSelectItem Value="SelectionMode.SingleSelection">Single selection</MudSelectItem>
+                    <MudSelectItem Value="SelectionMode.MultiSelection">Multi-selection</MudSelectItem>
+                    <MudSelectItem Value="SelectionMode.ToggleSelection">Toggle selection</MudSelectItem>
+                </MudSelect>
+            </MudItem>
 
-<MudPaper Width="300px" Elevation="0">
-    <MudTreeView T="string" ReadOnly="@ReadOnly" Hover="@Hover" Dense="@Dense" Disabled="@Disabled"
-        ExpandOnClick="@ExpandOnClick" ExpandOnDoubleClick="@ExpandOnDoubleClick" TriState="@TriState"
-        AutoSelectParent="@AutoSelectParent" CheckBoxColor="Color.Info" @bind-SelectedValues="SelectedValues"
-        SelectionMode="SelectionMode.MultiSelection">
-        <MudTreeViewItem Icon="@Icons.Material.Filled.FolderZip" IconColor="Color.Success"
-            Text="Inside TreeView Without Nested" />
-        <MudTreeViewItem Icon="@Icons.Material.Filled.FolderZip" Text="Applications" Expanded
-            ExpandButtonIcon="@Icons.Material.Filled.ArrowRight" ExpandButtonIconColor="Color.Primary">
-            <MudTreeViewItem Icon="@Icons.Material.Filled.FolderZip" IconColor="Color.Secondary" Text="Terminal" />
-        </MudTreeViewItem>
-        <MudTreeViewItem Text="Documents" Expanded>
-            <MudTreeViewItem Text="MudBlazor" Expanded>
-                <MudTreeViewItem Value='"tasks.json"' />
-                <MudTreeViewItem Value='"launch.json"' />
-                <MudTreeViewItem Value='"logo.png"' />
-            </MudTreeViewItem>
-        </MudTreeViewItem>
-    </MudTreeView>
-</MudPaper>
+            <MudItem xs="12" md="6">
+                <MudSelect T="Color" Label="Selection color" Dense="true" @bind-Value="_color">
+                    <MudSelectItem Value="Color.Default">Default</MudSelectItem>
+                    <MudSelectItem Value="Color.Primary">Primary</MudSelectItem>
+                    <MudSelectItem Value="Color.Secondary">Secondary</MudSelectItem>
+                    <MudSelectItem Value="Color.Tertiary">Tertiary</MudSelectItem>
+                    <MudSelectItem Value="Color.Info">Info</MudSelectItem>
+                    <MudSelectItem Value="Color.Success">Success</MudSelectItem>
+                    <MudSelectItem Value="Color.Warning">Warning</MudSelectItem>
+                    <MudSelectItem Value="Color.Error">Error</MudSelectItem>
+                </MudSelect>
+            </MudItem>
+            <MudItem xs="12" md="6">
+                <MudSelect T="Color" Label="Checkbox color" Dense="true" @bind-Value="_checkBoxColor"
+                           Disabled="@(_selectionMode != SelectionMode.MultiSelection)">
+                    <MudSelectItem Value="Color.Default">Default</MudSelectItem>
+                    <MudSelectItem Value="Color.Primary">Primary</MudSelectItem>
+                    <MudSelectItem Value="Color.Secondary">Secondary</MudSelectItem>
+                    <MudSelectItem Value="Color.Tertiary">Tertiary</MudSelectItem>
+                    <MudSelectItem Value="Color.Info">Info</MudSelectItem>
+                    <MudSelectItem Value="Color.Success">Success</MudSelectItem>
+                    <MudSelectItem Value="Color.Warning">Warning</MudSelectItem>
+                    <MudSelectItem Value="Color.Error">Error</MudSelectItem>
+                </MudSelect>
+            </MudItem>
 
+            <MudItem xs="12">
+                <MudText Typo="Typo.subtitle2" Style="font-weight: 600" Class="mt-2 mb-1">Behavior</MudText>
+                <div class="d-flex flex-wrap align-center justify-start" style="column-gap: 12px; row-gap: 0;">
+                    <MudCheckBox @bind-Value="_readOnly" Label="Read only" Color="Color.Primary" />
+                    <MudCheckBox @bind-Value="_hover" Label="Hover" Color="Color.Primary" />
+                    <MudCheckBox @bind-Value="_ripple" Label="Ripple" Color="Color.Primary" />
+                    <MudCheckBox @bind-Value="_dense" Label="Dense" Color="Color.Primary" />
+                    <MudCheckBox @bind-Value="_disabled" Label="Disabled" Color="Color.Primary" />
+                    <MudCheckBox @bind-Value="_expandOnClick" Label="Expand on click" Color="Color.Primary" />
+                    <MudCheckBox @bind-Value="_expandOnDoubleClick" Label="Expand on double click" Color="Color.Primary" />
+                    <MudCheckBox @bind-Value="_autoExpand" Label="Auto expand selected" Color="Color.Primary" />
+                    <MudCheckBox @bind-Value="_triState" Label="Tri-state" Color="Color.Primary"
+                                 Disabled="@(_selectionMode != SelectionMode.MultiSelection)" />
+                    <MudCheckBox @bind-Value="_autoSelectParent" Label="Auto-select parent" Color="Color.Primary"
+                                 Disabled="@(_selectionMode != SelectionMode.MultiSelection)" />
+                </div>
+            </MudItem>
+        </MudGrid>
+    </Options>
+</DemoPageLayout>
 
 @code {
-    public bool ReadOnly = false;
-    public bool Hover = true;
-    public bool Ripple;
-    public bool Dense;
-    public bool Disabled;
-    public bool ExpandOnClick = true;
-    public bool ExpandOnDoubleClick;
-    public bool TriState = true;
-    public bool AutoSelectParent = true;
-    public IReadOnlyCollection<string> SelectedValues = ["tasks.json", "launch.json"];
-
-    private List<TreeItemData<string>> InitialTreeItems { get; set; } = new();
-    private int _idCounter = 1; // <- the counter makes sure the generated items are unique
-
-    protected override void OnInitialized()
+    private enum TreeExample
     {
-        // MudTreeView initially only gets these top-level items
-        InitialTreeItems.Add(new TreeItemData<string>
+        Selectable,
+        LazyLoading
+    }
+
+    private TreeExample _example;
+    private SelectionMode _selectionMode = SelectionMode.SingleSelection;
+    private Color _color = Color.Primary;
+    private Color _checkBoxColor = Color.Default;
+    private bool _readOnly;
+    private bool _hover;
+    private bool _ripple = true;
+    private bool _dense;
+    private bool _disabled;
+    private bool _expandOnClick;
+    private bool _expandOnDoubleClick;
+    private bool _autoExpand;
+    private bool _triState = true;
+    private bool _autoSelectParent = true;
+    private string? _selectedValue = "tasks.json";
+    private IReadOnlyCollection<string> _selectedValues = ["tasks.json", "launch.json"];
+
+    private List<TreeItemData<string>> InitialTreeItems { get; } =
+    [
+        new TreeItemData<string>
         {
             Value = "All Mail",
             Expanded = true,
-            Children = [
-        new TreeItemData<string> { Value = "Test with this Loading", Icon = Icons.Material.Filled.Group, },
-]
-        });
+            Children =
+            [
+                new TreeItemData<string> { Value = "Test with this Loading", Icon = Icons.Material.Filled.Group }
+            ]
+        }
+    ];
+
+    private int _idCounter = 1;
+
+    private void OnExampleChanged()
+    {
+        if (_example == TreeExample.Selectable)
+        {
+            _selectedValue = "tasks.json";
+            _selectedValues = ["tasks.json", "launch.json"];
+        }
+        else
+        {
+            _selectedValue = null;
+            _selectedValues = Array.Empty<string>();
+        }
     }
 
-    public async Task<IReadOnlyCollection<TreeItemData<string>>> LoadServerData(string parentValue)
+    private async Task<IReadOnlyCollection<TreeItemData<string>>> LoadServerData(string parentValue)
     {
-        // wait 500ms to simulate a server load
         await Task.Delay(500);
-        // normally you would use the parentValue to query your server for the children of the given parent
-        // but for the sake of this example we will just return some hardcoded children
-        return [
-        new TreeItemData<string> { Value = $"More Spam ({_idCounter++})", Icon = Icons.Material.Filled.Group, },
-    new TreeItemData<string> { Value = $"L.E.D Door Mats ({_idCounter++})", Icon = Icons.Material.Outlined.Lightbulb,
-    Expandable = false },
-    new TreeItemData<string> { Value = $"Car Beauty Salon ({_idCounter++})", Icon = Icons.Material.Filled.CarRepair,
-    Expandable = false },
-    new TreeItemData<string> { Value = $"Fakedoors.com ({_idCounter++})", Icon = Icons.Material.Outlined.DoorFront,
-    Expandable = false },
-    new TreeItemData<string> { Value = $"Bluetooth Toilet ({_idCounter++})", Icon = Icons.Material.Filled.Wc, Expandable =
-    false }
+
+        return
+        [
+            new TreeItemData<string> { Value = $"More Spam ({_idCounter++})", Icon = Icons.Material.Filled.Group },
+            new TreeItemData<string> { Value = $"L.E.D Door Mats ({_idCounter++})", Icon = Icons.Material.Outlined.Lightbulb, Expandable = false },
+            new TreeItemData<string> { Value = $"Car Beauty Salon ({_idCounter++})", Icon = Icons.Material.Filled.CarRepair, Expandable = false },
+            new TreeItemData<string> { Value = $"Fakedoors.com ({_idCounter++})", Icon = Icons.Material.Outlined.DoorFront, Expandable = false },
+            new TreeItemData<string> { Value = $"Bluetooth Toilet ({_idCounter++})", Icon = Icons.Material.Filled.Wc, Expandable = false }
         ];
     }
 
-    private void OnItemsLoaded(ITreeItemData<string> treeItemData, IReadOnlyCollection<ITreeItemData<string>> children)
-    {
-        // here we store the server-loaded children in the treeItemData so that they are available in the InitialTreeItems
-        // if you don't do this you loose already loaded children on next render update
-        treeItemData.Children = children?.ToList();
-    }
+    private static void OnItemsLoaded(ITreeItemData<string> treeItemData, IReadOnlyCollection<ITreeItemData<string>> children)
+        => treeItemData.Children = children?.ToList();
 }

@@ -12,6 +12,7 @@
                            Edge="@_edge"
                            Variant="@_variant"
                            Disabled="@_disabled"
+                           DropShadow="@_dropShadow"
                            Ripple="@_ripple"
                            Href="@ResolvedHref"
                            Target="@ResolvedTarget"
@@ -97,6 +98,7 @@
             <MudItem xs="12">
                 <div class="d-flex flex-wrap align-center justify-start" style="column-gap: 12px;">
                     <MudCheckBox @bind-Value="_disabled" Label="Disabled" Color="Color.Primary" />
+                    <MudCheckBox @bind-Value="_dropShadow" Label="Drop Shadow" Color="Color.Primary" />
                     <MudCheckBox @bind-Value="_ripple" Label="Ripple" Color="Color.Primary" />
                     <MudCheckBox @bind-Value="_linkMode" Label="Link Mode" Color="Color.Primary" />
                     @if (_linkMode)
@@ -125,6 +127,7 @@
     private Variant _variant = Variant.Text;
     private string _ariaLabel = "favorite";
     private bool _disabled;
+    private bool _dropShadow = true;
     private bool _ripple = true;
     private bool _linkMode;
     private bool _openInNewTab = true;

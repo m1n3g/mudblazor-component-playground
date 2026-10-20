@@ -74,7 +74,7 @@
     <Options>
         <MudGrid Spacing="4" Class="w-100">
             <MudItem xs="12" md="6">
-                <MudSelect T="DrawerVariant" @bind-Value="_variant" Label="Variant">
+                <MudSelect T="DrawerVariant" @bind-Value="_variant" Dense="true" Label="Variant">
                     <MudSelectItem Value="@DrawerVariant.Responsive">Responsive</MudSelectItem>
                     <MudSelectItem Value="@DrawerVariant.Persistent">Persistent</MudSelectItem>
                     <MudSelectItem Value="@DrawerVariant.Temporary">Temporary</MudSelectItem>
@@ -82,7 +82,7 @@
                 </MudSelect>
             </MudItem>
             <MudItem xs="12" md="6">
-                <MudSelect T="Anchor" @bind-Value="_anchor" Label="Anchor">
+                <MudSelect T="Anchor" @bind-Value="_anchor" Dense="true" Label="Anchor">
                     <MudSelectItem Value="@Anchor.Start">Start</MudSelectItem>
                     <MudSelectItem Value="@Anchor.End">End</MudSelectItem>
                     <MudSelectItem Value="@Anchor.Top">Top</MudSelectItem>
@@ -91,7 +91,7 @@
             </MudItem>
 
             <MudItem xs="12" md="6">
-                <MudSelect T="Breakpoint" @bind-Value="_breakpoint" Label="Breakpoint">
+                <MudSelect T="Breakpoint" @bind-Value="_breakpoint" Dense="true" Label="Breakpoint">
                     <MudSelectItem Value="@Breakpoint.Xs">Xs</MudSelectItem>
                     <MudSelectItem Value="@Breakpoint.Sm">Sm</MudSelectItem>
                     <MudSelectItem Value="@Breakpoint.Md">Md</MudSelectItem>
@@ -100,7 +100,7 @@
                 </MudSelect>
             </MudItem>
             <MudItem xs="12" md="6">
-                <MudSelect T="Color" @bind-Value="_color" Label="Color">
+                <MudSelect T="Color" @bind-Value="_color" Dense="true" Label="Color">
                     <MudSelectItem Value="@Color.Default">Default</MudSelectItem>
                     <MudSelectItem Value="@Color.Primary">Primary</MudSelectItem>
                     <MudSelectItem Value="@Color.Secondary">Secondary</MudSelectItem>

@@ -84,7 +84,7 @@
                 AdornmentIcon="@Icons.Material.Filled.Schedule"
                 @bind-Date="_dateExtra2" />
 
-            <MudSelect T="Margin" @bind-Value="_margin" Label="Margin">
+            <MudSelect T="Margin" @bind-Value="_margin" Label="Margin" Dense="true">
                 @foreach (var m in Enum.GetValues(typeof(Margin)).Cast<Margin>())
                 {
                     <MudSelectItem Value="m">@m</MudSelectItem>

@@ -1,18 +1,128 @@
 @page "/components/typography"
 @using MudBlazor
 
-<MudText Typo="Typo.h1">h1. Heading</MudText>
-<MudText Typo="Typo.h2">h2. Heading</MudText>
-<MudText Typo="Typo.h3">h3. Heading</MudText>
-<MudText Typo="Typo.h4">h4. Heading</MudText>
-<MudText Typo="Typo.h5">h5. Heading</MudText>
-<MudText Typo="Typo.h6">h6. Heading</MudText>
-<MudText Typo="Typo.subtitle1">subtitle1. Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quos blanditiis tenetur</MudText>
-<MudText Typo="Typo.subtitle2">subtitle2. Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quos blanditiis tenetur</MudText>
-<MudText Typo="Typo.body1">body1. Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quos blanditiis tenetur unde suscipit, quam beatae rerum inventore consectetur, neque doloribus, cupiditate numquam dignissimos laborum fugiat deleniti? Eum quasi quidem quibusdam.</MudText>
-<MudText Typo="Typo.body2">body2. Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quos blanditiis tenetur unde suscipit, quam beatae rerum inventore consectetur, neque doloribus, cupiditate numquam dignissimos laborum fugiat deleniti? Eum quasi quidem quibusdam.</MudText>
-<MudText Typo="Typo.button">BUTTON TEXT</MudText>
-<MudText Typo="Typo.caption">caption text</MudText>
-<MudText Typo="Typo.overline">OVERLINE TEXT</MudText>
-<MudText Typo="Typo.button" HtmlTag="h3">button typo but the element is h3</MudText>
-<MudText Typo="Typo.body2" HtmlTag="strong">body2 typo but the element is strong</MudText>
+<style>
+    .typography-reference .type-sample-row {
+        display: grid;
+        grid-template-columns: minmax(110px, 180px) minmax(0, 1fr);
+        align-items: baseline;
+        gap: 16px;
+        padding: 14px 0;
+        border-bottom: 1px solid var(--mud-palette-divider);
+    }
+
+    .typography-reference .type-sample-row:last-child {
+        border-bottom: 0;
+    }
+
+    .typography-reference .type-sample-name {
+        color: var(--mud-palette-text-secondary);
+        white-space: nowrap;
+    }
+
+    @@media (max-width: 600px) {
+        .typography-reference .type-sample-row {
+            grid-template-columns: 1fr;
+            gap: 4px;
+        }
+    }
+</style>
+
+<DemoPageLayout Title="Typography"
+                Description="A customizable piece of text."
+                Variant="DemoPageLayoutVariant.PreviewOnly"
+                ConstrainPreviewContent="false">
+    <Preview>
+        <MudStack Spacing="5" Class="typography-reference w-100">
+            <section>
+                <MudText Typo="Typo.subtitle2" Style="font-weight: 600" Color="Color.Primary" Class="mb-1">Headings</MudText>
+                <MudText Typo="Typo.body2" Class="mb-2">Use the heading scale to establish page and section hierarchy.</MudText>
+
+                <div class="type-sample-row">
+                    <MudText Typo="Typo.caption" Class="type-sample-name">h1</MudText>
+                    <MudText Typo="Typo.h1">Build clear, useful interfaces</MudText>
+                </div>
+                <div class="type-sample-row">
+                    <MudText Typo="Typo.caption" Class="type-sample-name">h2</MudText>
+                    <MudText Typo="Typo.h2">Explore the component library</MudText>
+                </div>
+                <div class="type-sample-row">
+                    <MudText Typo="Typo.caption" Class="type-sample-name">h3</MudText>
+                    <MudText Typo="Typo.h3">Design system foundations</MudText>
+                </div>
+                <div class="type-sample-row">
+                    <MudText Typo="Typo.caption" Class="type-sample-name">h4</MudText>
+                    <MudText Typo="Typo.h4">A consistent visual language</MudText>
+                </div>
+                <div class="type-sample-row">
+                    <MudText Typo="Typo.caption" Class="type-sample-name">h5</MudText>
+                    <MudText Typo="Typo.h5">Patterns that scale</MudText>
+                </div>
+                <div class="type-sample-row">
+                    <MudText Typo="Typo.caption" Class="type-sample-name">h6</MudText>
+                    <MudText Typo="Typo.h6">Thoughtful details</MudText>
+                </div>
+            </section>
+
+            <section>
+                <MudText Typo="Typo.subtitle2" Style="font-weight: 600" Color="Color.Primary" Class="mb-1">Supporting text</MudText>
+                <MudText Typo="Typo.body2" Class="mb-2">Subtitle styles add context without competing with the main heading.</MudText>
+
+                <div class="type-sample-row">
+                    <MudText Typo="Typo.caption" Class="type-sample-name">subtitle1</MudText>
+                    <MudText Typo="Typo.subtitle1">A concise introduction to the page</MudText>
+                </div>
+                <div class="type-sample-row">
+                    <MudText Typo="Typo.caption" Class="type-sample-name">subtitle2</MudText>
+                    <MudText Typo="Typo.subtitle2">A secondary label or short description</MudText>
+                </div>
+            </section>
+
+            <section>
+                <MudText Typo="Typo.subtitle2" Style="font-weight: 600" Color="Color.Primary" Class="mb-1">Body</MudText>
+                <MudText Typo="Typo.body2" Class="mb-2">Body styles are tuned for comfortable reading across common content lengths.</MudText>
+
+                <div class="type-sample-row">
+                    <MudText Typo="Typo.caption" Class="type-sample-name">body1</MudText>
+                    <MudText Typo="Typo.body1">Good typography makes information easier to scan and understand. Use body text for the main content people come to read.</MudText>
+                </div>
+                <div class="type-sample-row">
+                    <MudText Typo="Typo.caption" Class="type-sample-name">body2</MudText>
+                    <MudText Typo="Typo.body2">Use a more compact body style for secondary descriptions, supporting details, and denser layouts.</MudText>
+                </div>
+            </section>
+
+            <section>
+                <MudText Typo="Typo.subtitle2" Style="font-weight: 600" Color="Color.Primary" Class="mb-1">Interface labels</MudText>
+                <MudText Typo="Typo.body2" Class="mb-2">Compact styles help distinguish controls and supporting information.</MudText>
+
+                <div class="type-sample-row">
+                    <MudText Typo="Typo.caption" Class="type-sample-name">button</MudText>
+                    <MudText Typo="Typo.button">SAVE CHANGES</MudText>
+                </div>
+                <div class="type-sample-row">
+                    <MudText Typo="Typo.caption" Class="type-sample-name">caption</MudText>
+                    <MudText Typo="Typo.caption">Last updated just now</MudText>
+                </div>
+                <div class="type-sample-row">
+                    <MudText Typo="Typo.caption" Class="type-sample-name">overline</MudText>
+                    <MudText Typo="Typo.overline">ACCOUNT SETTINGS</MudText>
+                </div>
+            </section>
+
+            <section>
+                <MudText Typo="Typo.subtitle2" Style="font-weight: 600" Color="Color.Primary" Class="mb-1">Semantic HTML</MudText>
+                <MudText Typo="Typo.body2" Class="mb-2">Typography style and HTML meaning can be chosen independently.</MudText>
+
+                <div class="type-sample-row">
+                    <MudText Typo="Typo.caption" Class="type-sample-name">button style · h3 element</MudText>
+                    <MudText Typo="Typo.button" HtmlTag="h3">Button-styled heading</MudText>
+                </div>
+                <div class="type-sample-row">
+                    <MudText Typo="Typo.caption" Class="type-sample-name">body2 style · strong element</MudText>
+                    <MudText Typo="Typo.body2" HtmlTag="strong">Emphasized supporting text</MudText>
+                </div>
+            </section>
+        </MudStack>
+    </Preview>
+</DemoPageLayout>

@@ -29,8 +29,7 @@
             </MudItem>
 
             <MudItem xs="12" md="6">
-                <MudSelect T="Color" @bind-Value="_color" Label="Color">
-                    <MudSelectItem Value="Color.Default">Default</MudSelectItem>
+                <MudSelect T="Color" @bind-Value="_color" Label="Color" Dense="true">
                     <MudSelectItem Value="Color.Primary">Primary</MudSelectItem>
                     <MudSelectItem Value="Color.Secondary">Secondary</MudSelectItem>
                     <MudSelectItem Value="Color.Tertiary">Tertiary</MudSelectItem>
@@ -39,14 +38,14 @@
                     <MudSelectItem Value="Color.Warning">Warning</MudSelectItem>
                     <MudSelectItem Value="Color.Error">Error</MudSelectItem>
                     <MudSelectItem Value="Color.Dark">Dark</MudSelectItem>
-                    <MudSelectItem Value="Color.Default">Default</MudSelectItem>
                 </MudSelect>
             </MudItem>
             <MudItem xs="12" md="6">
-                <MudSelect T="Typo" @bind-Value="_typo" Label="Typography">
-                    <MudSelectItem Value="Typo.inherit">Inherit</MudSelectItem>
+                <MudSelect T="Typo" @bind-Value="_typo" Label="Typography" Dense="true">
                     <MudSelectItem Value="Typo.body1">Body 1</MudSelectItem>
                     <MudSelectItem Value="Typo.body2">Body 2</MudSelectItem>
+                    <MudSelectItem Value="Typo.button">Button</MudSelectItem>
+                    <MudSelectItem Value="Typo.caption">Caption</MudSelectItem>
                     <MudSelectItem Value="Typo.subtitle1">Subtitle 1</MudSelectItem>
                     <MudSelectItem Value="Typo.subtitle2">Subtitle 2</MudSelectItem>
                     <MudSelectItem Value="Typo.h6">Heading 6</MudSelectItem>
@@ -54,14 +53,14 @@
             </MudItem>
 
             <MudItem xs="12" md="6">
-                <MudSelect T="Underline" @bind-Value="_underline" Label="Underline">
+                <MudSelect T="Underline" @bind-Value="_underline" Label="Underline" Dense="true">
                     <MudSelectItem Value="Underline.Hover">Hover</MudSelectItem>
                     <MudSelectItem Value="Underline.Always">Always</MudSelectItem>
                     <MudSelectItem Value="Underline.None">None</MudSelectItem>
                 </MudSelect>
             </MudItem>
             <MudItem xs="12" md="6">
-                <MudSelect T="string" @bind-Value="_target" Label="Target">
+                <MudSelect T="string" @bind-Value="_target" Label="Target" Dense="true">
                     <MudSelectItem Value="@string.Empty">Default</MudSelectItem>
                     <MudSelectItem Value="@("_blank")">New tab (_blank)</MudSelectItem>
                     <MudSelectItem Value="@("_self")">Same tab (_self)</MudSelectItem>
@@ -69,7 +68,7 @@
             </MudItem>
 
             <MudItem xs="12" md="6">
-                <MudSelect T="string" @bind-Value="_startIcon" Label="Start Icon">
+                <MudSelect T="string" @bind-Value="_startIcon" Label="Start Icon" Dense="true">
                     <MudSelectItem Value="@string.Empty">None</MudSelectItem>
                     <MudSelectItem Value="@Icons.Material.Filled.Home">Home</MudSelectItem>
                     <MudSelectItem Value="@Icons.Material.Filled.Link">Link</MudSelectItem>
@@ -77,7 +76,7 @@
                 </MudSelect>
             </MudItem>
             <MudItem xs="12" md="6">
-                <MudSelect T="string" @bind-Value="_endIcon" Label="End Icon">
+                <MudSelect T="string" @bind-Value="_endIcon" Label="End Icon" Dense="true">
                     <MudSelectItem Value="@string.Empty">None</MudSelectItem>
                     <MudSelectItem Value="@Icons.Material.Filled.OpenInNew">Open in new</MudSelectItem>
                     <MudSelectItem Value="@Icons.Material.Filled.ArrowForward">Arrow forward</MudSelectItem>
@@ -101,7 +100,7 @@
     private string _startIcon = Icons.Material.Filled.Link;
     private string _endIcon = string.Empty;
     private Color _color = Color.Primary;
-    private Typo _typo = Typo.inherit;
+    private Typo _typo = Typo.body1;
     private Underline _underline = Underline.Hover;
     private bool _disabled;
 

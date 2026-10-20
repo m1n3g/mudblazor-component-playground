@@ -268,7 +268,7 @@
     private string _cultureName = "Invariant";
     private string _format = "Default";
 
-    private static readonly Variant[] Variants = [Variant.Text, Variant.Outlined, Variant.Filled];
+    private static readonly Variant[] Variants = [Variant.Text, Variant.Filled, Variant.Outlined];
     private NumericBindingType _bindingType = NumericBindingType.NullableInt;
     private string? FormatValue => _format == "Default" ? null : _format;
     private string BindingTypeLabel => _bindingType switch

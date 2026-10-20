@@ -809,3 +809,135 @@ Updated [`MudListDemo.razor`](./Pages/Components/DataDisplay/MudListDemo.razor) 
 - Added conditional rendering for the editable secondary navigation item when both text values are empty
 - Aligned list, list-item, and subheader initial values with the MudBlazor API defaults
 - Enabled multiple sidebar groups to remain expanded and opened Buttons, Charts, Form & Inputs, and Table by default
+
+## 2026-09-07
+
+### Icon Button Demo Option
+
+Updated [`MudIconButtonDemo.razor`](./Pages/Components/Buttons/MudIconButtonDemo.razor):
+
+- Added a `Drop Shadow` checkbox after `Disabled`
+- Bound the option to the preview with the API-default value disabled
+
+## 2026-09-09
+
+### FAB Menu Demo Option Refinement
+
+Updated [`MudButtonFabMenu.razor`](./Pages/Components/Buttons/MudButtonFabMenu.razor):
+
+- Added item content modes for icon-only, label-only, and icon-and-label previews
+- Added configurable item start and end icon presets while preserving the default per-item icons
+- Reordered the option panel into the shared row structure for clearer scanning
+
+## 2026-09-13
+
+### Overlay Demo API Alignment
+
+Updated [`MudOverlayDemo.razor`](./Pages/Components/Feedback/MudOverlayDemo.razor):
+
+- Removed the custom blur and opacity controls so the preview focuses on MudOverlay API properties
+- Made z-index a full-width option
+- Added an outlined preview surface to match the established form-component demo layout
+- Added an outlined explanation panel for the behavior checkboxes
+
+## 2026-09-16
+
+### Carousel Control Color Options
+
+Updated [`MudCarouselDemo.razor`](./Pages/Components/DataDisplay/MudCarouselDemo.razor):
+
+- Bound explicit colors for carousel arrows and bullets
+- Defaulted both controls to `Color.Inherit`
+- Added independent arrow and bullet color selectors to the options panel
+
+### Chip and Chip Set Demo Refinement
+
+Updated [`MudChipsDemo.razor`](./Pages/Components/DataDisplay/MudChipsDemo.razor) and [`MudChipSetDemo.razor`](./Pages/Components/DataDisplay/MudChipSetDemo.razor):
+
+- Added options to show or hide regular chip icons while preserving avatar content
+- Made chip close callbacks conditional on the closable option
+- Set `Icons.Material.Filled.Cancel` as the default close icon in both demos
+
+## 2026-09-24
+
+### Demo Defaults and Layout Updates
+
+Updated the following demo pages:
+
+- [`MudDialogDemo.razor`](./Pages/Components/Feedback/MudDialogDemo.razor): defaulted MaxWidth and Close button options to off
+- [`MudChipSetDemo.razor`](./Pages/Components/DataDisplay/MudChipSetDemo.razor): added a Default chip to the preview
+- [`MudColorPickerDemo.razor`](./Pages/Components/Inputs/MudColorPickerDemo.razor): migrated to the shared horizontal layout with Text, Outlined, and Filled previews, expanded options, and a persistent picker panel
+- [`MudMenuDemo.razor`](./Pages/Components/Navigation/MudMenuDemo.razor): shortened the `Trigger Variant` option label to `Variant`
+- [`MudButtonFabMenu.razor`](./Pages/Components/Buttons/MudButtonFabMenu.razor): set the FAB menu button's default start icon to Edit
+
+## 2026-10-02
+
+### Shared Layout Migrations and Preview Refinements
+
+Updated the following demo pages:
+
+- [`MudRatingDemo.razor`](./Pages/Components/Inputs/MudRatingDemo.razor): migrated the demo to the shared layout
+- [`MudToolbarDemo.razor`](./Pages/Components/Layout/MudToolbarDemo.razor): migrated the demo to the shared layout
+- [`MudPaperDemo.razor`](./Pages/Components/Layout/MudPaperDemo.razor): repositioned quick width actions
+
+## 2026-10-03
+
+### Skeleton and Expansion Panel Refinements
+
+- [`MudSkeletonDemo.razor`](./Pages/Components/Feedback/MudSkeletonDemo.razor): repositioned the option value and added a placeholder to the demo
+- [`MudExpansionPanelsDemo.razor`](./Pages/Components/DataDisplay/MudExpansionPanelsDemo.razor): updated the icon preset
+
+## 2026-10-04
+
+### Shared Layout Migrations and Interaction Updates
+
+- [`MudDialogDemo.razor`](./Pages/Components/Feedback/MudDialogDemo.razor): aligned the preview according to the active layout
+- [`MudSnackbarDemo.razor`](./Pages/Components/Feedback/MudSnackbarDemo.razor): migrated to the shared layout and added a reset control for duration and transition timing
+- [`MudTooltipDemo.razor`](./Pages/Components/DataDisplay/MudTooltipDemo.razor): migrated to the shared layout
+- [`MudTreeViewDemo.razor`](./Pages/Components/DataDisplay/MudTreeViewDemo.razor): migrated to the shared layout with selectable-tree and lazy-loading examples and bound selection and behavior controls
+
+## 2026-10-06
+
+### Checkbox Preview Binding Refinement
+
+Updated [`MudCheckBoxDemo.razor`](./Pages/Components/Inputs/MudCheckBoxDemo.razor):
+
+- Bound checked, unchecked, and indeterminate icon options to the tri-state preview
+- Bound the Tri-state option directly to the preview checkbox and kept its displayed value and reset behavior consistent when switching modes
+
+### File Upload Error Feedback
+
+Updated [`MudFileUploadDemo.razor`](./Pages/Components/Inputs/MudFileUploadDemo.razor):
+
+- Prevented the Show error and Error text controls from immediately resetting the upload component's error state
+
+## 2026-10-08
+
+### Color Picker Demo Completion
+
+Updated [`MudColorPickerDemo.razor`](./Pages/Components/Inputs/MudColorPickerDemo.razor):
+
+- Added shared color binding across the Text, Outlined, Filled, and persistent static picker previews
+- Added configurable picker view, palette presets, static orientation, adornment presets, and picker-panel visibility controls
+- Added input behavior options for editability, immediate text updates, validation, and HSL-only binding updates
+- Added a Show tooltips option, enabled by default to match MudBlazor
+- Removed redundant picker color, picker shape, elevation, and throttle interval controls
+- Removed the color-picker mode dropdown because the component's mode switch is internally managed
+
+### Scroll To Top Demo
+
+Updated [`MudScrollToTopDemo.razor`](./Pages/Components/Buttons/MudScrollToTopDemo.razor):
+
+- Kept the example focused on page scrolling and removed the scroll-target selector and nested preview scroller
+- Expanded the page-scroll preview to 10 sections so the scroll-to-top button can be demonstrated
+- Added controls for the top offset, scroll behavior, and button appearance
+
+## 2026-10-17
+
+### Slider Preview Options
+
+Updated [`MudSliderDemo.razor`](./Pages/Components/Inputs/MudSliderDemo.razor):
+
+- Removed `Color.Default` from the color selector
+- Added a **Show label** option to toggle the `Value: x` text independently of the slider's built-in value label
+- Set the maximum value default to 10

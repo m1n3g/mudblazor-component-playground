@@ -1,38 +1,96 @@
 @page "/components/tooltip"
 @using MudBlazor
 
-<MudTooltip Text="Delete">
-    <MudIconButton Class="mr-3" Icon="@Icons.Material.Filled.Delete" />
-</MudTooltip>
+<DemoPageLayout Title="Tooltip"
+                Description="Displays additional context when users hover over or focus on an element."
+                Variant="DemoPageLayoutVariant.Horizontal">
+    <Preview>
+        <MudStack Row Justify="Justify.Center" Class="w-100">
+            <MudTooltip Text="@_tooltipText"
+                        Color="@_color"
+                        Placement="@_placement"
+                        Arrow="@_arrow"
+                        Delay="@_delay"
+                        Duration="@_duration"
+                        ShowOnHover="@_showOnHover"
+                        ShowOnFocus="@_showOnFocus"
+                        ShowOnClick="@_showOnClick"
+                        Inline="@_inline"
+                        Disabled="@_disabled">
+                <MudButton Variant="Variant.Filled" Color="Color.Primary">Hover/Focus to view Tooltip</MudButton>
+            </MudTooltip>
+        </MudStack>
+    </Preview>
 
-<MudTooltip Text="Add">
-    <MudFab Class="mr-3" StartIcon="@Icons.Material.Filled.Add" Color="Color.Secondary" />
-</MudTooltip>
+    <Options>
+        <MudGrid Spacing="4" Class="w-100">
+            <MudItem xs="12" md="6">
+                <MudSelect T="Placement" Label="Placement" Dense="true" @bind-Value="_placement">
+                    <MudSelectItem Value="Placement.Top">Top</MudSelectItem>
+                    <MudSelectItem Value="Placement.Bottom">Bottom</MudSelectItem>
+                    <MudSelectItem Value="Placement.Left">Left</MudSelectItem>
+                    <MudSelectItem Value="Placement.Right">Right</MudSelectItem>
+                </MudSelect>
+            </MudItem>
 
-<MudTooltip Text="Arrow Left" Arrow="true" Placement="Placement.Left">
-    <MudButton Class="mr-3">Arrow Left</MudButton>
-</MudTooltip>
+            <MudItem xs="12" md="6">
+                <MudSelect T="Color" Label="Color" Dense="true" @bind-Value="_color">
+                    <MudSelectItem Value="Color.Default">Default</MudSelectItem>
+                    <MudSelectItem Value="Color.Primary">Primary</MudSelectItem>
+                    <MudSelectItem Value="Color.Secondary">Secondary</MudSelectItem>
+                    <MudSelectItem Value="Color.Tertiary">Tertiary</MudSelectItem>
+                    <MudSelectItem Value="Color.Info">Info</MudSelectItem>
+                    <MudSelectItem Value="Color.Success">Success</MudSelectItem>
+                    <MudSelectItem Value="Color.Warning">Warning</MudSelectItem>
+                    <MudSelectItem Value="Color.Error">Error</MudSelectItem>
+                    <MudSelectItem Value="Color.Dark">Dark</MudSelectItem>
+                </MudSelect>
+            </MudItem>
 
-<MudTooltip Text="Arrow Top" Arrow="true" Placement="Placement.Top">
-    <MudButton Class="mr-3">Arrow Top</MudButton>
-</MudTooltip>
+            <MudItem xs="12">
+                <MudTextField Label="Tooltip text" @bind-Value="_tooltipText" Immediate="true" />
+            </MudItem>
 
-<MudTooltip Text="Arrow Bottom" Arrow="true" Placement="Placement.Bottom">
-    <MudButton Class="mr-3">Arrow Bottom</MudButton>
-</MudTooltip>
+            <MudItem xs="12" md="6">
+                <MudNumericField T="int" Label="Delay (ms)" @bind-Value="_delay" Min="0" Step="100" Margin="Margin.Dense" />
+            </MudItem>
+            <MudItem xs="12" md="6">
+                <MudNumericField T="int" Label="Animation duration (ms)" @bind-Value="_duration" Min="0" Step="50" Margin="Margin.Dense" />
+            </MudItem>
+            <MudItem xs="12">
+                <MudButton Variant="Variant.Outlined" OnClick="ResetTiming">Reset delay and duration</MudButton>
+            </MudItem>
 
-<MudTooltip Text="Arrow Right" Arrow="true" Placement="Placement.Right">
-    <MudButton Class="mr-3">Arrow Right</MudButton>
-</MudTooltip>
+            <MudItem xs="12">
+                <div class="d-flex flex-wrap align-center justify-start" style="column-gap: 12px; row-gap: 0;">
+                    <MudCheckBox @bind-Value="_arrow" Label="Arrow" Color="Color.Primary" />
+                    <MudCheckBox @bind-Value="_showOnHover" Label="Show on hover" Color="Color.Primary" />
+                    <MudCheckBox @bind-Value="_showOnFocus" Label="Show on focus" Color="Color.Primary" />
+                    <MudCheckBox @bind-Value="_showOnClick" Label="Show on click" Color="Color.Primary" />
+                    <MudCheckBox @bind-Value="_inline" Label="Inline" Color="Color.Primary" />
+                    <MudCheckBox @bind-Value="_disabled" Label="Disabled" Color="Color.Primary" />
+                </div>
+            </MudItem>
+        </MudGrid>
+    </Options>
+</DemoPageLayout>
 
-<MudTooltip Text="Secondary" Color="Color.Secondary" Placement="Placement.Top">
-    <MudButton Class="mr-3">Secondary</MudButton>
-</MudTooltip>
+@code {
+    private string _tooltipText = "More information";
+    private Placement _placement = Placement.Bottom;
+    private Color _color = Color.Default;
+    private bool _arrow;
+    private int _delay;
+    private int _duration = 251;
+    private bool _showOnHover = true;
+    private bool _showOnFocus = true;
+    private bool _showOnClick;
+    private bool _inline = true;
+    private bool _disabled;
 
-<MudTooltip Text="Tertiary" Color="Color.Tertiary" Placement="Placement.Bottom" Arrow="true">
-    <MudButton Class="mr-3">Tertiary</MudButton>
-</MudTooltip>
-
-<MudTooltip Text="Primary" Color="Color.Primary" Placement="Placement.Top">
-    <MudButton Class="mr-3">Primary</MudButton>
-</MudTooltip>
+    private void ResetTiming()
+    {
+        _delay = 0;
+        _duration = 251;
+    }
+}
