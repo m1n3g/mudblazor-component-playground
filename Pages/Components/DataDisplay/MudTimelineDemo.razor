@@ -72,7 +72,7 @@
                     </MudCard>
                 </MudTimelineItem>
 
-                <MudTimelineItem Color="@DotColor" Size="@DotSize" Variant="@DotVariant" Elevation="@DotElevation" HideDot="@HideDot" TimelineAlign="TimelineAlign.End" Style="width: 100%;">
+                <MudTimelineItem Color="@DotColor" Size="@DotSize" Variant="@DotVariant" Elevation="@DotElevation" HideDot="@HideDot" Style="width: 100%;">
                     <MudPaper Class="pa-4" Elevation="@DotElevation">
                         <MudStack Row AlignItems="AlignItems.Center" Spacing="2">
                             <MudAvatar>
@@ -187,13 +187,13 @@
 </DemoPageLayout>
 
 @code {
-    private TimelinePosition _position { get; set; } = TimelinePosition.Start;
+    private TimelinePosition _position { get; set; } = TimelinePosition.Alternate;
     private TimelineOrientation _orientation { get; set; } = TimelineOrientation.Vertical;
-    private TimelineAlign _timelineAlign { get; set; } = TimelineAlign.Start;
+    private TimelineAlign _timelineAlign { get; set; } = TimelineAlign.Default;
     private bool _reverse;
 
-    public Size DotSize { get; set; } = Size.Medium;
-    public Color DotColor { get; set; } = Color.Primary;
+    public Size DotSize { get; set; } = Size.Small;
+    public Color DotColor { get; set; } = Color.Default;
     public Variant DotVariant { get; set; } = Variant.Outlined;
     public int DotElevation { get; set; } = 1;
     public bool HideDot { get; set; }
