@@ -963,3 +963,12 @@ Updated [`MudSliderDemo.razor`](./Pages/Components/Inputs/MudSliderDemo.razor):
 - Removed `Color.Default` from the color selector
 - Added a **Show label** option to toggle the `Value: x` text independently of the slider's built-in value label
 - Set the maximum value default to 10
+
+## 2026-10-24
+
+### Input Demo Density Options
+
+Updated [`MudTextFieldDemo.razor`](./Pages/Components/Inputs/MudTextFieldDemo.razor), [`MudSelectDemo.razor`](./Pages/Components/Inputs/MudSelectDemo.razor), and [`MudNumericFieldDemo.razor`](./Pages/Components/Inputs/MudNumericFieldDemo.razor):
+
+- Removed the redundant Dense checkbox options and their Margin overrides
+- Kept compact spacing configurable through each component's Margin selector
