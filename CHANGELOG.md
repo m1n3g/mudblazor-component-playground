@@ -972,3 +972,11 @@ Updated [`MudTextFieldDemo.razor`](./Pages/Components/Inputs/MudTextFieldDemo.ra
 
 - Removed the redundant Dense checkbox options and their Margin overrides
 - Kept compact spacing configurable through each component's Margin selector
+
+## 2026-10-25
+
+### Input Placeholder Defaults
+
+Updated [`MudTextFieldDemo.razor`](./Pages/Components/Inputs/MudTextFieldDemo.razor), [`MudSelectDemo.razor`](./Pages/Components/Inputs/MudSelectDemo.razor), and [`MudNumericFieldDemo.razor`](./Pages/Components/Inputs/MudNumericFieldDemo.razor):
+
+- Set the Placeholder option to off by default
