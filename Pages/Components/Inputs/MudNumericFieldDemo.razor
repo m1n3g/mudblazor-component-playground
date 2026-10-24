@@ -14,7 +14,7 @@
                     @foreach (var variant in Variants)
                     {
                         <MudNumericField T="int" @key="variant" @bind-Value="_intValue" Variant="@variant" Label="@($"{variant} — {BindingTypeLabel}")"
-                                         Margin="@ComputedMargin" ReadOnly="@_readOnly" Disabled="@_disabled" Clearable="@_clearable"
+                                         Margin="@_margin" ReadOnly="@_readOnly" Disabled="@_disabled" Clearable="@_clearable"
                                          Immediate="@_immediate" DebounceInterval="@_debounceInterval" Placeholder="@(_placeholder ? "Enter number" : null)"
                                          OnDebounceIntervalElapsed="HandleDebounceIntervalElapsed"
                                          HelperText="@(_helperText ? $"Range: {_min?.ToString() ?? "any"} - {_max}, step {_step}" : null)"
@@ -30,7 +30,7 @@
                     @foreach (var variant in Variants)
                     {
                         <MudNumericField T="double" @key="variant" @bind-Value="_doubleValue" Variant="@variant" Label="@($"{variant} — {BindingTypeLabel}")"
-                                         Margin="@ComputedMargin" ReadOnly="@_readOnly" Disabled="@_disabled" Clearable="@_clearable"
+                                         Margin="@_margin" ReadOnly="@_readOnly" Disabled="@_disabled" Clearable="@_clearable"
                                          Immediate="@_immediate" DebounceInterval="@_debounceInterval" Placeholder="@(_placeholder ? "Enter number" : null)"
                                          OnDebounceIntervalElapsed="HandleDebounceIntervalElapsed"
                                          HelperText="@(_helperText ? $"Range: {_min?.ToString() ?? "any"} - {_max}, step {_step}" : null)"
@@ -46,7 +46,7 @@
                     @foreach (var variant in Variants)
                     {
                         <MudNumericField T="int?" @key="variant" @bind-Value="_nullableIntValue" Variant="@variant" Label="@($"{variant} — {BindingTypeLabel}")"
-                                         Margin="@ComputedMargin" ReadOnly="@_readOnly" Disabled="@_disabled" Clearable="@_clearable"
+                                         Margin="@_margin" ReadOnly="@_readOnly" Disabled="@_disabled" Clearable="@_clearable"
                                          Immediate="@_immediate" DebounceInterval="@_debounceInterval" Placeholder="@(_placeholder ? "Enter number" : null)"
                                          OnDebounceIntervalElapsed="HandleDebounceIntervalElapsed"
                                          HelperText="@(_helperText ? $"Range: {_min?.ToString() ?? "any"} - {_max}, step {_step}" : null)"
@@ -62,7 +62,7 @@
                     @foreach (var variant in Variants)
                     {
                         <MudNumericField T="double?" @key="variant" @bind-Value="_nullableDoubleValue" Variant="@variant" Label="@($"{variant} — {BindingTypeLabel}")"
-                                         Margin="@ComputedMargin" ReadOnly="@_readOnly" Disabled="@_disabled" Clearable="@_clearable"
+                                         Margin="@_margin" ReadOnly="@_readOnly" Disabled="@_disabled" Clearable="@_clearable"
                                          Immediate="@_immediate" DebounceInterval="@_debounceInterval" Placeholder="@(_placeholder ? "Enter number" : null)"
                                          OnDebounceIntervalElapsed="HandleDebounceIntervalElapsed"
                                          HelperText="@(_helperText ? $"Range: {_min?.ToString() ?? "any"} - {_max}, step {_step}" : null)"
@@ -205,7 +205,6 @@
             <MudItem xs="12">
                 <MudText Typo="Typo.subtitle2" Style="font-weight: 600" Class="mt-2 mb-1">Behavior</MudText>
                 <div class="d-flex flex-wrap align-center justify-start" style="column-gap: 12px; row-gap: 0;">
-                    <MudCheckBox @bind-Value="_dense" Label="Dense" Color="Color.Primary" />
                     <MudCheckBox @bind-Value="_readOnly" Label="Read only" Color="Color.Primary" />
                     <MudCheckBox @bind-Value="_disabled" Label="Disabled" Color="Color.Primary" />
                     <MudCheckBox @bind-Value="_placeholder" Label="Placeholder" Color="Color.Primary" />
@@ -232,7 +231,6 @@
     private int? _nullableIntValue;
     private double? _nullableDoubleValue;
 
-    private bool _dense;
     private bool _readOnly;
     private bool _disabled;
     private bool _placeholder = true;
@@ -257,8 +255,6 @@
     private ClearIconPreset _clearIconPreset;
 
     private Margin _margin = Margin.None;
-    private Margin ComputedMargin => _dense ? Margin.Dense : _margin;
-
     private decimal? _min;
     private decimal _max = 100m;
     private decimal _step = 1m;

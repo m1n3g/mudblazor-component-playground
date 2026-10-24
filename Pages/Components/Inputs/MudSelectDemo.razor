@@ -16,8 +16,8 @@
                             @if (_multiSelection)
                             {
                                 <MudSelect T="string" @key="variant" Variant="@variant"
-                                           Label="@(variant == Variants[0] ? _label : $"{variant} — Select a state")" Margin="@ComputedMargin"
-                                           Dense="@_dense" Disabled="@_disabled" ReadOnly="@_readOnly"
+                                           Label="@(variant == Variants[0] ? _label : $"{variant} — Select a state")" Margin="@_margin"
+                                           Disabled="@_disabled" ReadOnly="@_readOnly"
                                            Placeholder="@(_placeholder ? "Select a state" : null)"
                                            HelperText="@(_helperText ? SelectedSummary : null)"
                                            HelperTextOnFocus="@_helperTextOnFocus" Clearable="@_clearable"
@@ -40,8 +40,8 @@
                             else
                             {
                                 <MudSelect T="string" @key="variant" @bind-Value="_value" Variant="@variant"
-                                           Label="@(variant == Variants[0] ? _label : $"{variant} — Select a state")" Margin="@ComputedMargin"
-                                           Dense="@_dense" Disabled="@_disabled" ReadOnly="@_readOnly"
+                                           Label="@(variant == Variants[0] ? _label : $"{variant} — Select a state")" Margin="@_margin"
+                                           Disabled="@_disabled" ReadOnly="@_readOnly"
                                            Placeholder="@(_placeholder ? "Select a state" : null)"
                                            HelperText="@(_helperText ? (_multiSelection ? SelectedSummary : "Choose one option") : null)"
                                            HelperTextOnFocus="@_helperTextOnFocus" Clearable="@_clearable"
@@ -195,7 +195,6 @@
             <MudItem xs="12">
                 <MudText Typo="Typo.subtitle2" Style="font-weight: 600" Class="mt-2 mb-1">Behavior</MudText>
                 <div class="d-flex flex-wrap align-center justify-start" style="column-gap: 12px; row-gap: 0;">
-                    <MudCheckBox @bind-Value="_dense" Label="Dense" Color="Color.Primary" />
                     <MudCheckBox @bind-Value="_readOnly" Label="Read only" Color="Color.Primary" />
                     <MudCheckBox @bind-Value="_disabled" Label="Disabled" Color="Color.Primary" />
                     <MudCheckBox @bind-Value="_placeholder" Label="Placeholder" Color="Color.Primary" />
@@ -233,7 +232,6 @@
     private string _label = "Text — Select a state";
     private string? _value = "California";
     private Margin _margin = Margin.None;
-    private bool _dense;
     private bool _readOnly;
     private bool _disabled;
     private bool _placeholder = true;
@@ -268,8 +266,6 @@
     private string _errorText = "There is a problem with this selection.";
     private string _requiredError = "Please select a value.";
     private IReadOnlyCollection<string> _selectedStates = Array.Empty<string>();
-
-    private Margin ComputedMargin => _dense ? Margin.Dense : _margin;
 
     private string SelectedSummary => _selectedStates.Count == 0
         ? "Selected (0): None"

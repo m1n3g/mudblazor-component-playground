@@ -16,7 +16,7 @@
                                 <MudTextField T="string" @key="@($"{variant}-{_inputType}")" @bind-Value="_value" Variant="@variant"
                                               @ref="_textFieldReference"
                                               Label="@($"{variant} — {_label}")"
-                                              Margin="@ComputedMargin" ReadOnly="@_readOnly" Disabled="@_disabled"
+                                              Margin="@_margin" ReadOnly="@_readOnly" Disabled="@_disabled"
                                               InputType="@_inputType" Lines="@LinesValue" MaxLines="@MaxLinesValue"
                                               Sizing="@_sizing" Mask="@InputMask"
                                               Placeholder="@(_placeholder ? "Enter text" : null)"
@@ -185,7 +185,6 @@
             <MudItem xs="12">
                 <MudText Typo="Typo.subtitle2" Style="font-weight: 600" Class="mt-2 mb-1">Behavior</MudText>
                 <div class="d-flex flex-wrap align-center justify-start" style="column-gap: 12px; row-gap: 0;">
-                    <MudCheckBox @bind-Value="_dense" Label="Dense" Color="Color.Primary" />
                     <MudCheckBox @bind-Value="_readOnly" Label="Read only" Color="Color.Primary" />
                     <MudCheckBox @bind-Value="_disabled" Label="Disabled" Color="Color.Primary" />
                     <MudCheckBox @bind-Value="_placeholder" Label="Placeholder" Color="Color.Primary" />
@@ -222,7 +221,6 @@
     private ClearIconPreset _clearIconPreset = ClearIconPreset.Default;
     private InputType _inputType = InputType.Text;
     private MaskPreset _maskPreset = MaskPreset.None;
-    private bool _dense;
     private bool _readOnly;
     private bool _disabled;
     private bool _placeholder = true;
@@ -245,7 +243,6 @@
     private string _errorText = "Please enter a value";
     private string _requiredError = "A value is required";
 
-    private Margin ComputedMargin => _dense ? Margin.Dense : _margin;
     private int CounterValue => _counter ? _maxLength : 0;
     private int MaxLengthValue => _counter ? _maxLength : int.MaxValue;
     private int LinesValue => _multiline ? _lines : 1;
